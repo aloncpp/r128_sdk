@@ -162,9 +162,9 @@ mkconfig: $(DBUILD_ROOT).dbuild/scripts/mkconfig/mkconfig$(OS_EXT)
 ifeq ($(DBUILD_OS), WIN32)
 	if [ ! -f $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME) ]; then \
 		$(Q)mkdir -p $(CONFIG_HEADER_PATH); \
-		$(Q)$(DBUILD_ROOT).dbuild/scripts/mkconfig/mkconfig$(OS_EXT) $(subst \,\\,$(shell cygpath -w $(PROJECT_DIR)/)) > $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME); \
+		$(DBUILD_ROOT).dbuild/scripts/mkconfig/mkconfig$(OS_EXT) $(subst \,\\,$(shell cygpath -w $(PROJECT_DIR)/)) > $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME); \
 	else \
-		$(Q)$(DBUILD_ROOT).dbuild/scripts/mkconfig/mkconfig$(OS_EXT) $(subst \,\\,$(shell cygpath -w $(PROJECT_DIR)/)) > $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME).tmp; \
+		$(DBUILD_ROOT).dbuild/scripts/mkconfig/mkconfig$(OS_EXT) $(subst \,\\,$(shell cygpath -w $(PROJECT_DIR)/)) > $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME).tmp; \
 		diff $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME) $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME).tmp  &>/dev/null; \
 		if [ $$? -ne 0 ]; then \
 			cp $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME).tmp $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME); \
@@ -175,9 +175,9 @@ ifeq ($(DBUILD_OS), WIN32)
 else
 	if [ ! -f $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME) ]; then \
 		$(Q)mkdir -p $(CONFIG_HEADER_PATH); \
-		$(Q)$(DBUILD_ROOT).dbuild/scripts/mkconfig/mkconfig$(OS_EXT) $(PROJECT_DIR)/ > $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME); \
+		$(DBUILD_ROOT).dbuild/scripts/mkconfig/mkconfig$(OS_EXT) $(PROJECT_DIR)/ > $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME); \
 	else \
-		$(Q)$(DBUILD_ROOT).dbuild/scripts/mkconfig/mkconfig$(OS_EXT) $(PROJECT_DIR)/ > $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME).tmp; \
+		$(DBUILD_ROOT).dbuild/scripts/mkconfig/mkconfig$(OS_EXT) $(PROJECT_DIR)/ > $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME).tmp; \
 		diff $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME) $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME).tmp  &>/dev/null; \
 		if [ $$? -ne 0 ]; then \
 			cp $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME).tmp $(CONFIG_HEADER_PATH)/$(CONFIG_HEADER_NAME); \
