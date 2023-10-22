@@ -976,6 +976,14 @@ function uncompress_toolchain_linux() {
 
     if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/conf/kconfig-conf" -o \
          ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/mconf/kconfig-mconf" ]; then
+        
+        cd "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15"
+        ./configure --prefix="$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/"
+        make
+        make install
+        export PATH=$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin:$PATH
+        cd -
+        
         cd "$T/lichee/rtos/scripts/kconfig-frontends"
         ./configure --enable-mconf --disable-nconf --disable-gconf --disable-qconf
         make

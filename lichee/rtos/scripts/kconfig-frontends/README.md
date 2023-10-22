@@ -1,3 +1,5 @@
+$ sudo apt install gperf
+
 $ git clone https://bitbucket.org/nuttx/tools.git
 $ cd tools/kconfig-frontends
 $ # on MacOS do the following:
