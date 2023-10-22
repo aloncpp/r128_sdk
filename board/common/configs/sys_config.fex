@@ -1,0 +1,144 @@
+[product]
+version = "100"
+machine = "perf1"
+
+[platform]
+eraseflag   = 1
+debug_mode = 1
+next_work = 2
+
+;----------------------------------------------------------------------------------
+;[target]  system bootup configuration
+;storage_type	= boot medium, 3-nor, 5-spinand
+;----------------------------------------------------------------------------------
+[target]
+boot_clock	= 1008
+storage_type    = 3
+
+[power_sply]
+dcdc1_vol                  = 3000
+dcdc2_vol                  = 1200
+dcdc3_vol                  = 1200
+dcdc4_vol                  = 1200
+dcdc5_vol                  = 1500
+aldo2_vol                  = 1800
+aldo3_vol                  = 3000
+
+[card_boot]
+logical_start   = 40960
+sprite_gpio0    =
+
+[twi_para]
+twi_port        = 0
+twi_scl         = port:PH14<2><default><default><default>
+twi_sda         = port:PH15<2><default><default><default>
+
+[uart_para]
+uart_debug_port = 0
+uart_debug_tx   = port:PH00<3><1><default><default>
+uart_debug_rx   = port:PH01<3><1><default><default>
+
+[jtag_para]
+jtag_enable     = 0
+jtag_ms         = port:PB00<4><default><default><default>
+jtag_ck         = port:PB01<4><default><default><default>
+jtag_do         = port:PB02<4><default><default><default>
+jtag_di         = port:PB03<4><default><default><default>
+
+[dram_para]
+dram_clk            = 0
+dram_type           = 3
+dram_zq             = 0x000bfb
+dram_odt_en         = 0x00
+dram_para1          = 0x000010d2
+dram_para2          = 0x0000
+dram_mr0            = 0x1c70
+dram_mr1            = 0x02
+dram_mr2            = 0x18
+dram_mr3            = 0x0
+dram_tpr0           = 0x004A2195
+dram_tpr1           = 0x02423190
+dram_tpr2           = 0x0008B061
+dram_tpr3           = 0xB4787896
+dram_tpr4           = 0x0
+dram_tpr5           = 0x0
+dram_tpr6           = 0x0
+dram_tpr7           = 0x1621121e
+dram_tpr8           = 0x0
+dram_tpr9           = 0x0
+dram_tpr10          = 0x0
+dram_tpr11          = 0x00210000
+dram_tpr12          = 0x00000055
+dram_tpr13          = 0x14000900
+
+;[spi0]
+;spi0_used       = 1
+;spi0_cs_number  = 1
+;spi0_cs_bitmap  = 1
+;spi0_cs0        = port:PC03<4><1><default><default>
+;spi0_sclk       = port:PC00<4><default><default><default>
+;spi0_mosi       = port:PC02<4><default><default><default>
+;spi0_miso       = port:PC04<4><default><default><default>
+;spi0_hold       = port:PC16<4><default><default><default>
+;spi0_wp         = port:PC15<4><default><default><default>
+
+;----------------------------------------------------------------------------------
+;spinor configuration
+;----------------------------------------------------------------------------------
+[spinor_para]
+;-----------------------------------------------------------
+;------------useage-----------------------------------------
+;readcmd: uboot use
+;read_mode: when read_mode=4 use 4 quad mode;equal 2 use dual mode;equal 1 use single fast mode
+;write_mode: when write_mode=4 use 4 quad mode;equal 2 use dual mode;equal 1 use single fast mode
+;flash_size: flash size the unit is M
+;erase_size: erase_size = 4 use 4K erase mode,default equal 64
+;delay_cycle: When the frequency is greater than 60MHZ configured as 1;when the frequency is less than 24MHZ configured as 2;and other 3
+;lock_flag: Whether to use the lock function,0 is closed, others are open
+;frequency: frequency
+;-----------------------------------------------------------
+
+;read_mode           =4
+;flash_size          =16
+;delay_cycle         =1
+;frequency           =100000000
+
+spi0_cs0        = port:PC03<4><1><2><default>
+spi0_sclk       = port:PC00<4><0><2><default>
+spi0_mosi       = port:PC02<4><0><2><default>
+spi0_miso       = port:PC04<4><0><2><default>
+spi0_hold       = port:PC16<4><0><2><default>
+spi0_wp         = port:PC15<4><0><2><default>
+
+;----------------------------------------------------------------------------------
+;card_ctrl 		-卡量产相关的控制器选择0      |
+;card_high_speed        -速度模式 0为低速，1为高速|
+;card_line        	-4：4线卡，8：8线卡|
+;sdc_d1  		-sdc卡数据1线信号的GPIO配置     |
+;sdc_d0			-sdc卡数据0线信号的GPIO配置  |
+;sdc_clk  		-sdc卡时钟信号的GPIO配置   |
+;sdc_cmd       		-sdc命令信号的GPIO配置|
+;sdc_d3  		-sdc卡数据3线信号的GPIO配置    |
+;sdc_d2			-sdc卡数据2线信号的GPIO配置  |
+;----------------------------------------------------------------------------------
+[card0_boot_para]
+card_ctrl       = 0
+card_high_speed = 0
+card_line       = 4
+sdc_d1          = port:PA27<2><1><2><default>
+sdc_d0          = port:PA26<2><1><2><default>
+sdc_clk         = port:PA29<2><1><2><default>
+sdc_cmd         = port:PA25<2><1><2><default>
+sdc_d3          = port:PA24<2><1><2><default>
+sdc_d2          = port:PA28<2><1><2><default>
+bus-width = 4
+cap-sd-highspeed =
+cap-wait-while-busy =
+no-sdio =
+no-mmc =
+sunxi-power-save-mode =
+
+;boot0 debug_mode
+;when debug_mode is 0, boot0 doesn't print debug message, otherwise print debug message
+[platform]
+debug_mode = 1

@@ -1,0 +1,14 @@
+obj-y += common/
+obj-$(CONFIG_COMPONENTS_AW) += sound/
+obj-$(CONFIG_STANDBY) += standby/
+obj-$(CONFIG_DEBUG_BACKTRACE) += backtrace/
+obj-$(CONFIG_LINUX_DEBUG) += linux_debug/
+obj-y += testbench/
+#obj-y += message_manager/
+obj-y += oemhead/
+obj-y += misc/
+obj-$(CONFIG_PM_CLIENT_DSP_WAITI) += pm_client/
+obj-y += elf_message/
+obj-$(CONFIG_COMPONENTS_WATCHPOINT) += watchpoint/
+obj-$(CONFIG_COMPONENTS_MALLOC) += malloc/
+obj-$(CONFIG_COMPONENTS_SAFE_PRINTF) += safe_printf/

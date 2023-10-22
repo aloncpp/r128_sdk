@@ -1,0 +1,27 @@
+config FREERTOS_CLI_CMD_TEMPLATE
+	bool "template command (for illustration)"
+	default n
+
+config FREERTOS_CLI_CMD_MEM_RW
+	bool "Memory read/write"
+	default n
+
+config FREERTOS_CLI_CMD_FREE
+	bool "Free Memory in Heap"
+	default n
+
+config FREERTOS_CLI_CMD_TASK_STATUS
+	bool "task status command"
+	default n
+
+config FREERTOS_CLI_CMD_FORK
+	bool "fork command"
+	default n
+
+config FREERTOS_CLI_CMD_TOP
+    bool "show task list"
+    default n
+
+config FREERTOS_CLI_CMD_TEST_CACHE
+    bool "test cache"
+    default n

@@ -1,0 +1,15 @@
+menuconfig DRIVERS_WIRELESS
+	default n
+	bool "wireless devices"
+
+if DRIVERS_WIRELESS
+
+config DRIVERS_RTL8723DS
+	select USE_SDIO
+	select SDIO_IRQ
+    bool "enable rtl8723ds device drivers"
+        default n
+
+source drivers/drv/wireless/xradio/Kconfig
+
+endif #DRIVERS_WIRELESS

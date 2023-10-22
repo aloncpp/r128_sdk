@@ -1,0 +1,32 @@
+
+menu "asr_demo"
+
+config COMPONENTS_ASR_DEMO
+	bool "asr_demo"
+	default n
+
+if COMPONENTS_ASR_DEMO
+
+config COMPONENTS_ASR_RWS_CLIENT_USE_WEBSOCKET
+	bool "asr_rws_client use websocket"
+	select COMPONENTS_WEBSOCKET
+	default n
+
+config COMPONENTS_ASR_INPUT_USE_AUDIO_SYSTEM
+	bool "asr_input use AudioSystem"
+	select COMPONENTS_AW_AUDIO_SYSTEM
+	default n
+
+config COMPONENTS_ASR_PARSER_RESULT_USE_CJSON
+	bool "asr_parser_result result use cJSON"
+	select COMPONENT_CJSON
+	default n
+
+config COMPONENTS_ASR_PLAYER_MGR_USE_RTPLAYER
+	bool "player_mgr use rtplayer"
+	select RTPLAYER_TEST
+	default n
+
+endif
+
+endmenu

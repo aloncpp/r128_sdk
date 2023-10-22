@@ -1,0 +1,35 @@
+menuconfig COMPONENT_ENV
+    bool "uboot env"
+    select COMPONENTS_AW_BLKPART
+    default n
+    help
+      support read write uboot env
+      If unsure, say Y.
+
+if COMPONENT_ENV
+
+    config COMPONENTS_ENV_SIZE
+    int "Env Size (bytes)"
+    default 4096
+    help
+        Size of env in bytes.
+
+    config COMPONENTS_ENV_PRINTENV
+    bool "print env"
+    default y
+    help
+        print env.
+
+    config COMPONENTS_ENV_SETENV
+    bool "set env"
+    default y
+    help
+        set env.
+
+    config COMPONENTS_ENV_FILE_SUPPORT
+    bool "support file operations"
+    default y
+    help
+        support standard open,read,write.
+
+endif

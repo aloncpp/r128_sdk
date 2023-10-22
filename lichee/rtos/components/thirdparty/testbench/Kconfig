@@ -1,0 +1,7 @@
+config PROJECT_TEST_POSIX
+    bool "run posix test"
+    default n
+
+config PROJECT_TEST_GENIE_CTS
+    bool "run genie cts"
+    default n

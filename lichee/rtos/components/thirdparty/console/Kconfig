@@ -1,0 +1,186 @@
+menu "command-line interface"
+
+config COMPONENT_CLI
+    bool "command-line interface support"
+    select COMPONENT_CLI_COMMANDS
+    default y
+
+config COMPONENT_CLI_COMMANDS
+    bool "command-line command support"
+    default y
+
+config COMMAND_MISC
+    bool "misc command"
+    default y
+
+if COMPONENT_CLI_COMMANDS
+
+if COMMAND_MISC
+
+config COMMAND_SAMPLE
+    bool "sample command"
+    default n
+
+config COMMAND_REBOOT
+    bool "reboot command"
+    select DRIVERS_WATCHDOG
+    select DRIVERS_RTC
+    default y
+
+config COMMAND_FORK
+    bool "fork command"
+    default y
+
+config COMMAND_EFUSE_TEST
+    bool "efsue_test command"
+    depends on DRIVERS_EFUSE
+    default n
+
+config COMMAND_TOP
+    bool "top command"
+    default y
+
+config COMMAND_MTOP
+    bool "mtop command"
+    select DRIVERS_MBUS
+    default y
+
+config COMMAND_MAHB
+    bool "mahb command"
+    select DRIVERS_AHB
+    default n
+
+config COMMAND_UPGRADE
+    bool "upgrade command"
+    depends on DRIVERS_PRCM
+    select DRIVERS_WATCHDOG
+    default y
+
+config COMMAND_VERSION
+	bool "version command"
+    default y
+
+config COMMAND_REG_WRITE
+	bool "register write command"
+    default y
+
+config COMMAND_REG_READ
+	bool "register read command"
+    default y
+
+config COMMAND_TEST_CACHE
+	bool "test cache command"
+    default n
+
+config COMMAND_HELP
+	bool "help command"
+    default y
+
+config COMMAND_CLEAN
+	bool "clean command"
+    default y
+
+config COMMAND_MEM_LAYOUT
+	bool "memory layout command"
+    default y
+
+config COMMAND_DATE
+	bool "date command"
+    default y
+
+config COMMAND_TIMEDATECTL
+	bool "timectl command"
+    default y
+
+config COMMAND_TZSET
+	bool "tzset command"
+    default n
+
+config COMMAND_KTIME
+    bool "ktime command"
+    default n
+
+config COMMAND_FREE
+	bool "free command"
+    default y
+
+config COMMAND_CLOCK_TIME
+	bool "clock time command"
+    default y
+
+config COMMAND_PANIC
+    bool "painc command"
+    default n
+
+config COMMAND_BOOT_C906
+    bool "boot c906 command"
+    default n
+
+config COMMAND_BOOT_DSP
+    bool "boot dsp command"
+    default n
+
+config COMMAND_TASK_STATUS
+    bool "task status command"
+    default y
+
+config COMMAND_NOR_READ
+    bool "nor read command"
+    default n
+
+config COMMAND_NOR_ERASE
+    bool "nor erase command"
+    default n
+
+config COMMAND_NOR_WRITE
+    bool "nor write command"
+    default n
+
+config COMMAND_MMC_READ
+    bool "mmc read command"
+    depends on DRIVERS_SDMMC
+    default n
+
+config COMMAND_MMC_WRITE
+    bool "mmc write command"
+    depends on DRIVERS_SDMMC
+    default n
+
+config COMMAND_DCACHE_CLEAN
+    bool "dcache clean command"
+    default n
+
+config COMMAND_DCACHE_INVALIDATE
+    bool "dcache invalidate command"
+    default n
+
+config COMMAND_EXEC
+    bool "execute file"
+    default n
+
+endif
+
+config COMMAND_ARCH_RISCV_PMU
+    bool "riscv pmu command"
+    depends on ARCH_RISCV_PMU
+    default n
+
+config COMMAND_MEMTESTER
+	bool "memtester command"
+    default n
+
+config COMMAND_CSR
+    bool "csr command"
+    default n
+
+config COMMAND_LIST_IRQ
+    bool "list irq command"
+    default n
+
+config COMMAND_DCDC_SWITCH
+    bool "switch DCDC source command"
+    default n
+
+endif
+
+endmenu

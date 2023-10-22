@@ -1,0 +1,3 @@
+config COMPONENT_LINPACK
+    bool "linpack"
+    default n

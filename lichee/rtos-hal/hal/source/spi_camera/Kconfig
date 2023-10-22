@@ -1,0 +1,18 @@
+menu "SPICAMERA Devices"
+
+config DRIVERS_SPI_CAMERA
+    bool "enable spi camera driver"
+        default n
+
+menu "spi sensor select"
+    depends on DRIVERS_SPI_CAMERA
+
+source "drivers/rtos-hal/hal/source/spi_camera/spi_sensor/Kconfig"
+endmenu
+
+config HAL_TEST_SPI_CAMERA
+    bool "enable spi camera demo test command"
+    depends on DRIVERS_SPI_CAMERA
+        default y
+
+endmenu

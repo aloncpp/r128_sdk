@@ -1,0 +1,16 @@
+diff --git a/sys_partition_nor.fex b/sys_partition_nor.fex
+index 4b3f370..b190da8 100755
+--- a/sys_partition_nor.fex
++++ b/sys_partition_nor.fex
+@@ -45,6 +45,12 @@ size = 16
+     downloadfile = "env.fex"
+     user_type    = 0x8000
+ 
++[partition]
++    name         = bootpkg
++    size         = 200
++    downloadfile = "boot_package.fex"
++    user_type    = 0x8000
++
+ [partition]
+     name         = arm-lpsram

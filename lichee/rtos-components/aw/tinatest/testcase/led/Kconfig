@@ -1,0 +1,10 @@
+config TESTCASE_LEDC
+	bool "LEDC Testcase."
+	depends on DRIVERS_LEDS_SUNXI
+	default n
+
+config TESTCASE_PWMLED
+	bool "PWM LED Testcase."
+	depends on DRIVERS_PWM_LEDS
+	default n
+

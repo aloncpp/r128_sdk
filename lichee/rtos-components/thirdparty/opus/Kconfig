@@ -1,0 +1,15 @@
+menuconfig COMPONENTS_OPUS
+    bool "opus audio codec"
+    default n
+    help
+      support Opus audio codec
+
+if COMPONENTS_OPUS
+
+    config COMPONENTS_OPUS_TEST
+    bool "OPUS Test Suite"
+    default n
+    help
+      A collection of OPUS automated unit and system tests.
+
+endif

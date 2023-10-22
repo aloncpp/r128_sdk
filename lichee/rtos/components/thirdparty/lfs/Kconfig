@@ -1,0 +1,25 @@
+config COMPONENT_LITTLEFS
+    bool "LittleFS Filesystem"
+    select COMPONENT_VFS
+    select COMPONENTS_AW_BLKPART
+    default y
+    help
+      LittleFS is a filesystem desigend by arm.
+
+choice
+
+    prompt "LFS Codes Version"
+    depends on COMPONENT_LITTLEFS
+    default COMPONENT_LITTLEFS_2_2_1
+
+    config COMPONENT_LITTLEFS_2_2_1
+        bool "v2.2.1"
+
+endchoice
+
+config COMPONENT_LITTLEFS_MAX_OPEN_FILES
+    int "max opened files"
+    depends on COMPONENT_LITTLEFS
+    default 20
+    help
+      Max opened files at one time.

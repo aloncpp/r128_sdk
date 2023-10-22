@@ -1,0 +1,5 @@
+config COMPONENT_SONA_AUDIOAEF
+	bool "Sona audio effect"
+	default n
+	help
+	  Sona audio effect library

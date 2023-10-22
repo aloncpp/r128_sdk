@@ -1,0 +1,67 @@
+mainmenu "Cadence Xtensa DSP Configuration"
+
+menu "Target options"
+source "arch/Kconfig"
+endmenu
+
+menu "Kernel options"
+source "kernel/Kconfig"
+endmenu
+
+menu "Drivers options"
+source "drivers/Kconfig"
+endmenu
+
+menu "Components options"
+source "components/Kconfig"
+endmenu
+
+menu "Build System options"
+
+choice
+        prompt "Compiler optimization level"
+        default CC_OPTIMIZE_FOR_SIZE
+
+config CC_OPTIMIZE_FOR_DEBUG
+        bool "Optimization level for (-O0)"
+        ---help---
+          Choosing this option will pass "-O0" to your compiler to debug.
+
+config CC_OPTIMIZE_FOR_PERFORMANCE_O2
+        bool "Optimization level for (-O2)"
+        ---help---
+          Choosing this option will pass "-O2" to your compiler to optimize
+          the kernel yet more for performance.
+
+config CC_OPTIMIZE_FOR_PERFORMANCE_O3
+        bool "Optimization level for (-O3)"
+        ---help---
+          Choosing this option will pass "-O3" to your compiler to optimize
+          the kernel yet more for performance.
+
+config CC_OPTIMIZE_FOR_SIZE
+        bool "Optimization level for (-Os)"
+        ---help---
+          Choosing this option will pass "-Os" to your compiler resulting
+          in a smaller kernel.
+
+endchoice
+
+config LOG_LEVEL
+	int "Log level select"
+	range 0 7
+	default 7
+	---help---
+			The log level to print. The bigger the level is, the more log.
+			We have the follow log level:
+
+			LOG_LVL_ERROR     3
+			LOG_LVL_WARNING   4
+			LOG_LVL_INFO      6
+			LOG_LVL_DBG       7
+
+config DISABLE_ALL_UART_LOG
+    bool "Disable All Uart Log"
+	default n
+
+endmenu

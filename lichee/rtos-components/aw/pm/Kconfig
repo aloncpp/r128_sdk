@@ -1,0 +1,144 @@
+
+menuconfig COMPONENTS_PM
+    bool "PowerManager Support"
+    default n
+    help
+      Support standby and hibernation mode.
+
+if COMPONENTS_PM
+choice COMPONENTS_PM_CORE
+    prompt "Select core"
+    default COMPONENTS_PM_CORE_M33   if ARCH_ARM_ARMV8M
+    default COMPONENTS_PM_CORE_RISCV if ARCH_RISCV_RV64
+    default COMPONENTS_PM_CORE_DSP   if ARCH_DSP
+    help
+      This option determines which core the PM run on.
+
+    config COMPONENTS_PM_CORE_M33
+        bool "M33"
+        help
+          the code for m33
+
+    config COMPONENTS_PM_CORE_DSP
+        bool "DSP"
+        help
+          the code for dsp
+
+    config COMPONENTS_PM_CORE_RISCV
+        bool "RISCV"
+        help
+          the code for riscv
+endchoice
+
+menuconfig COMPONENTS_PM_WAKESRC
+    bool "List of wakeup source types"
+    default y
+    help
+	List of wakesrc on the core.
+	Some wakeup sources may need to register with the specific core.
+	It is only used to detemine whether it is a wakeup source for the the driver that needs it.
+	Configuration is n does not mean the wakesrc is not supported.
+
+if COMPONENTS_PM_WAKESRC
+config PM_WAKESRC_WUPIO
+    bool "WUPIO wakesrc"
+    default y
+    help
+      WUPIO wakesrc
+
+config PM_WAKESRC_WUPTIMER
+    bool "WUPTIMER wakesrc"
+    default y
+    help
+      WUPTIMER wakesrc
+
+config PM_WAKESRC_ALARM
+    bool "RTC  Alarm wakesrc"
+    default y
+    help
+      RTC alarm wakesrc
+
+config PM_WAKESRC_LPUART
+    bool "LPUART wakesrc"
+    default n
+    help
+      LPUART wakesrc
+
+config PM_WAKESRC_GPADC
+    bool "GPADC wakesrc"
+    default n
+    help
+      GPADC wakesrc
+
+config PM_WAKESRC_MAD
+    bool "MAD wakesrc"
+    default n
+    help
+      MAD wakesrc
+
+config PM_WAKESRC_WLAN
+    bool "WLAN wakesrc"
+    default n
+    help
+       WLAN wakesrc
+
+config PM_WAKESRC_BLE
+    bool "BLE wakesrc"
+    default n
+    help
+       BLE wakesrc
+
+config PM_WAKESRC_GPIO
+    bool "GPIO wakesrc"
+    default n
+    help
+       GPIO wakesrc
+endif
+
+comment "Special Config"
+config ARCH_PM_FIRMWARE_BASE
+    hex "PM Firmware's space base"
+    default 0x04000000
+    depends on COMPONENTS_PM_CORE_M33
+    help
+      The space must be placed on SRAM.
+      This parameter takes effect only after
+      COMPONENTS_PM_CORE_M33 is enabled
+
+config ARCH_PM_FIRMWARE_SIZE
+    hex "PM Firmware's space size"
+    default 0x10000
+    depends on COMPONENTS_PM_CORE_M33
+    help
+      The recommended value is not less than 64K.
+
+config PM_SIMULATED_RUNNING
+    bool "Simulated on FPGA"
+    default n
+    help
+      Simulates a running environment on the FPGA
+
+config PM_SUBSYS_RISCV_SUPPORT
+    bool "support riscv subsys"
+    default y
+    depends on COMPONENTS_PM_CORE_M33
+    help
+      Enable riscv subsys support
+
+config PM_SUBSYS_DSP_SUPPORT
+    bool "support dsp subsys"
+    default n
+    depends on COMPONENTS_PM_CORE_M33
+    help
+      Enable dsp subsys support
+
+config COMPONENTS_PM_TEST_TOOLS
+    bool "PM test tools"
+    default n
+    depends on COMPONENTS_PM
+    help
+      Enable pm test tools, including pm stress, recording sign and etc.
+
+endif
+
+

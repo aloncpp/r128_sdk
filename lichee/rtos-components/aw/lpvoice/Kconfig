@@ -1,0 +1,11 @@
+menu "LP-Voice"
+
+config COMPONENTS_LPVOICE
+	bool "LP-Voice Support"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM
+	depends on COMPONENTS_PM
+	help
+	  Say y herer to enable LP-Voice(Low Power Voice) serivce.
+	  It record audio data with VAD module.
+
+endmenu

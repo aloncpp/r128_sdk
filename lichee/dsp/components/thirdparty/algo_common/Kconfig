@@ -1,0 +1,7 @@
+config COMPONENTS_ALGO_GENERATE
+	bool "Algorithm generate"
+	default n
+	depends on COMPONENTS_ALGO_COMMON
+	help
+	  This is install generate algorithm.
+

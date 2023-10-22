@@ -1,0 +1,144 @@
+config KERNEL_FREERTOS
+	bool "Support FreeRTOS kernel"
+	default y
+
+if KERNEL_FREERTOS
+
+choice
+	prompt "Kernel version"
+	default KERNEL_XTENSA_V1_7
+
+config KERNEL_XTENSA_V1_7
+	bool "Use freertos kernel xtensa v1.7"
+endchoice
+
+config KERNEL_VERSION_DIR
+	string
+	default "FreeRTOS_xtensa_v1.7" if KERNEL_XTENSA_V1_7
+
+choice
+	prompt "Heap Memory Manager"
+	default MEMMANG_HEAP_4
+
+config MEMMANG_HEAP_1
+	bool "Use heap_1 to allocate memory"
+
+config MEMMANG_HEAP_2
+	bool "Use heap_2 to allocate memory"
+
+config MEMMANG_HEAP_3
+	bool "Use heap_3 to allocate memory"
+
+config MEMMANG_HEAP_4
+	bool "Use heap_4 to allocate memory"
+
+config MEMMANG_HEAP_5
+	bool "Use heap_5 to allocate memory"
+
+config MEMMANG_HEAP_MULTIPLE
+	bool "Use heap-multiple to allocate memory"
+
+endchoice
+
+if MEMMANG_HEAP_MULTIPLE
+choice
+	prompt "Default Heap Ram"
+	default DEFAULT_SRAM_HEAP
+
+config DEFAULT_SRAM_HEAP
+	bool "default heap in sram"
+
+config DEFAULT_LPSRAM_HEAP
+	bool "default heap in lpsram"
+
+config DEFAULT_HPSRAM_HEAP
+	bool "default heap in hpsram"
+
+endchoice
+
+config SRAM_HEAP
+	bool "sram heap"
+	default y
+
+config SRAM_HEAP_DYNAMIC_ADDR
+	bool "sram heap dynamic address"
+	depends on SRAM_HEAP
+	default y
+
+config SRAM_HEAP_START_ADDR
+	depends on !SRAM_HEAP_DYNAMIC_ADDR
+	depends on SRAM_HEAP
+	hex "sram heap start address"
+	default 0x4030000
+
+config SRAM_HEAP_SIZE
+	depends on SRAM_HEAP
+	hex "sram heap size"
+	default 0x60000
+
+config LPSRAM_HEAP
+	bool "lpsram heap"
+	default n
+
+config LPSRAM_HEAP_DYNAMIC_ADDR
+	bool "lpsram heap dynamic address"
+	depends on LPSRAM_HEAP
+	default y
+
+config LPSRAM_HEAP_START_ADDR
+	depends on !LPSRAM_HEAP_DYNAMIC_ADDR
+	depends on LPSRAM_HEAP
+	hex "lpsram heap start address"
+	default 0x8030000
+
+config LPSRAM_HEAP_SIZE
+	depends on LPSRAM_HEAP
+	hex "lpsram heap size"
+	default 0x100000
+
+config HPSRAM_HEAP
+	bool "hpsram heap"
+	default n
+
+config HPSRAM_HEAP_DYNAMIC_ADDR
+	bool "hpsram heap dynamic address"
+	depends on HPSRAM_HEAP
+	default y
+
+config HPSRAM_HEAP_START_ADDR
+	depends on !HPSRAM_HEAP_DYNAMIC_ADDR
+	depends on HPSRAM_HEAP
+	hex "hpsram heap start address"
+	default 0xc030000
+
+config HPSRAM_HEAP_SIZE
+	depends on HPSRAM_HEAP
+	hex "hpsram heap size"
+	default 0x100000
+
+endif
+
+choice
+	prompt "Portable"
+	default PORT_XCC_XTENSA
+
+config PORT_XCC_XTENSA
+	bool "XCC/Xtensa"
+	---help---
+		FreeRTOS Port for Xtensa Configurable Processors
+endchoice
+
+config PORT_ARCH_DIR
+	string
+	default "xtensa" if PORT_XCC_XTENSA
+	---help---
+		This value must be corresponding to the name of
+		the specific arch directory.
+
+config PORT_XEA2
+	bool
+	default y if PORT_XCC_XTENSA
+	---help---
+		Xtensa Exception Architecture 2(XEA2) supports.
+
+endif

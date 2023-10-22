@@ -1,0 +1,321 @@
+/*
+ * Allwinner Technology CO., Ltd. sun8iw18p1 soc board.
+ *
+ * soc board support.
+ */
+
+/dts-v1/;
+
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/gpio/gpio.h>
+/*#include "sun8iw18p1-clk.dtsi"*/
+/*#include "sun8iw18p1-pinctrl.dtsi"*/
+
+
+/ {
+	model = "sun8iw18";
+	compatible = "allwinner,sun8iw18p1";
+	interrupt-parent = <&wakeupgen>;
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	aliases {
+		serial0 = &uart0;
+		twi0 = &twi0;
+		twi1 = &twi1;
+		spi0 = &spi0;
+		spi1 = &spi1;
+	};
+
+	gic: interrupt-controller@03020000 {
+		compatible = "arm,cortex-a15-gic", "arm,cortex-a9-gic";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		device_type = "gic";
+		interrupt-controller;
+		reg = <0x0 0x03021000 0 0x1000>, /* GIC Dist */
+		      <0x0 0x03022000 0 0x2000>, /* GIC CPU */
+		      <0x0 0x03024000 0 0x2000>, /* GIC VCPU Control */
+		      <0x0 0x03026000 0 0x2000>; /* GIC VCPU */
+		interrupts = <GIC_PPI 9 0xf04>; /* GIC Maintenence IRQ */
+		interrupt-parent = <&gic>;
+	};
+	wakeupgen: interrupt-controller@0 {
+		compatible = "allwinner,sunxi-wakeupgen";
+		interrupt-controller;
+		#interrupt-cells = <3>;
+		interrupt-parent = <&gic>;
+	};
+
+	soc: soc@03000000 {
+		compatible = "simple-bus";
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+		device_type = "soc";
+
+		pio: pinctrl@0300b000 {
+			compatible = "allwinner,sun8iw18p1-pinctrl";
+			reg = <0x0 0x0300b000 0x0 0x400>;
+			interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
+			device_type = "pio";
+			/*clocks = <&clk_pio>;*/
+			gpio-controller;
+			interrupt-controller;
+			#interrupt-cells = <3>;
+			#size-cells = <0>;
+			#gpio-cells = <6>;
+
+			vdevice_pins_a: vdevice@0 {
+				allwinner,pins = "PE0", "PE1";
+				allwinner,function = "vdevice";
+				allwinner,muxsel = <5>;
+				allwinner,drive = <1>;
+				allwinner,pull = <1>;
+			};
+
+			uart0_pins_a: uart0@0 {
+				allwinner,pins = "PH0", "PH1";
+				allwinner,pname = "uart0_tx", "uart0_rx";
+				allwinner,function = "uart0";
+				allwinner,muxsel = <3>;
+				allwinner,drive = <1>;
+				allwinner,pull = <1>;
+			};
+
+			uart0_pins_b: uart0@1 {
+				allwinner,pins = "PH0", "PH1";
+				allwinner,function = "io_disabled";
+				allwinner,muxsel = <7>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			uart1_pins_a: uart1@0 {
+				allwinner,pins = "PG6", "PG7", "PG8", "PG9";
+				allwinner,pname = "uart1_tx", "uart1_rx",
+						  "uart1_rts", "uart1_cts";
+				allwinner,function = "uart1";
+				allwinner,muxsel = <2>;
+				allwinner,drive = <1>;
+				allwinner,pull = <1>;
+			};
+
+			uart1_pins_b: uart1@1 {
+				allwinner,pins = "PG6", "PG7", "PG8", "PG9";
+				allwinner,function = "io_disabled";
+				allwinner,muxsel = <7>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			uart2_pins_a: uart2@0 {
+				allwinner,pins = "PB0", "PB1", "PB2", "PB3";
+				allwinner,pname = "uart2_tx", "uart2_rx",
+						  "uart2_rts", "uart2_cts";
+				allwinner,function = "uart2";
+				allwinner,muxsel = <2>;
+				allwinner,drive = <1>;
+				allwinner,pull = <1>;
+			};
+
+			uart2_pins_b: uart2@1 {
+				allwinner,pins = "PB0", "PB1", "PB2", "PB3";
+				allwinner,function = "io_disabled";
+				allwinner,muxsel = <7>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			uart3_pins_a: uart3@0 {
+				allwinner,pins = "PH4", "PH5", "PH6", "PH7";
+				allwinner,pname = "uart3_tx", "uart3_rx",
+						  "uart3_rts", "uart3_cts";
+				allwinner,function = "uart3";
+				allwinner,muxsel = <2>;
+				allwinner,drive = <1>;
+				allwinner,pull = <1>;
+			};
+
+			uart3_pins_b: uart3@1 {
+				allwinner,pins = "PH4", "PH5", "PH6", "PH7";
+				allwinner,function = "io_disabled";
+				allwinner,muxsel = <7>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			twi0_pins_a: twi0@0 {
+				allwinner,pins = "PH0", "PH1";
+				allwinner,pname = "twi0_scl", "twi0_sda";
+				allwinner,function = "twi0";
+				allwinner,muxsel = <2>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			twi0_pins_b: twi0@1 {
+				allwinner,pins = "PH0", "PH1";
+				allwinner,function = "io_disabled";
+				allwinner,muxsel = <7>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			twi1_pins_a: twi1@0 {
+				allwinner,pins = "PB8", "PB9";
+				allwinner,pname = "twi1_scl", "twi1_sda";
+				allwinner,function = "twi1";
+				allwinner,muxsel = <4>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			twi1_pins_b: twi1@1 {
+				allwinner,pins = "PB8", "PB9";
+				allwinner,function = "io_disabled";
+				allwinner,muxsel = <7>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			spi0_pins_a: spi0@0 {
+				allwinner,pins = "PC0", "PC2", "PC4", "PC16",
+						 "PC15";
+				allwinner,pname = "spi0_sclk", "spi0_mosi",
+						  "spi0_miso", "spi0_hold",
+						  "spi0_wp";
+				allwinner,function = "spi0";
+				allwinner,muxsel = <4>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			spi0_pins_b: spi0@1 {
+				allwinner,pins = "PC3";
+				allwinner,pname = "spi0_cs0";
+				allwinner,function = "spi0";
+				allwinner,muxsel = <4>;
+				allwinner,drive = <1>;
+				allwinner,pull = <1>; 	// only CS should be pulled up
+			};
+
+			spi0_pins_c: spi0@2 {
+				allwinner,pins = "PC0", "PC2", "PC3", "PC4",
+						 "PC15", "PC16";
+				allwinner,function = "io_disabled";
+				allwinner,muxsel = <7>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			spi1_pins_a: spi1@0 {
+				allwinner,pins = "PH5", "PH6", "PH7";
+				allwinner,pname = "spi1_sclk", "spi1_mosi",
+						  "spi1_miso";
+				allwinner,function = "spi1";
+				allwinner,muxsel = <3>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+			spi1_pins_b: spi1@1 {
+				allwinner,pins = "PH4";
+				allwinner,pname = "spi1_cs0";
+				allwinner,function = "spi1";
+				allwinner,muxsel = <3>;
+				allwinner,drive = <1>;
+				allwinner,pull = <1>; // only CS should be pulled up
+			};
+
+			spi1_pins_c: spi1@2 {
+				allwinner,pins = "PH4", "PH5", "PH6", "PH7";
+				allwinner,function = "io_disabled";
+				allwinner,muxsel = <7>;
+				allwinner,drive = <1>;
+				allwinner,pull = <0>;
+			};
+
+		uart0: uart@05000000 {
+			compatible = "allwinner,sun8i-uart";
+			device_type = "uart0";
+			reg = <0x0 0x05000000 0x0 0x400>;
+			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
+			/*clocks = <&clk_uart0>;*/
+			pinctrl-names = "default", "sleep";
+			pinctrl-0 = <&uart0_pins_a>;
+			pinctrl-1 = <&uart0_pins_b>;
+			uart0_port = <0>;
+			uart0_type = <2>;
+			status = "okay";
+		};
+
+		twi0: twi@0x05002000{
+			#address-cells = <1>;
+			#size-cells = <0>;
+			compatible = "allwinner,sun8i-twi";
+			device_type = "twi0";
+			reg = <0x0 0x05002000 0x0 0x400>;
+			interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+			/*clocks = <&clk_twi0>;*/
+			clock-frequency = <400000>;
+			pinctrl-names = "default", "sleep";
+			pinctrl-0 = <&twi0_pins_a>;
+			pinctrl-1 = <&twi0_pins_b>;
+			status = "disabled";
+		};
+
+		twi1: twi@0x05002400{
+			#address-cells = <1>;
+			#size-cells = <0>;
+			compatible = "allwinner,sun8i-twi";
+			device_type = "twi1";
+			reg = <0x0 0x05002400 0x0 0x400>;
+			interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+			/*clocks = <&clk_twi1>;*/
+			clock-frequency = <100000>;
+			pinctrl-names = "default", "sleep";
+			pinctrl-0 = <&twi1_pins_a>;
+			pinctrl-1 = <&twi1_pins_b>;
+			status = "disabled";
+		};
+
+		spi0: spi@05010000 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			compatible = "allwinner,sun8i-spi";
+			device_type = "spi0";
+			reg = <0x0 0x05010000 0x0 0x1000>;
+			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
+			/*clocks = <&clk_pll_periph0>, <&clk_spi0>;*/
+			clock-frequency = <100000000>;
+			pinctrl-names = "default", "sleep";
+			pinctrl-0 = <&spi0_pins_a &spi0_pins_b>;
+			pinctrl-1 = <&spi0_pins_c>;
+			spi0_cs_number = <2>;
+			spi0_cs_bitmap = <3>;
+			status = "disabled";
+		};
+
+		spi1: spi@05011000 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			compatible = "allwinner,sun8i-spi";
+			device_type = "spi1";
+			reg = <0x0 0x05011000 0x0 0x1000>;
+			interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
+			/*clocks = <&clk_pll_periph0>, <&clk_spi1>;*/
+			clock-frequency = <100000000>;
+			pinctrl-names = "default", "sleep";
+			pinctrl-0 = <&spi1_pins_a &spi1_pins_b>;
+			pinctrl-1 = <&spi1_pins_c>;
+			spi1_cs_number = <1>;
+			spi1_cs_bitmap = <1>;
+			status = "disabled";
+		};
+	};
+	};
+};

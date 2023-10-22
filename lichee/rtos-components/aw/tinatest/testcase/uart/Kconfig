@@ -1,0 +1,19 @@
+menuconfig TESTCASE_UART
+	bool "UART Testcase."
+	depends on DRIVERS_UART
+	default n
+
+if TESTCASE_UART
+config UART_PORT
+	default "2"
+	string "uart port"
+	help
+		This means whitch port of the uart is to be tested.Please input "0/1/2/3/.etc"
+
+config UART_BAUDRATE
+	default "115200"
+	string "uart baudrate"
+	help
+		This means how many baudrate uart to be tested.Please input "4800/9600/115200".
+
+endif

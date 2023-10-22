@@ -1,0 +1,15 @@
+menuconfig DRIVERS_LEDS
+	default n
+	bool "leds driver"
+
+if DRIVERS_LEDS
+
+config DRIVERS_LEDS_SUNXI
+    bool "enable sunxi leds drivers"
+        default n
+
+config DRIVERS_PWM_LEDS
+    bool "enable sunxi pwm leds drivers"
+        default n
+
+endif

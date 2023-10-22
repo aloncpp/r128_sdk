@@ -1,0 +1,72 @@
+config COMPONENT_ELMFAT
+    bool "elmfat"
+    default n
+    depends on COMPONENTS_AW_DEVFS
+    help
+      support elmfat
+
+    if COMPONENT_ELMFAT
+        menu "elm-chan's FatFs, Generic FAT Filesystem Module"
+        config VFS_ELM_CODE_PAGE
+            int "OEM code page"
+            default 437
+
+        config VFS_ELM_WORD_ACCESS
+            bool "Using VFS_ELM_WORD_ACCESS"
+            default y
+
+        choice
+            prompt "Support long file name"
+            default VFS_ELM_USE_LFN_3
+
+            config VFS_ELM_USE_LFN_0
+                bool "0: LFN disable"
+
+            config VFS_ELM_USE_LFN_1
+                bool "1: LFN with static LFN working buffer"
+
+            config VFS_ELM_USE_LFN_2
+                bool "2: LFN with dynamic LFN working buffer on the stack"
+
+            config VFS_ELM_USE_LFN_3
+                bool "3: LFN with dynamic LFN working buffer on the heap"
+        endchoice
+
+        config VFS_ELM_USE_LFN
+            int
+            default 0 if VFS_ELM_USE_LFN_0
+            default 1 if VFS_ELM_USE_LFN_1
+            default 2 if VFS_ELM_USE_LFN_2
+            default 3 if VFS_ELM_USE_LFN_3
+
+        config VFS_ELM_MAX_LFN
+            int "Maximal size of file name length"
+            range 12 255
+            default 255
+
+        config VFS_ELM_DRIVES
+            int "Number of volumes (logical drives) to be used."
+            default 2
+
+        config VFS_ELM_MAX_SECTOR_SIZE
+            int "Maximum sector size to be handled."
+            default 512
+            help
+                if you use some spi nor flash for fatfs, please set this the erase sector size, for example 4096.
+
+        config VFS_ELM_USE_ERASE
+            bool "Enable sector erase feature"
+            default n
+
+        config VFS_ELM_REENTRANT
+            bool "Enable the reentrancy (thread safe) of the FatFs module"
+            default y
+        endmenu
+        config VFS_SUPPORT_DIR
+            bool "Enable Directory Support"
+            default y
+
+        config DRIVERS_SDMMC_FS_PATH
+            string "/sdmmc"
+    endif
+

@@ -1,0 +1,15 @@
+choice
+	prompt "Sun20iw2 Driver Controller"
+	default DRIVER_SUN20IW2_BT_CONTROLLER
+
+config DRIVER_SUN20IW2_BT_CONTROLLER
+	bool "Sun20iw2 BT Controller"
+	help
+	  If this option is enabled, Sun20iw2 BT Controller is used.
+
+config DRIVER_SUN20IW2_BT_CONTROLLER_BLE_ONLY
+	bool "Sun20iw2 BLE Only Controller"
+	help
+	  If this option is enabled, Sun20iw2 BLE only Controller is used.
+
+endchoice

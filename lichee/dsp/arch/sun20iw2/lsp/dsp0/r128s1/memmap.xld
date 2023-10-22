@@ -1,0 +1,10 @@
+- { construct: include, filename: xtensa-core/hw-maps }
+- { construct: include, filename: xtensa-core/default-maps }
+- { construct: include, filename: xtensa-core/default-system }
+- { construct: memory, name: extra_mem, description: 'extra_mem',
+    space: physical,
+    startaddr: 0xc600000, size: 0x200000,
+    attrs: { device: 0, executable: 1, writable: 1 },
+  }
+- { construct: include, filename: xtensa-core/sw-sections }
+- { construct: include, filename: xtensa-core/vectors }

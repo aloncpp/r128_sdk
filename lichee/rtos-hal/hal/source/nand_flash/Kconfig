@@ -1,0 +1,7 @@
+menu "Nand Flash Devices"
+
+config DRIVERS_NAND_FLASH
+    bool "enable nand flash driver"
+        default n
+
+endmenu

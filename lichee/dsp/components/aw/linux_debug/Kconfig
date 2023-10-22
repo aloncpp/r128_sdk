@@ -1,0 +1,7 @@
+menu "Linux Debug Support"
+
+config LINUX_DEBUG
+	bool "Allow linux debug for dsp"
+	default n
+
+endmenu

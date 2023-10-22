@@ -1,0 +1,263 @@
+#
+mainmenu "BitThunder Configuration"
+
+config CONFIGURED
+	bool
+	default y
+
+config PROJECT_CONFIG
+	bool
+	option env="PROJECT_CONFIG"
+	default n
+
+config PROJECT_DIR
+	string
+	default "scripts" if !PROJECT_CONFIG
+	option env="PROJECT_DIR"
+
+config ARCH_SUN8IW20
+	bool
+
+choice
+	prompt "Build target sunxi arch"
+	default ARCH_SUN8IW18P1
+
+config ARCH_SUN8IW18P1
+	bool "sun8iw18p1"
+
+config ARCH_SUN8IW20P1
+	bool "sun8iw20p1"
+	select ARCH_SUN8IW20
+
+config ARCH_SUN20IW2P1
+	bool "sun20iw2p1"
+	select ARCH_SUN20IW2
+
+config ARCH_SUN55IW3P1
+	bool "sun55iw3p1"
+	select ARCH_SUN55IW3
+
+config ARCH_SUN60IW1P1
+	bool "sun60iw1p1"
+	select ARCH_SUN60IW1
+endchoice
+
+choice
+	prompt "Build OS or Library"
+	default OS
+
+config OS
+	bool "OS"
+
+config LIB
+	bool "Library"
+
+endchoice
+
+menu "Build System (dbuild)"
+
+config DBUILD_PYTHON
+	string "Python path"
+	default "/usr/bin/python"
+	---help---
+	DBUILD uses Python to form pretty output. Ensure it has a valid python
+	interpreter path here.
+
+choice
+	prompt "Build Host Platform"
+	default HOST_LINUX
+
+config HOST_LINUX
+	bool "Linux"
+
+config HOST_WINDOWS
+	bool "Windows"
+
+config HOST_OTHER
+	bool "Other"
+
+endchoice
+
+config TOOLCHAIN
+	string "Toolchain prefix"
+	default "tools/gcc-arm-melis-eabi-8-2019-q3-update/bin/arm-melis-eabi-"
+
+
+choice
+	prompt "Optimisation Level"
+	default OPTIMISE_SIZE
+
+config OPTIMISE_NONE
+	bool "No Optimisations"
+
+config OPTIMISE_SIZE
+    bool "-Os (Optimise for size)"
+
+config OPTIMISE_SPEED
+	bool "-O2 (Optimise for speed)"
+
+config OPTIMISE_ULTRA_SPEED
+	bool "-O3 (Optimise for ultra-speed (can increase code-size))"
+
+endchoice
+
+config READABLE_ASM
+	bool "Generate readable assembler code"
+	help
+          Disable some compiler optimizations that tend to generate human unreadable
+          assembler output. This may make the kernel slightly slower, but it helps
+          to keep kernel developers who have to stare a lot at assembler listings
+          sane.
+
+choice
+	prompt "Warning Level"
+	default WARN_NORMAL
+
+config WARN_NORMAL
+	bool "Normal warnings from compiler"
+
+config WARN_ALL
+	bool "-Wall on compiler"
+
+config WARN_PEDANTIC
+	bool "-Wall --pedantic"
+
+config WARN_ERROR
+	bool "-Wall -Werror"
+
+config WARN_ERROR_PEDANTIC
+	bool "-Wall -Werror --pedantic (For the insane)"
+
+endchoice
+
+config TOOLCHAIN_WARNING
+	string
+	default ""				if WARN_NORMAL
+	default	"-Wall"				if WARN_ALL
+	default "-Wall --pedantic"		if WARN_PEDANTIC
+	default "-Wall -Werror"			if WARN_ERROR
+	default "-Wall -Werror --pedantic" 	if WARN_ERROR_PEDANTIC
+
+config TOOLCHAIN_OPTIMISATION
+	string
+	default "-Os" if OPTIMISE_SIZE
+	default "-O0" if OPTIMISE_NONE
+	default "-O2" if OPTIMISE_SPEED
+	default "-O3" if OPTIMISE_ULTRA_SPEED
+
+config TOOLCHAIN_DEBUG
+	bool "Debug Symbols"
+	default y
+
+config TOOLCHAIN_DEBUG_FLAGS
+	string
+	default "-g" if TOOLCHAIN_DEBUG
+
+config NEWLIBC_NANOSPECS
+	bool "newlibc specs flags"
+	default n
+	help
+		"It means use --specs=nano.specs for gcc"
+
+if NEWLIBC_NANOSPECS
+
+config NEWLIBC_NANO_PRINTF_FLOAT
+    bool "newlibc nano printf float"
+	default n
+
+config NEWLIBC_NANO_SCANF_FLOAT
+    bool "newlibc nano scanf float"
+	default n
+
+endif
+
+choice
+	prompt "Windows Build Environment"
+	default WINDOWS_CYGWIN
+	depends on HOST_WINDOWS
+
+config WINDOWS_NATIVE
+	bool "Windows Native"
+	---help---
+		Build natively in a CMD.exe environment with Windows style paths (like C:\cgywin\home)
+
+config WINDOWS_CYGWIN
+	bool "Cygwin"
+	---help---
+		Build natively in a Cygwin environment with POSIX style paths (like /cygdrive/c/cgywin/home)
+
+config WINDOWS_MSYS
+	bool "MSYS"
+	---help---
+		Build natively in a Cygwin environment with POSIX style paths (like /cygdrive/c/cgywin/home)
+
+config WINDOWS_OTHER
+	bool "Windows POSIX-like environment"
+	---help---
+		Build natively in another POSIX-like environment.  Additional support may be necessary
+
+endchoice
+
+config LOG_LEVEL
+	int "log level"
+	range 0 7
+	default 7
+	---help---
+		The log level to print. The bigger the level is, the more log.
+		We have the follow log level:
+
+		LOG_LVL_ERROR     3
+		LOG_LVL_WARNING   4
+		LOG_LVL_INFO      6
+		LOG_LVL_DBG       7
+
+config CHECK_ILLEGAL_FUNCTION_USAGE
+    bool "check illegal function usage"
+    default n
+
+menu "Build Configuration"
+
+config BUILD_NOSTDLIB
+	   bool "Disable stdlib linking"
+	   default y
+	   ---help---
+	   Should be enabled for a pure standalone kernel.
+
+config BUILD_GC_UNUSED
+	   bool "Removed unused code/data"
+	   default y
+	   ---help---
+	   Asks the linker to always remove unused data/code from the kernel.
+
+config BUILD_DISASSEMBLE
+	   bool "Create Assembly listing"
+	   default y
+
+config BUILD_DISASSEMBLE_SOURCE
+	   bool "Source code in listing"
+	   depends on BUILD_DISASSEMBLE
+	   default n
+
+endmenu
+
+endmenu
+
+menu "Architecture Options"
+source arch/Kconfig
+endmenu
+
+menu "Kernel Options"
+source kernel/Kconfig
+endmenu
+
+menu "Drivers Options"
+source drivers/Kconfig
+endmenu
+
+menu "System components"
+source components/Kconfig
+endmenu
+
+menu "Projects Options"
+source projects/Kconfig
+endmenu

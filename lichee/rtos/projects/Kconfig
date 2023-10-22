@@ -1,0 +1,74 @@
+choice
+    prompt "Configure Application"
+    default PROJECT_R128S2_PRO_M33
+
+config PROJECT_R128S2_PRO_M33
+    bool "r128s2 pro m33 system"
+	select PROJECT_R128S2
+    ---help---
+        r128s2 pro m33 system
+
+config PROJECT_R128S2_PRO_C906
+    bool "r128s2 pro c906 system"
+	select PROJECT_R128S2
+    ---help---
+        r128s2 pro c906 system
+
+config PROJECT_R128S3_PRO_RGB_M33
+    bool "r128s3 pro rgb m33 system"
+	select PROJECT_R128S3
+    ---help---
+        r128s3 pro rgb nand m33 system
+
+config PROJECT_R128S3_PRO_RGB_C906
+    bool "r128s3 pro rgb c906 system"
+	select PROJECT_R128S3
+    ---help---
+        r128s3 pro rgb nand c906 system
+
+config PROJECT_XR875_PRO_M33
+    bool "xr875 pro m33 system"
+	select PROJECT_XR875
+    ---help---
+        xr875 pro m33 system
+
+config PROJECT_XR875_PRO_C906
+    bool "xr875 pro C906 system"
+	select PROJECT_XR875
+    ---help---
+        xr875 pro C906 system
+
+config PROJECT_XR875S1_PRO_M33
+    bool "xr875s1 pro m33 system"
+	select PROJECT_XR875S1
+    ---help---
+        xr875s1 pro m33 system
+
+config PROJECT_XR875S1_PRO_C906
+    bool "xr875s1 pro C906 system"
+	select PROJECT_XR875S1
+    ---help---
+        xr875s1 pro C906 system
+
+endchoice
+
+config PROJECT_R128S2
+    bool
+
+config PROJECT_R128S3
+    bool
+
+config PROJECT_XR875
+    bool
+
+config PROJECT_XR875S1
+    bool
+
+config PLATFORM_FPGA
+    bool "Run on fpga"
+    default n
+
+config PROJECT_TESTCASE
+    bool "Project Testcase"
+    default n
+

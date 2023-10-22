@@ -1,0 +1,136 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+if ARCH_ARM
+
+comment "ARM Options"
+
+menu "sunxi platform"
+
+config ARCH_SUN20IW2
+	bool "allwinner sun20iw2"
+	select ARCH_ARM_CORTEX_M33
+	default n
+
+config ARCH_SUN8IW18
+	bool "allwinner sun8iw18"
+	select ARCH_ARM_CORTEX_A7
+	default n
+
+config ARCH_SUN8IW20
+	bool "allwinner sun8iw20"
+	select ARCH_ARM_CORTEX_A7
+	default n
+
+endmenu
+
+config ARCH_ARM_CORTEX_M33
+	bool
+	select LITTLE_ENDIAN
+	select ARCH_ARM_ARMV8M
+
+config ARCH_ARM_CORTEX_A7
+	bool
+	default n
+	select LITTLE_ENDIAN
+	select ARCH_ARM_ARMV7A
+
+config ARCH_ARM_FAMILY
+	string
+	default "-march=armv8-m.main -mfpu=fpv5-sp-d16"	if ARCH_ARM_CORTEX_M33
+	default "-march=armv7ve"	if ARCH_ARM_CORTEX_A7
+
+config ARCH_ARM_ARMV8M
+    bool
+
+config ARCH_ARM_ARMV7A
+    bool
+
+config TOOLCHAIN_CPU
+	string
+	default "-mtune=cortex-m33"	if ARCH_ARM_CORTEX_M33
+	default "-mtune=cortex-a7"     if ARCH_ARM_CORTEX_A7
+
+choice
+	prompt "Floating point ARM ABI"
+	default TOOLCHAIN_ARM_FLOAT_SOFT
+
+config TOOLCHAIN_ARM_FLOAT_HARD
+	bool "hardfp"
+	select TOOLCHAIN_FLOAT_HARD
+
+config TOOLCHAIN_ARM_FLOAT_SOFTFP
+	bool "softfp"
+	select TOOLCHAIN_FLOAT_SOFTFP
+
+config TOOLCHAIN_ARM_FLOAT_SOFT
+	bool "soft"
+	select TOOLCHAIN_FLOAT_SOFT
+
+endchoice
+
+config TOOLCHAIN_MACH_FLAGS
+	string
+	default "-mthumb -mtune=cortex-m33" if ARCH_ARM_CORTEX_M33
+	default "-mcpu=cortex-a7" if ARCH_ARM_CORTEX_A7
+
+config TOOLCHAIN_MFPU
+	string
+	default "-mfpu=neon-vfpv4" if ARCH_ARM_HAS_NEON
+
+config TOOLCHAIN_FPU_ABI
+	string
+	default "-mfloat-abi=soft" if TOOLCHAIN_FLOAT_SOFT
+	default "-mfloat-abi=softfp" if TOOLCHAIN_FLOAT_SOFTFP
+	default "-mfloat-abi=hard" if TOOLCHAIN_FLOAT_HARD
+
+config TOOLCHAIN_OTHER_FLAGS
+	string "Toolchain Other Flags"
+	default ""
+
+config ARCH_ARM_HAS_NEON
+	bool "support neon"
+	default n
+
+config ARCH_ARM_BOOT
+	bool
+	default n
+
+config ARCH_ARM_FPU
+	bool "FPU support"
+	default y
+	depends on ARCH_CORTEXM33
+	---help---
+		Build in support for the ARM Cortex-M4 Floating Point Unit (FPU).
+		Check your chip specifications first; not all Cortex-M4 chips support the FPU.
+
+config ARCH_HAVE_MPU
+	bool "MPU Support"
+	select ARM_MPU
+	default n
+
+config ARCH_HAVE_MMU
+    bool "MMU Support"
+	default n
+
+config ARM_MPU
+    bool
+
+config ARM_MPU_NREGIONS
+	int "MMU Region Num"
+	depends on ARM_MPU
+	default 8
+
+config ARCH_HAVE_DCACHE
+    bool "DCache Support"
+	default n
+
+config ARCH_HAVE_ICACHE
+    bool "ICache Support"
+	default n
+
+source arch/arm/armv8m/Kconfig
+
+endif

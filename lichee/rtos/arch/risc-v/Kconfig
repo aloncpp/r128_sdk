@@ -1,0 +1,150 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+if ARCH_RISCV
+
+comment "RISCV Options"
+
+menu "sunxi platform"
+
+config ARCH_SUN20IW2
+	bool "allwinner sun20iw2"
+	select ARCH_RISCV_C906
+	default n
+
+config ARCH_SUN55IW3
+	bool "allwinner sun55iw3"
+	select ARCH_RISCV_E906
+	default n
+
+config ARCH_SUN60IW1
+	bool "allwinner sun60iw1"
+	select ARCH_RISCV_E906
+	default n
+
+endmenu
+
+config ARCH_RISCV_C906
+	bool
+	select ARCH_RISCV_RV64
+	select LITTLE_ENDIAN
+
+config ARCH_RISCV_E906
+	bool
+	select ARCH_RISCV_RV32
+	select LITTLE_ENDIAN
+
+config ARCH_RISCV_RV64
+	bool
+
+config ARCH_RISCV_RV32
+	bool
+
+config TOOLCHAIN_CPU
+	string
+	default ""
+
+choice
+	prompt "Floating point ABI"
+	default TOOLCHAIN_RISCV_FLOAT_SOFT
+
+config TOOLCHAIN_RISCV_FLOAT_HARD
+	bool "hardfp"
+	select TOOLCHAIN_FLOAT_HARD
+
+config TOOLCHAIN_RISCV_FLOAT_SOFTFP
+	bool "softfp"
+	select TOOLCHAIN_FLOAT_SOFTFP
+
+config TOOLCHAIN_RISCV_FLOAT_SOFT
+	bool "soft"
+	select TOOLCHAIN_FLOAT_SOFT
+
+config TOOLCHAIN_RISCV_FLOAT_NONE
+	bool "none"
+	select TOOLCHAIN_FLOAT_NONE
+
+endchoice
+
+
+config TOOLCHAIN_MACH_FLAGS
+	string "toolchain arch cflags"
+	default "-mcmodel=medany -mabi=lp64dv -march=rv64gcvxthead" if ARCH_RISCV_VECTOR
+	default "-mcmodel=medany -mabi=lp64d -march=rv64gcxthead" if !ARCH_RISCV_VECTOR
+
+config TOOLCHAIN_LD_FLAGS
+	string
+	default "-melf32lriscv" if ARCH_RISCV_RV32
+
+config TOOLCHAIN_MFPU
+	string
+	default ""
+
+config TOOLCHAIN_FPU_ABI
+	string
+	default "-march=rv64gcvxthead" if TOOLCHAIN_FLOAT_SOFT && ARCH_RISCV_VECTOR
+	default "-march=rv64gcvxthead" if TOOLCHAIN_FLOAT_SOFTFP && ARCH_RISCV_VECTOR
+	default "-march=rv64gcvxthead" if TOOLCHAIN_FLOAT_HARD && ARCH_RISCV_VECTOR
+	default "-march=rv64gcxthead" if TOOLCHAIN_FLOAT_SOFT && !ARCH_RISCV_VECTOR
+	default "-march=rv64gcxthead" if TOOLCHAIN_FLOAT_SOFTFP && !ARCH_RISCV_VECTOR
+	default "-march=rv64gcxthead" if TOOLCHAIN_FLOAT_HARD && !ARCH_RISCV_VECTOR
+	default "" if TOOLCHAIN_FLOAT_NONE
+
+config ARCH_RISCV_FPU
+	bool "FPU support"
+	default y
+	---help---
+		Build in support for the RISC-V Floating Point Unit (FPU).
+		Check your chip specifications first; not all RISC-V chips support the FPU.
+
+config SAVE_C906_FPU_CONTEXT_IN_TCB
+	bool "Save C906 FPU context in thread TCB"
+	depends on ARCH_RISCV_C906
+	depends on ARCH_RISCV_FPU
+	default y
+	---help---
+		When enable this configuration, the system will skip FPU context save/restore
+		opertaion on some unnecessary situation, you'd better enable this config unless
+		the FPU work abnormally after enable this config.
+
+config RECORD_C906_FPU_CTX_STATISTICS
+	bool "Record C906 FPU context save/restore statistics info for debug"
+	depends on SAVE_C906_FPU_CONTEXT_IN_TCB
+	default n
+	---help---
+		Record C906 FPU context save/restore operation(skip situation) statistics info.
+
+config ARCH_RISCV_VECTOR
+	bool "RISC-V VECTOR support"
+	default n
+	---help---
+		Build in with RVV.
+		Check specification first; not all RISC-V chips support the VECTOR.
+
+config SAVE_C906_VECTOR_CONTEXT_IN_TCB
+	bool "Save C906 Vecotr context in thread TCB"
+	depends on ARCH_RISCV_C906
+	depends on ARCH_RISCV_VECTOR
+	default y
+	---help---
+		enable this configuration, save/restore vector context in TCB.
+
+config ARCH_RISCV_PMU
+    bool "RISC-V PMU Support"
+    default n
+
+config ARCH_HAVE_MMU
+    bool "MMU Support"
+	default n
+
+config ARCH_HAVE_DCACHE
+    bool "DCache Support"
+	default n
+
+config ARCH_HAVE_ICACHE
+    bool "ICache Support"
+	default n
+
+endif

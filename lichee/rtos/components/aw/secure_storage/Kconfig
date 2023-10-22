@@ -1,0 +1,16 @@
+config COMPONENTS_AW_SS
+    bool "Secure Storage"
+    select DRIVERS_CE
+    default n
+    help
+	secure storage demo
+
+config COMPONENT_SECURE_STORAGE
+    bool "Flashc Secure Storage"
+    depends on (ARCH_ARM && FLASHC_ENC && DRIVERS_FLASHC && COMPONENTS_AW_BLKPART) || ARCH_RISCV
+    default n
+
+config SECURE_STORAGE_SSK_KEY
+	bool "Secure Storage using ssk key"
+	depends on COMPONENT_SECURE_STORAGE
+	default n

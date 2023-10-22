@@ -1,0 +1,10 @@
+menu "msgbox demo"
+
+config COMPONENTS_MSGBOX_DEMO
+         bool "Msgbox demo"
+         default n
+         help
+           This is a demo that introduces how to use msgbox
+
+endmenu
+

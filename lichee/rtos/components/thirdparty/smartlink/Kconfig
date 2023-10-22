@@ -1,0 +1,8 @@
+menu "smartlink"
+
+config COMPONENTS_AIRKISS
+	bool "airkiss"
+	default n
+
+endmenu
+

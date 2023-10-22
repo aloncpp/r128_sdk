@@ -1,0 +1,57 @@
+menuconfig COMPONENT_BT
+	bool "bluetooth"
+	default n
+	help
+	  support bluetooth.
+	  If unsure, say Y.
+
+config BT_XR_IMPL
+	bool
+	default y if COMPONENT_BT
+
+if COMPONENT_BT
+
+menuconfig COMPONENTS_ZEPHYR
+	bool "Zephyr"
+	select NET_BUF
+	default y
+	help
+	  This option enables Zephyr Bluetooth host support.
+
+if COMPONENTS_ZEPHYR
+source components/common/thirdparty/bluetooth/zephyr/Kconfig
+endif
+
+menuconfig COMPONENTS_BLUEDROID
+	bool "Bluedroid"
+	default y
+	help
+	  This option enables Bluedroid Bluetooth host support.
+
+if COMPONENTS_BLUEDROID
+source components/common/thirdparty/bluetooth/bluedroid/Kconfig
+endif
+
+config BT_DUAL_HOST
+	bool
+	default y if COMPONENTS_ZEPHYR && COMPONENTS_BLUEDROID
+
+source components/common/thirdparty/bluetooth/rtlbt/Kconfig
+#source components/common/thirdparty/bluetooth/zblue/Kconfig
+
+if COMPONENTS_BLUEDROID || COMPONENTS_ZEPHYR
+config COMPONENTS_BT_PM
+	bool "bt host pm"
+	depends on COMPONENTS_PM
+	default y if COMPONENTS_PM
+	help
+	  This option enables bt host pm.
+
+config BT_PM_LOG_LEVEL
+	int "bt host pm log level"
+	depends on COMPONENTS_BT_PM
+	default 2
+	help
+	  This option set bt host pm level.0:ERROR 1:WARNING 2:DEBUG 3:INFO
+endif
+endif

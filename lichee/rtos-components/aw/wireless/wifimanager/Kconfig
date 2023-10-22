@@ -1,0 +1,104 @@
+menu "Wifimanager-v2.0 Configuration"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+
+config WMG_PROTOCOL_SOFTAP
+	bool "CONFIG_WMG_PROTOCOL_SOFTAP"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default n
+	help
+		softap net config.
+
+config WMG_PROTOCOL_BLE
+	bool "CONFIG_WMG_PROTOCOL_BLE"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default n
+	help
+		ble net config.
+
+config WMG_PROTOCOL_XCONFIG
+	bool "CONFIG_WMG_PROTOCOL_XCONFIG"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default n
+	help
+		xconfig net config.
+
+config WMG_PROTOCOL_SOUNDWAVE
+	bool "CONFIG_WMG_PROTOCOL_SOUNDWAVE"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default n
+	help
+		soundwave net config.
+
+choice
+	prompt "Wifimanager support platform"
+	default WMG_PLATFORM_LINUX
+config WMG_PLATFORM_LINUX
+	bool "LINUX PLATFORM OS"
+config WMG_PLATFORM_FREERTOS
+	bool "FREERTOS PLATFORM OS"
+config WMG_PLATFORM_XRLINK
+	bool "XRLINK PLATFORM OS"
+endchoice
+
+config WMG_UNREGISTER_CB
+	bool "Wifimanager unregister callback function"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default y
+		help
+			Wifimanager unregister callback function.
+
+config WMG_SUPPORT_EXPAND
+	bool "Wifimanager support send expand cmd"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default n
+		help
+			Wifimanager support send expand cmd.
+
+menu "Wifimanager support mode Configuration"
+config WMG_SUPPORT_STA_MODE
+	bool "Wifimanager support sta mode enable"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default y
+		help
+			Wifimanager support sta mode.
+
+config WMG_SUPPORT_AP_MODE
+	bool "Wifimanager support ap mode enable"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default y
+		help
+			Wifimanager support ap mode.
+
+config WMG_SUPPORT_MONITOR_MODE
+	bool "Wifimanager support monitor mode enable"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default n
+		help
+			Wifimanager support monitor mode.
+
+config WMG_SUPPORT_P2P_MODE
+	bool "Wifimanager support p2p mode enable"
+	depends on (PACKAGE_wifimanager-v2.0 || COMPONENTS_WIFIMANAGER)
+	default n
+		help
+			Wifimanager support p2p mode.
+endmenu
+
+choice
+	prompt "Wifimanager set default debug level"
+	default WMG_DEFAULT_DEBUG_LV_INFO
+config WMG_DEFAULT_DEBUG_LV_ERROR
+	bool "default debug level: error"
+config WMG_DEFAULT_DEBUG_LV_WARN
+	bool "default debug level: to warn"
+config WMG_DEFAULT_DEBUG_LV_INFO
+	bool "default debug level: to info"
+config WMG_DEFAULT_DEBUG_LV_DEBUG
+	bool "default debug level: to debug"
+config WMG_DEFAULT_DEBUG_LV_DUMP
+	bool "default debug level: to dump"
+config WMG_DEFAULT_DEBUG_LV_EXCE
+	bool "default debug level: to exce"
+endchoice
+
+endmenu

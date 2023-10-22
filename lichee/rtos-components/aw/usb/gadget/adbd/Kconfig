@@ -1,0 +1,26 @@
+config COMPONENTS_USB_GADGET_ADBD
+    bool "adbd service"
+    select DRIVERS_USB_UDC
+    default n
+    help
+	adbd service
+
+config COMPONENTS_USB_GADGET_ADB_LOCAL_TRANSPORT
+    bool "adb local transport"
+    default n
+    depends on COMPONENTS_USB_GADGET_ADBD
+
+config ADB_LOCAL_TRANSPORT_PORT
+    string "adb local transport port"
+    default "5555"
+    depends on COMPONENTS_USB_GADGET_ADB_LOCAL_TRANSPORT
+
+config COMPONENTS_USB_GADGET_ADB_FORWARD
+    bool "adb forward function"
+    default n
+    depends on  COMPONENTS_USB_GADGET_ADBD
+
+config COMPONENTS_USB_GADGET_ADB_FORWARD_WITHOUT_SOCKET
+    bool "adb forward function without socket"
+    depends on COMPONENTS_USB_GADGET_ADB_FORWARD
+    default n

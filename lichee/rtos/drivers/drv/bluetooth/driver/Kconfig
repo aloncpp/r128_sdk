@@ -1,0 +1,7 @@
+if BT_DRIVERS_LIB
+
+source drivers/drv/bluetooth/driver/controller/Kconfig
+
+source drivers/drv/bluetooth/driver/interface/Kconfig
+
+endif

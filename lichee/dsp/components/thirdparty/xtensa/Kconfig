@@ -1,0 +1,49 @@
+config COMPONENTS_XTENSA_XTOS
+	bool "Xtensa XTOS libraries"
+	default n
+	---help---
+		This is the interrupt and vector management package
+		that provides startup code, handlers for all the vectors,
+		and a simple C interface to interrupts and exceptions.
+
+		If not selected, the compiler will link the default
+		libraries from XCC toolchain.
+
+config COMPONENTS_XTENSA_LIBSIM
+	bool "Xtensa sim libraries"
+	default n
+	---help---
+		This is used for code running in the Xtensa Instruction
+		Set Simulator (ISS) and uses the semi-hosted SIMCALL
+		instruction interface to implement a minimal set of
+		system calls.
+
+		If not selected, the compiler will link the default
+		libraries from XCC toolchain.
+
+config COMPONENTS_XTENSA_LIBGLOSS
+	bool "Xtensa GNU Low-Level Operating System Support libraries"
+	default n
+	---help---
+		This is used on board-specific LSPs and requires board-specific
+		libraries to implement character I/O and other facilities.
+
+		The routines provided in this library include reentrant stubs and
+		wrappers for file and other operations such as _open_r, _close_r,
+		_read_r, _write_r, _fstat_r, _stat_r, _lseek_r, _getpid_r, _kill_r,
+		and a non-reentrant version of _sbrk_r.
+
+		If not selected, the compiler will link the default
+		libraries from XCC toolchain.
+
+config COMPONENTS_XTENSA_HIFI4_VFPU_LIBRARY
+	bool "Xtensa HiFi4 NatureDSP Library"
+	default n
+
+config COMPONENTS_XTENSA_HIFI5_NNLIB_LIBRARY
+	bool "Xtensa HiFi5 nn v_1_7_0 Library"
+	default n
+
+config COMPONENTS_XTENSA_HIFI5_VFPU_LIBRARY
+	bool "Xtensa HiFi5 vfpu v_2_0_0 Library"
+	default n

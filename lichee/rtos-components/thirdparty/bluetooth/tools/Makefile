@@ -1,0 +1,2 @@
+obj-$(CONFIG_BT_DRIVERS_LOG_HCIDUMP) += hcidump/
+obj-$(CONFIG_BT_DRIVERS_LOG_BTSNOOP) += btsnoop/

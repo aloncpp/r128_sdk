@@ -1,0 +1,17 @@
+if ARCH_SUN20IW2P1
+
+config POWER_FALL_PROTECTION
+	bool "power fail protection"
+	default n
+	help
+		When vbat drops to 2.7V, SoC will reset to prevent the system working
+		in the wrong voltage.
+
+config USE_EXTERNAL_LOW_FREQ_CRYSTAL_CLK
+	bool "Use the external low frequency crystal clock"
+	default n
+	help
+		Use the external low frequency crystal clock. After enable this config,
+		the clock source of sys_32k, sysrtc_32k and ble_32k will be
+		the external low frequency crystal.
+endif

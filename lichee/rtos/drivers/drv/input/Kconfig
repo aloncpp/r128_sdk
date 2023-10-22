@@ -1,0 +1,11 @@
+menuconfig DRIVERS_INPUT
+	default n
+	bool "input driver"
+
+if DRIVERS_INPUT
+
+	source drivers/drv/input/keyboard/Kconfig
+
+	source drivers/drv/input/tp/Kconfig
+
+endif

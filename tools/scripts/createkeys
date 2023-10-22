@@ -1,0 +1,160 @@
+#!/bin/bash
+#
+# pack/pack
+# (c) Copyright 2013
+# Allwinner Technology Co., Ltd. <www.allwinnertech.com>
+# flord wang <wangflord@allwinnertech.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+function gettop
+{
+    local TOPFILE=tools/scripts/envsetup.sh
+    if [ -n "$RTOS_TOP" -a -f "$RTOS_TOP/$TOPFILE" ] ; then
+        # The following circumlocution ensures we remove symlinks from TOP.
+        (\cd $RTOS_TOP; PWD= /bin/pwd)
+    else
+        if [ -f $TOPFILE ] ; then
+          # The following circumlocution (repeated below as well) ensures
+          # that we record the true directory name and not one that is
+          # faked up with symlink names.
+          PWD= /bin/pwd
+        else
+           local here="${PWD}"
+           while [ "${here}" != "/" ]; do
+               if [ -f "${here}/${TOPFILE}" ]; then
+                   (\cd ${here}; PWD= /bin/pwd)
+                   break
+               fi
+               here="$(dirname ${here})"
+             done
+        fi
+    fi
+}
+
+RTOS_BUILD_TOP=$(gettop)
+ROOT_DIR=${RTOS_BUILD_TOP}/out
+echo "$ROOT_DIR"
+
+if [ "$(expr substr $(uname -s) 1 6)" == "CYGWIN" ];then
+HOST_DIR=${RTOS_BUILD_TOP}/tools/win-tools
+else
+HOST_DIR=${RTOS_BUILD_TOP}/tools/tool
+fi
+export PATH=${HOST_DIR}:$PATH
+
+function pack_error()
+{
+    echo -e "\033[47;31mERROR: $*\033[0m"
+}
+
+function pack_warn()
+{
+    echo -e "\033[47;34mWARN: $*\033[0m"
+}
+
+function pack_info()
+{
+    echo -e "\033[0;31;1mINFO: $*\033[0m"
+}
+
+createkeys()
+{
+    pack_info "Use $RTOS_BUILD_TOP/board/${RTOS_TARGET_PROJECT_PATH}/sign_config/dragon_toc.cfg creat keys"
+
+	if [ -f $RTOS_BUILD_TOP/board/${RTOS_TARGET_PROJECT_PATH}/sign_config/dragon_toc.cfg ]
+	then
+		if [ ! -d $ROOT_DIR ]
+		then
+			mkdir -p $ROOT_DIR
+		fi
+		cp $RTOS_BUILD_TOP/board/${RTOS_TARGET_PROJECT_PATH}/sign_config/dragon_toc.cfg $ROOT_DIR/dragon_toc.cfg
+	fi
+
+	if [ $? -ne 0 ]
+	then
+		pack_error "dragon toc config file is not exist"
+		exit 1
+	fi
+
+	echo "$ROOT_DIR/keys"
+
+	if [ "$(expr substr $(uname -s) 1 6)" == "CYGWIN" ];then
+		local dragon_toc_config=$(cygpath -w $ROOT_DIR/dragon_toc.cfg)
+		local key_path=$(cygpath -w $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH}/keys)
+		dragonsecboot.exe -key ${dragon_toc_config/\\/\\\\} ${key_path/\\/\\\\}
+	else
+		dragonsecboot -key $ROOT_DIR/dragon_toc.cfg $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH}/keys
+	fi
+
+	if [ $? -ne 0 ]
+	then
+		pack_error "dragon toc run error"
+		rm -rf dragon_toc.cfg
+		exit 1
+	else
+		pack_info "creat keys successful!"
+	fi
+
+	rm -rf $ROOT_DIR/dragon_toc.cfg
+}
+
+createkeys_sun20iw2()
+{
+	pack_info "Use $RTOS_BUILD_TOP/board/${RTOS_TARGET_PROJECT_PATH%_*}/configs/image_header.cfg creat keys"
+
+	if [ ! -f $RTOS_BUILD_TOP/board/${RTOS_TARGET_PROJECT_PATH%_*}/configs/image_header.cfg ]
+	then
+		pack_error "image header secure config file is not exist"
+		exit 1
+	fi
+
+	if [ ! -d $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*} ]
+	then
+		mkdir -p $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}
+	fi
+	cp $RTOS_BUILD_TOP/board/${RTOS_TARGET_PROJECT_PATH%_*}/configs/image_header.cfg $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/image_header.cfg
+
+	echo "$ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/keys"
+	if [ ! -d $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/keys ]
+	then
+		mkdir -p $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/keys
+	fi
+
+	grep '"key_type"' $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/image_header.cfg > /dev/null
+	if [ $? -eq 0 ]
+	then
+		key_type=`grep '"key_type"' $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/image_header.cfg | awk -F \" '{print $4}'`
+	else
+		key_type=rsa
+	fi
+
+	if [ "$(expr substr $(uname -s) 1 6)" == "CYGWIN" ];then
+		local image_header_sec_config=$(cygpath -w $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/image_header.cfg)
+		local key_config=$(cygpath -w $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/keys)
+		mkimage_header.exe -C 7 -c ${image_header_sec_config/\\/\\\\} -s $key_type -k ${key_config/\\/\\\\}
+	else
+		mkimage_header -C 7 -c $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/image_header.cfg -s $key_type -k $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/keys > /dev/null
+	fi
+
+	if [ $? -ne 0 ]
+	then
+		pack_error "image_header createkeys run error"
+		rm -rf $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/image_header.cfg
+		exit 1
+	else
+		pack_info "creat keys successful!"
+	fi
+
+	rm -rf $ROOT_DIR/${RTOS_TARGET_PROJECT_PATH%_*}/image_header.cfg
+
+}
+
+if [ "x${RTOS_TARGET_CHIP}" == "xsun20iw2p1" ]; then
+	createkeys_sun20iw2
+else
+	createkeys
+fi

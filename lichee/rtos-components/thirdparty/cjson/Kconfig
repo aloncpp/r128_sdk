@@ -1,0 +1,7 @@
+menu "cjson parser"
+
+config COMPONENT_CJSON
+    bool "cjson support"
+    default n
+
+endmenu

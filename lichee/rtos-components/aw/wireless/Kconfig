@@ -1,0 +1,42 @@
+menu "wireless"
+		config COMPONENTS_WIRELSEE_COMMON
+			bool "wireless common"
+			depends on COMPONENTS_WIFIMANAGER || COMPONENTS_BTMANAGER
+			default y if COMPONENTS_WIFIMANAGER || COMPONENTS_BTMANAGER
+
+		menuconfig COMPONENTS_WIFIMANAGER
+			bool wifimanager-v2.0
+			default n
+source "components/common/aw/wireless/wifimanager/Kconfig"
+
+		menuconfig COMPONENTS_BTMANAGER
+			bool "btmanager"
+			depends on COMPONENT_BT
+			default n
+			if COMPONENTS_BTMANAGER
+
+				config COMPONENT_BTMG_CORE
+					bool "btmg core"
+					depends on COMPONENTS_BTMANAGER
+					depends on COMPONENTS_SPEEXDSP
+					default y
+				help
+				support btmg core
+
+			if COMPONENT_BTMG_CORE
+
+				config A2DP_USE_AUDIO_SYSTEM
+					bool "Enable AudioTrack send audio data"
+					default n
+
+			endif
+
+				config COMPONENT_BTMG_CMD
+					bool "btmg cmd"
+					depends on COMPONENTS_BTMANAGER
+					default y
+				help
+					support btmg cmd
+
+			endif
+endmenu

@@ -1,0 +1,4 @@
+config TESTCASE_G2D
+	bool "G2D Testcase."
+	default n
+

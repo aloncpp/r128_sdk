@@ -1,0 +1,6 @@
+config AW_COMPONENT_HEALTHD
+    bool "healthd for axp"
+    default n
+    depends on DRIVERS_POWER
+    help
+      support healthd for rtos

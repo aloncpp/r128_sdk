@@ -1,0 +1,17 @@
+menu "SOUND Devices"
+
+config DRIVERS_SOUND
+	bool "Sound card support"
+	default y
+
+if DRIVERS_SOUND
+
+source "drivers/rtos-hal/hal/source/sound/core/Kconfig"
+source "drivers/rtos-hal/hal/source/sound/codecs/Kconfig"
+source "drivers/rtos-hal/hal/source/sound/platform/Kconfig"
+source "drivers/rtos-hal/hal/source/sound/component/Kconfig"
+source "drivers/rtos-hal/hal/source/sound/common/Kconfig"
+
+endif # DRIVERS_SOUND
+
+endmenu

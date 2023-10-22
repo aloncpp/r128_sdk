@@ -1,0 +1,22 @@
+menu "AW OTA Compenents"
+
+config COMPONENTS_AW_UPGRADE_APP
+    bool "Tina RTOS OTA UPGRADE_APP"
+    default n
+    help
+        Tina RTOS OTA upgrade_app support.
+        If unsure, say N.
+
+
+if COMPONENTS_AW_UPGRADE_APP
+
+config COMPONENTS_AW_UPGRADE_MD5SUM
+	bool "Tina RTOS OTA MD5SUM"
+	select COMPONENTS_MD5
+	default y
+	help
+		Tina RTOS OTA md5sum after ota finished.
+		If unsure, say N.
+
+endif
+endmenu

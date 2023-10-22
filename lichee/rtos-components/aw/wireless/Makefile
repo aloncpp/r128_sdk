@@ -1,0 +1,3 @@
+obj-$(CONFIG_COMPONENTS_WIRELSEE_COMMON) += common/
+obj-$(CONFIG_COMPONENTS_WIFIMANAGER) += wifimanager/
+obj-$(CONFIG_COMPONENTS_BTMANAGER) += btmanager/

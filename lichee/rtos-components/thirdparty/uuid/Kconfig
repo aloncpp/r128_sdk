@@ -1,0 +1,5 @@
+config COMPONENT_UUID
+    bool "uuid"
+    default n
+    help
+      support uuid

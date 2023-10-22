@@ -1,0 +1,35 @@
+menu "aw aactd"
+
+config COMPONENTS_AACTD
+    bool "Audio Calibration Tool"
+    default y
+    help
+        "A applications that communicate with aactd."
+
+config COMPONENTS_AACTD_DAEMO
+    bool "Audio Calibration Tool Daemon"
+    depends on COMPONENTS_AACTD
+    depends on COMPONENTS_AACTD_LIB
+    select COMPONENTS_LWIP
+    default n
+    help
+        "A tool which runs on the target device and communicates with AACTD on PC,
+         to support tuning runtime audio effect arguments."
+
+if ARCH_SUN20IW2
+config COMPONENTS_AACTD_HW_SET
+    bool "Audio Calibration Tool hw reg set"
+    depends on COMPONENTS_AACTD_DAEMO
+    depends on SND_COMMON_SUNXI_COMMON
+    default n
+
+endif
+
+config COMPONENTS_AACTD_UTILS
+    bool "Audio Calibration Tool UTILS"
+    depends on COMPONENTS_AACTD_DAEMO
+    default n
+    help
+        "A applications that test Audio Calibration Tool Daemon as client."
+
+endmenu

@@ -1,0 +1,28 @@
+menu "TFM Support"
+
+config COMPONENTS_TFM
+    bool "TFM support"
+    default n
+    depends on ARCH_ARM_CORTEX_M33
+    help
+        TFM support.
+
+if COMPONENTS_TFM
+
+config COMPONENTS_TFM_TEST
+    bool "TFM test demo"
+    default n
+    depends on COMPONENTS_TFM
+    help
+        TFM test demo.
+
+config COMPONENTS_TFM_DEBUG
+    bool "TFM debug demo"
+    default n
+    depends on COMPONENTS_TFM
+    help
+        TFM debug demo.
+
+endif
+
+endmenu

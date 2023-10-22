@@ -1,0 +1,17 @@
+choice
+	prompt "Bluetooth Driver Controller"
+	default XRADIO_BT_CONTROLLER
+
+config XRADIO_BT_CONTROLLER
+	bool "Xradio BT Controller"
+	default y
+	help
+	  If this option is enabled, Xradio BT Controller is used.
+
+endchoice
+
+if XRADIO_BT_CONTROLLER
+menu "xradio bt controller"
+	source drivers/drv/bluetooth/driver/controller/xradio/Kconfig
+endmenu
+endif

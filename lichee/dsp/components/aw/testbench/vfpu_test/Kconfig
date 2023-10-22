@@ -1,0 +1,16 @@
+
+config VFPU_TEST
+	bool "vfpu test (depends hifi5 vfpu library)"
+	select COMPONENTS_XTENSA_HIFI5_VFPU_LIBRARY
+	default n
+
+if VFPU_TEST
+    menu "vfpu test case"
+    config VFPU_TEST_CASE1
+	    bool "vfpu_test1: test with vec_sigmoidf"
+	    default n
+    config VFPU_TEST_CASE2
+	    bool "vfpu_test2: test with fft_cplxf_ie"
+	    default n
+    endmenu
+endif

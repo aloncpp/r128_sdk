@@ -1,0 +1,47 @@
+comment "Configure all required drivers sub-systems"
+
+config DRIVERS_CHIP
+	bool "Support rtos-hal drivers"
+	default y
+
+config HAL_OSAL
+	bool "Support oasl api for rtos-hal drivers"
+	select DRIVERS_CHIP
+	default y
+
+config DRIVER_SYSCONFIG
+	bool "Support parse fex for rtos-hal drivers"
+	select DRIVERS_CHIP
+	default n
+
+config DRIVER_BOOT_DTS
+	bool "Support drivers boot from device tree"
+	select DRIVERS_CHIP
+	select DRIVER_SYSCONFIG
+	select COMPONENTS_OPENAMP_OPEN_AMP
+	select COMPONENTS_OPENAMP_VIRTUAL_DRIVER
+	default n
+	help
+		The option need to be selected when booting from dts,
+		otherwise not need to select it.
+
+if DRIVERS_CHIP
+menu "Supported drivers"
+source "drivers/rtos-hal/hal/source/prcm/Kconfig"
+source "drivers/rtos-hal/hal/source/ccmu/Kconfig"
+source "drivers/rtos-hal/hal/source/uart/Kconfig"
+source "drivers/rtos-hal/hal/source/lpuart/Kconfig"
+source "drivers/rtos-hal/hal/source/intc/Kconfig"
+source "drivers/rtos-hal/hal/source/dma/Kconfig"
+source "drivers/rtos-hal/hal/source/gpio/Kconfig"
+source "drivers/rtos-hal/hal/source/twi/Kconfig"
+source "drivers/rtos-hal/hal/source/spi/Kconfig"
+source "drivers/rtos-hal/hal/source/watchdog/Kconfig"
+source "drivers/rtos-hal/hal/source/msgbox/Kconfig"
+source "drivers/rtos-hal/hal/source/hwspinlock/Kconfig"
+source "drivers/rtos-hal/hal/source/timer/Kconfig"
+source "drivers/rtos-hal/hal/source/sound/Kconfig"
+endmenu
+endif
+
+

@@ -1,0 +1,7 @@
+obj-$(CONFIG_COMPONENTS_AW_ALSA_LIB_DSP) += pcm.o
+obj-$(CONFIG_COMPONENTS_AW_ALSA_LIB_DSP) += control.o
+obj-$(CONFIG_COMPONENTS_AW_ALSA_LIB_DSP) += alsa_config.o
+obj-$(CONFIG_COMPONENTS_AW_ALSA_LIB_DSP) += pcm_config.o
+obj-$(CONFIG_COMPONENTS_AW_ALSA_LIB_DSP) += pcm_hw.o
+obj-$(CONFIG_COMPONENTS_AW_ALSA_LIB_DSP) += pcm_mmap.o
+obj-$(CONFIG_COMPONENTS_AW_ALSA_LIB_TEST_DSP) += test/tt-aw-alsa-lib.o

@@ -1,0 +1,8 @@
+menu "Watchpoint Components Support"
+
+config COMPONENTS_WATCHPOINT
+    bool "DSP RTOS Watchpoint"
+    default y
+    help
+        DSP RTOS Watchpoint support.
+endmenu

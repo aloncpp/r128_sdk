@@ -1,0 +1,13 @@
+config COMPONENTS_FREERTOS_CLI
+	bool "FreeRTOS Plus CLI"
+	default n
+
+config COMPONENT_CLI_COMMANDS
+	bool "CLI Commands"
+	default y
+
+if COMPONENT_CLI_COMMANDS
+menu "Supported commands"
+source "components/thirdparty/freertos/FreeRTOS-Plus-CLI/commands/Kconfig"
+endmenu
+endif

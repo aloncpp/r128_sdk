@@ -1,0 +1,7 @@
+config COMPONENT_PWM_TEM
+	bool "PWM_TEM Support"
+	default n
+	help
+		support component aw pwm_tem management.
+	depends on DRIVERS_PWM
+	depends on COMPONENT_THERMAL

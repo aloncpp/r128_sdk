@@ -1,0 +1,4 @@
+config COMPONENT_WHETSTONE
+    bool "whetstone"
+    default n
+

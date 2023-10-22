@@ -1,0 +1,56 @@
+config COMPONENTS_AW_ALSA_RPAF_COMPONENT
+	bool "Allwinner rpaf component"
+	depends on COMPONENTS_AW_ALSA_RPAF
+	default n
+	help
+		This is package for aw-rpaf, only used for Allwinner DSP RTOS.
+
+config COMPONENTS_AW_ALSA_RPAF_SUBSTREAM
+	bool "Allwinner rpaf substream"
+	depends on COMPONENTS_AW_ALSA_RPAF && COMPONENTS_AW_ALSA_LIB_DSP
+	default n
+	help
+		This is package for aw-rpaf, only used for Allwinner DSP RTOS.
+
+config COMPONENTS_AW_ALSA_RPAF_MIXER
+	bool "Allwinner rpaf mixer"
+	depends on COMPONENTS_AW_ALSA_RPAF && COMPONENTS_AW_ALSA_LIB_DSP
+	default n
+	help
+		This is package for aw-rpaf, only used for Allwinner DSP RTOS.
+
+config COMPONENTS_AW_ALSA_RPAF_DEBUG
+	bool "Allwinner rpaf debug"
+	depends on COMPONENTS_AW_ALSA_RPAF
+	default n
+	help
+		This is package for aw-rpaf, only used for Allwinner DSP RTOS.
+
+config COMPONENTS_AW_ALSA_RPAF_SIMULATOR
+	bool "Allwinner rpaf <rpaf_simulator>"
+	depends on COMPONENTS_AW_ALSA_RPAF_DEBUG
+	default n
+	help
+		This is package for aw-rpaf, only used for Allwinner DSP RTOS.
+
+config COMPONENTS_AW_ALSA_RPAF_REMOTE_AMP
+	int "msgbox remote amp id"
+	default 0
+	depends on COMPONENTS_AW_ALSA_RPAF
+	help
+		msgbox remote amp id
+
+config COMPONENTS_AW_ALSA_RPAF_READ_CH
+	int "msgbox read channel"
+	default 1
+	depends on COMPONENTS_AW_ALSA_RPAF
+	help
+		msgbox read channel
+
+config COMPONENTS_AW_ALSA_RPAF_WRITE_CH
+	int "msgbox write channel"
+	default 1
+	depends on COMPONENTS_AW_ALSA_RPAF
+	help
+		msgbox write channel
+

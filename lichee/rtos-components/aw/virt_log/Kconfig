@@ -1,0 +1,14 @@
+menuconfig COMPONENTS_VIRT_LOG
+	bool "virtual log"
+	default n
+
+if COMPONENTS_VIRT_LOG
+config COMPONENTS_VIRT_LOG_SIZE
+	int "virt log buffer size(unit:Kb)"
+	default 4
+
+config COMMAND_DMESG
+    bool "Dmesg Command to show virt log buffer"
+	default n
+
+endif

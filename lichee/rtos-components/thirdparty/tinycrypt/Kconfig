@@ -1,0 +1,5 @@
+config COMPONENT_TINYCRYPT
+    bool "tinycrypt"
+    default n
+    help
+      support tinycrypt

@@ -1,0 +1,21 @@
+menu "CIR_TX Devices"
+
+config DRIVERS_CIR_TX
+	bool "enable CIR_TX driver"
+        default n
+
+menu "CIR_TX option features"
+
+config DRIVERS_CIR_TX_DEBUG
+	bool "support CIR_TX debug"
+	select DRIVERS_CIR
+	default n
+
+config HAL_TEST_CIR_TX
+	bool "CIR_TX TEST CASE"
+	depends on DRIVERS_CIR_TX
+	default n
+
+endmenu
+
+endmenu

@@ -1,0 +1,21 @@
+#ifndef __CIR_TX_SUN55IW3_H_
+#define __CIR_TX_SUN55IW3_H_
+
+#include <hal_interrupt.h>
+
+#if defined(CONFIG_ARCH_RISCV)
+#define SUNXI_IRQ_IRTX		MAKE_IRQn(93, 3)
+#endif
+
+#define SUNXI_IRTX_PBASE	0x02003000
+#define IRADC_PIN		GPIOH(18)
+#define IR_MUXSEL		2
+#define IR_DRVSEL		2
+
+#define SUNXI_IRTX_RESET_TYPE	HAL_SUNXI_RESET
+#define SUNXI_IRTX_CLK_TYPE	HAL_SUNXI_CCU
+#define SUNXI_RST_IRTX		RST_BUS_IRTX
+#define SUNXI_CLK_BUS_IRTX	CLK_BUS_IRTX
+#define SUNXI_CLK_MODULE_IRTX	CLK_IRTX
+#endif /* __CIR_TX_SUN55IW3_H_ */
+

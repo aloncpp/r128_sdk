@@ -1,0 +1,84 @@
+wifimanager2.0
+
+-version2.0.0
+init version.
+1.support sta/ap/monitor mode for linux os.
+
+-version2.0.1
+1.add freertos os interface, support sta/ap/monitor mode.
+
+-version2.0.2
+no this version
+
+-version2.0.3
+1.freertos os add dhcp flow in sta mode.
+2.rm some unused file in linux os.
+3.fix the bug stackdump when disable in sta mode .
+
+-version2.0.4
+1.support wpa3 sec in sta mode.
+2.support build in tina-dev and tina-5.0
+3.rename ‘os level’ interface, adtape code style.
+4.all mode only use:init,deinit,enable,disable,platform interface.
+
+-version2.0.5
+1.fix the bug regist event callback func more times.
+2.Solve the problem that the connection fails due to too short time.
+3.support get wifimanager state interface.
+4.support linkd_smatconfig/linkd_ble/linkd_softap for freertos os.
+5.support save ap info in wpa_supplicant.conf file,when connected successed for freertos os.
+6.wmg_common.c fix the problem that the char pointer caused the library to crash
+7.update some log level.
+8.Fix compilation issues when compiling tina-dev and tina-5.0 for linux os.
+
+-version2.0.6
+1.fix a issue that start_udhcpc's paramter is null.
+2.fix the bug 'devices busy' when connect second time.
+3.support p2p function.
+4.support xrlink function.
+5.support tina5.0.
+6.add config mode_list and compatible "Makefile".
+7.add tinanet_build for automated migration.
+
+-version2.0.7
+1.register function support config.
+2.refactored print function,optimize printing for 'path file func line'.
+3.fix bug,connect and reconnect interface return befor dhcp success.
+4.support modular configuration and compilation.
+5.fix bug, scan results err and add sec info for rtos.
+6.remove macro BSSID_MAX_LEN and wpa_supplicant.init file.
+7.fix the problem of switching mode error.
+8.add bitmap for config mode function.
+9.add p2p interface for rtos.
+10.optimize code, reduce code size.
+11.fix some bug about xrlink.
+12.fix bug wifi -l/wifi -v, ssid passwd too long.
+13.support 5G channel display.
+14.fix freertos wep connect support WPA_AUTH_ALG_SHARED or WPA_AUTH_ALG_OPEN.
+15.add wifi -r for freertos.
+16.add status juge before connect.
+
+-version2.0.8
+1.support ssid include blank space, but require quotation marks.
+2.support expand cmd, eg:wifi -e linux: ioctl: wlan0 setsusspendmode 1.
+3.mv get/set mac func to expand cmd(linux/rtos).
+4.fix the bug, switch ap connect failed.
+5.support display chinese, but less 10 char.
+6.fix the bug, display about sec mode, wifi -s/wifi -l.
+7.fix complie warning(freertos).
+8.fix the bug, display about rssi(freertos).
+
+-version2.0.8.1
+1.xrlink: expand cmd support get/set mac.
+2.xrlink: rm unused files.
+3.freertos: support set scan max num.
+4.freertos: fix bug, wifi -m can  not scan/connect.
+5.freertos: fix bug, reconnect success not cb event.
+6.blelink: fix bug, timeout handle ble deinit.
+7.refactor the way get ipv4.
+
+-version2.0.8.2
+1.fix bug connect hidden ssid.
+2.ble_link: fix blink crash problem.
+3.freertos: add func about countrycode.
+4.freertos: change scan max num to 50.

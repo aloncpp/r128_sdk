@@ -1,0 +1,92 @@
+choice
+	prompt "CPU Architecture"
+	default ARCH_ARM
+
+config ARCH_ARM
+	bool "ARM"
+	---help---
+	The ARM architectures
+
+config ARCH_RISCV
+	bool "RISCV"
+	---help---
+	The RISC-V architecture
+
+endchoice
+
+config ARCH
+	string
+	default "arm"		if ARCH_ARM
+	default "risc-v"	if ARCH_RISCV
+
+config ARCH_START_ADDRESS
+    hex "CPU Start Address"
+    default 0x04000000
+    ---help---
+    The CPU Bootup Address
+
+config ARCH_MEM_LENGTH
+    hex "Memory Length"
+    default 0x100000
+    ---help---
+    The memory length which is used by the CPU.
+
+config ARCH_RISCV_START_ADDRESS
+    hex "RISCV CPU Start Address"
+    default 0x04000000
+    depends on ARCH_ARM
+    ---help---
+    The RISCV CPU Bootup Address
+
+config ARCH_DSP_START_ADDRESS
+    hex "DSP CPU Start Address"
+    default 0x04000000
+    depends on ARCH_ARM
+    ---help---
+    The DSP CPU Bootup Address
+
+config BIG_ENDIAN
+    bool
+
+config LITTLE_ENDIAN
+    bool
+
+config BITS_PER_LONG
+    int "bit per long"
+    default 32 if ARCH_ARM || ARCH_RISCV_RV32 || ARCH_XTENSA
+    default 64 if ARCH_RISCV_RV64
+
+config CACHE_ALIGN_CHECK
+	bool "cache align check"
+	default y
+
+config TOOLCHAIN_FLOAT_HARD
+    bool
+
+config TOOLCHAIN_FLOAT_SOFTFP
+    bool
+
+config TOOLCHAIN_FLOAT_SOFT
+    bool
+
+config TOOLCHAIN_FLOAT_NONE
+    bool
+
+config PANIC_CLI
+    bool "Enter CLI When Crash"
+    default y
+
+if PANIC_CLI
+config PANIC_CLI_PWD
+    bool "Panic CLI Password"
+    default y
+
+endif
+
+config DISABLE_ALL_UART_LOG
+    bool "Disable All Uart Log"
+    depends on !PANIC_CLI
+    default n
+
+source arch/arm/Kconfig
+source arch/risc-v/Kconfig

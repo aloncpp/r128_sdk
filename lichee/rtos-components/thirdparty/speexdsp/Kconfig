@@ -1,0 +1,5 @@
+config COMPONENTS_SPEEXDSP
+    bool "speexdsp"
+    default n
+    help
+      support speexdsp resample

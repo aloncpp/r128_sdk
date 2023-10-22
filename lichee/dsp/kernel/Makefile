@@ -1,0 +1,1 @@
+obj-$(CONFIG_KERNEL_XTENSA_V1_7) += FreeRTOS_xtensa_v1.7/

@@ -1,0 +1,64 @@
+menuconfig COMPONENTS_AW_BLKPART
+    bool "Block Partition"
+    default y
+    help
+      Support block partition for block device.
+
+      If unsure, say Y.
+
+if COMPONENTS_AW_BLKPART
+
+    config COMPONENTS_AW_BLKPART_TEST
+    bool "Testcase for Block Partition"
+    default n
+    help
+        Enable testcase of block partition for tinatest.
+        You can call it by console with:
+            tt block [part]:
+                do erase/write/read to partition. If no part given, operate the
+                last partition.
+            tt block <read/write/erase> [part] [addr]:
+                operate address base on partition. If no part given, operate
+		the last partition. If address given, use 0 default.
+            tt block info [part]: show one or all partition
+
+        If unsure, say N.
+
+    config COMPONENTS_AW_BLKPART_PART_TABLE_SIZE
+    int "Partition Table Size (KB)"
+    default 16
+    help
+        Size of partition table in KB.
+
+    config COMPONENTS_AW_BLKPART_LOGICAL_OFFSET
+    int "Logical Partition Start Address (KB)"
+    default 144 if ARCH_SUN20IW2
+    default 5120
+    help
+        The offset address for storage to mapping partition by MBR/GPT.
+        It is excluding the size of partition table. For example, the
+        GPT table is saved in address (5M - 16K) and the starting address
+        for GPT mapping is 5M, in this case, this property should be set
+        to 5120(5M).
+
+    config RESERVE_IMAGE_PART
+    bool "Reserve Image Part for RTOS"
+    default y
+    help
+        Reserve Image Part for RTOS.
+
+    config RESERVE_FILESYSTEM_PATH
+    string "Reserve Image Mount Path"
+    default "/reserve"
+    depends on RESERVE_IMAGE_PART
+    help
+        The reserve image of rtosA or rtosB will mount at the path.
+
+    config COMPONENTS_AW_BLKPART_NO_GPT
+    bool "hardcode simple gpt when no valid gpt in flash"
+    default n
+    help
+        Hardcode simle gpt when no gpt in flash.
+        Only for debug.
+
+endif

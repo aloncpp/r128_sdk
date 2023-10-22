@@ -1,0 +1,16 @@
+menu "Bluetooth Testcase"
+	depends on COMPONENTS_BTMANAGER
+
+config TESTCASE_BTON
+	bool "BT On Testcase."
+	default n
+
+config TESTCASE_BTOFF
+	default n
+	bool "BT Off Testcase."
+
+config TESTCASE_BTSCAN
+	default n
+	bool "BT Scan Testcase."
+
+endmenu

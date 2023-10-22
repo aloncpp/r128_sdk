@@ -1,0 +1,22 @@
+menu "LPUART Devices"
+
+config DRIVERS_LPUART
+    bool "enable lpuart driver"
+        default y
+
+config HAL_TEST_LPUART
+    bool "enable lpuart hal APIs test command"
+	depends on DRIVERS_LPUART
+        default n
+
+config SUNXI_LPUART_REGISTER_LPUART0
+    bool "support lpuart0 device"
+	depends on DRIVERS_LPUART
+        default n
+
+config SUNXI_LPUART_REGISTER_LPUART1
+    bool "support lpuart1 device"
+	depends on DRIVERS_LPUART
+        default n
+
+endmenu

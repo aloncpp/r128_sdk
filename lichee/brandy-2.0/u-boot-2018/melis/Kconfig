@@ -1,0 +1,15 @@
+
+config SUNXI_MELIS
+	bool "Sunxi Melis support"
+	default n
+	help
+	  Enable support for sunxi Melis
+
+if SUNXI_MELIS
+config SUNXI_MELIS_LOGICAL_OFFSET
+	int "Melis logical offset"
+	default 10208
+	help
+	  spinor address is offset*512 bytes
+endif
+

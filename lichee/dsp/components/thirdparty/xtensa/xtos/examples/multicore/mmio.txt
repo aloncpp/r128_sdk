@@ -1,0 +1,28 @@
+
+// Copyright (c) 2018 Cadence Design Systems, Inc.  ALL RIGHTS RESERVED.
+//
+// These coded instructions, statements, and computer programs are the
+// copyrighted works and confidential proprietary information of
+// Cadence Design Systems, Inc.  They may be adapted and modified by bona fide
+// purchasers for internal use, but neither the original nor any adapted
+// or modified version may be disclosed or distributed to third parties
+// in any manner, medium, or form, in whole or in part, without the prior
+// written consent of Cadence Design Systems, Inc.
+
+// mmio configuration file. The 'SlaveReset' register has a bit for each
+// slave core, wired to the BReset input of the corresponding core. The
+// register powers up with all bits set, which holds all the slaves in
+// reset. A write from the master (core0) that sets the bit(s) to zero
+// will bring the corresponding core(s) out of reset.
+
+
+// register  <RegisterName>  <BitWidth>  <Address>   {<InitialValue>}
+// --------  --------------  ----------  ----------   --------------
+   register  SlaveReset         32       0x10000000    0xFFFFFFFF
+
+// output  <PortName>    <RegisterName>  {<HighBit>  {<LowBit>}}
+// ------  ------------  --------------   ---------   --------
+   output  SlaveReset1   SlaveReset           1          1
+   output  SlaveReset2   SlaveReset           2          2
+   output  SlaveReset3   SlaveReset           3          3
+

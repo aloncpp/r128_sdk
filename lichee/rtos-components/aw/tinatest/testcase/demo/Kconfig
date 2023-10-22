@@ -1,0 +1,4 @@
+config TESTCASE_DEMO
+	bool "tinatest demo testcase."
+	default y
+

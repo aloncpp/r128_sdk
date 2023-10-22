@@ -1,0 +1,99 @@
+#!/bin/bash
+
+usage() {
+	echo "USAGE:  ./scripts/ksize [d|v] [dir]"
+	echo ""
+	echo "OPTIONS:"
+	echo "    d - get text/data/bss size of 'dir'"
+	echo "    v - verbose"
+}
+
+func_simple() {
+	echo "             Total |      text      data       bss      filename"
+	echo "----------------------------------------------------------------------------------------------------"
+
+	if [ -n "$RTOSIMG" ]; then
+		size $RTOSIMG | tail -n +2 | awk '{text+=$1; data+=$2; bss+=$3}; END {printf "FreeRTOS%10s |%10s%10s%10s\t%s\n", text+data+bss, text, data, bss, "rt_system.elf"}'
+		echo "----------------------------------------------------------------------------------------------------"
+	fi
+
+	if [ -n "$LINKLIBA" ]; then
+		size $LINKLIBA | tail -n +2 | awk '{text+=$1; data+=$2; bss+=$3}; END {printf "\t%10s |%10s%10s%10s\t%s\n", text+data+bss, text, data, bss, "libwlan_lib.a"}'
+	fi
+
+	if [ -n "$SUBFILES" ]; then
+		size $SUBFILES | tail -n +2 | awk '{text+=$1; data+=$2; bss+=$3}; END {printf "\t%10s |%10s%10s%10s\t%s\n", text+data+bss, text, data, bss, "'$DIR'/*.o"}'
+	fi
+
+	for subdir in $SUBDIRS; do
+		size `find $subdir -name *.o` | tail -n +2 | awk '{text+=$1; data+=$2; bss+=$3}; END {printf "\t%10s |%10s%10s%10s\t%s\n", text+data+bss, text, data, bss, "'$subdir'/*"}'
+	done
+
+	echo "----------------------------------------------------------------------------------------------------"
+	size $LINKLIBA `find $DIR -name *.o` | tail -n +2 | awk '{text+=$1; data+=$2; bss+=$3}; END {printf "sum:\t%10s |%10s%10s%10s\n", text+data+bss, text, data, bss}'
+
+	if [ -n "$RTOSIMG" ]; then
+		size $RTOSIMG $LINKLIBA `find $DIR -name *.o` | tail -n +2 | awk '{ if (NR == 1) { text=$1; data=$2; bss=$3 } else {text-=$1; data-=$2; bss-=$3}  }; END {printf "delta:\t%10s |%10s%10s%10s\n", text+data+bss, text, data, bss}'
+	fi
+
+	echo ""
+	echo ""
+}
+
+func_verbose() {
+	for subdir in $SUBDIRS; do
+		echo "             Total |      text      data       bss      filename"
+		size `find $subdir -name *.o` | tail -n +2 | awk '{text+=$1; data+=$2; bss+=$3}; END {printf "SubSum:\t%10s |%10s%10s%10s\t%s\n", text+data+bss, text, data, bss, "'$subdir'/*"}'
+
+		echo "----------------------------------------------------------------------------------------------------"
+		size `find $subdir -name *.o` | tail -n +2 | awk '{printf "\t%10s |%10s%10s%10s\t%s\n", $1+$2+$3, $1, $2, $3, $6}'
+		echo ""
+		echo ""
+	done
+}
+
+CURDIR=`pwd`
+
+if [ -d "$RTOS_TOP" ]; then
+	if [ "x$RTOS_TOP/lichee/rtos" != "x$CURDIR" ]; then
+		echo "ERROR: Please run under: $RTOS_TOP/lichee/rtos"
+		exit
+	fi
+
+	if [ -d "$RTOS_TOP/lichee/rtos/build" ]; then
+		cd $RTOS_TOP/lichee/rtos/build
+	else
+		echo "ERROR: No Such Directory: $RTOS_TOP/build"
+		exit
+	fi
+fi
+
+OPFLAGS=$1
+DIR=${2%/}
+
+if [ "x$OPFLAGS" != "x" -a "x$OPFLAGS" != "xv" -a "x$OPFLAGS" != "xd" ]; then
+	usage
+	exit
+fi
+
+if [ "x$DIR" == "x" ]; then
+	RTOSIMG="../rt_system.elf"
+	LINKLIBA="../drivers/board/wireless/rtl8723ds/wlan_lib/libwlan_lib.a"
+
+	SUBDIRS=`ls -l ./ | grep ^d | awk '{print $NF}'`
+	SUBFILES=`ls -l ./ | grep '\.o' | awk '{print $NF}'`
+else
+	if [ ! -d "$DIR" ]; then
+		echo "ERROR: No Such Directory: $DIR"
+		exit
+	fi
+
+	SUBDIRS=`ls -l ./$DIR | grep ^d | awk '{print "'$DIR'/"$NF}'`
+	SUBFILES=`ls -l ./$DIR | grep '\.o' | awk '{print "'$DIR'/"$NF}'`
+fi
+
+func_simple
+
+if [ "x$OPFLAGS" == "xv" ]; then
+	func_verbose
+fi

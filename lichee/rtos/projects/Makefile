@@ -1,0 +1,1 @@
+obj-$(CONFIG_PROJECT_R128S2) += r128s2/

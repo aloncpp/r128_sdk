@@ -1,0 +1,4 @@
+config COMPONENT_DHRYSTONE
+    bool "dhrystone"
+    default n
+

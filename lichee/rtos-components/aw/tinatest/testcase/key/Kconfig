@@ -1,0 +1,3 @@
+config TESTCASE_KEY
+	bool "LRADC/GPADC KEY Testcase."
+	default n

@@ -1,0 +1,108 @@
+if COMPONENTS_BLUEDROID
+config BT_ENABLED
+    bool "Bluedroid enable"
+    depends on COMPONENTS_BLUEDROID
+    default y
+    help
+        Select this option to enable Bluedroid and show the submenu with Bluedroid configuration choices.
+
+config BT_BLUEDROID_ENABLED
+    bool "Bluedroid - Dual-mode"
+    depends on COMPONENTS_BLUEDROID
+    default y
+    help
+        This option is recommended for classic Bluetooth or for dual-mode
+        usecases
+
+config BT_HOST
+    bool "Bluedroid Host"
+    default BT_BLUEDROID_ENABLED
+    default y
+    help
+        This helps to enable Bluetooth host stack
+
+menu "Bluedroid-BT Options"
+    visible if BT_BLUEDROID_ENABLED
+
+    source "components/common/thirdparty/bluetooth/bluedroid/host/bluedroid/Kconfig.in"
+endmenu
+
+if !BT_DUAL_HOST
+menuconfig BLE_MESH
+    bool "XRAIDO BLE Mesh Support"
+    depends on BT_ENABLED
+    help
+        This option enables XRAIDO BLE Mesh support. The specific features that are
+        available may depend on other features that have been enabled in the
+        stack, such as Bluetooth Support, Bluedroid Support & GATT support.
+
+source "components/common/thirdparty/bluetooth/bluedroid/xr_ble_mesh/Kconfig.in"
+
+endif
+
+menu XRADIO_COMMON
+
+config HCI_LAYER_RX
+    bool "HCI LAYER RX support"
+    depends on BT_DUAL_HOST
+    default y if BT_DUAL_HOST
+    help
+        This option enable hci rx thread.
+
+config HCILOG_ENABLE
+    bool "hcilog enable"
+    depends on BT_DRIVERS_LOG
+    default y if BT_DRIVERS_LOG
+    help
+        This option enable bluedroid hcilog feature.
+
+config BT_SRC_PROCESS
+    bool "A2dp source process feature support"
+    default y
+    help
+        This option process a2dp source thread.
+
+config BTTRC_DUMP_BUFFER
+    int "hcidmp buffer"
+    default 1
+    help
+        This option set hcidump buff.
+
+config BLUEDROID_USE_SETTINGS
+    bool "bluedroid use settings"
+    default y
+    help
+        This option set bluedroid use settings.
+
+config BLUEDROID_MAX_STORE_VALUE
+    int "bluedroid max store value"
+    default 8
+    help
+        This option set bluedroid max store value.
+
+config FILE_MAX_SIZE
+    int "bluedroid max file size"
+    default 1536
+    help
+        This option set bluedroid max file size.
+
+config FILE_DEFAULE_LENGTH
+    int "bluedroid file defaule length"
+    default 2048
+    help
+        This option set bluedroid file defaule length.
+
+config KEY
+    string "bluedroid store key name"
+    default "bt_cfg_key"
+    help
+        This option set bluedroid store key name.
+
+config BLUEDRIOD_LOG_DEFAULT_LEVEL
+    int "bluedroid log defaule level"
+    default 2
+    help
+        This option set bluedroid log defaule level.
+endmenu
+endif
+

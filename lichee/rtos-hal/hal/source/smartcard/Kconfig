@@ -1,0 +1,20 @@
+menu "SMARTCARD Devices"
+
+config DRIVERS_SMARTCARD
+    bool "enable smartcard device drivers"
+        default n
+
+menu "smartcard device option freatuers"
+
+config DRIVERS_SMARTCARD_FEATURE
+    bool "scr device feature 1"
+        select DRIVERS_SMARTCARD
+        default n
+
+config HAL_TEST_SMARTCARD
+   bool "enable smartcard APIs test command"
+	default n
+
+endmenu
+
+endmenu

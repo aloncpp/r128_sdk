@@ -1,0 +1,25 @@
+source components/thirdparty/common/Kconfig
+
+source components/thirdparty/console/Kconfig
+
+source components/thirdparty/ulog/Kconfig
+
+source components/thirdparty/cplusplus/Kconfig
+
+source components/thirdparty/smartlink/Kconfig
+
+source components/thirdparty/vfs/Kconfig
+
+source components/thirdparty/spiffs/Kconfig
+
+source components/thirdparty/lfs/Kconfig
+
+source components/thirdparty/sona_audioaef/Kconfig
+
+source components/thirdparty/finsh_cli/Kconfig
+
+source components/thirdparty/io_multiplex/Kconfig
+
+source components/thirdparty/elmfat/Kconfig
+
+source components/thirdparty/speex/Kconfig

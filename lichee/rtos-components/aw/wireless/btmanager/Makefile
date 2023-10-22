@@ -1,0 +1,2 @@
+obj-$(CONFIG_COMPONENT_BTMG_CORE) += src/
+obj-$(CONFIG_COMPONENT_BTMG_CMD) += cmd/btcli/

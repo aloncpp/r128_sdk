@@ -1,0 +1,102 @@
+menu "AudioSystem Support"
+
+config COMPONENTS_AW_AUDIO_SYSTEM
+	bool "AW Audio System Support"
+	depends on COMPONENTS_AW_TINY_ALSA_LIB || AMP_AUDIO_PB_API_ALIAS || AMP_AUDIO_CAP_API_ALIAS
+	default n
+	help
+	  Support Allwinner Audio System component.
+
+config COMPONENTS_AW_AUDIO_SYSTEM_HW
+	bool "Audio HW Support"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM
+	select COMPONENTS_AW_AUDIO_SYSTEM_HW_AMP if AMP_AUDIO_PB_API_ALIAS
+	select COMPONENTS_AW_AUDIO_SYSTEM_HW_AMP if AMP_AUDIO_CAP_API_ALIAS
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_HW_PCM
+	bool "Audio HW Support PCM"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_HW_MULTI_PCM
+	bool "Audio HW Support Multi PCM"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW_PCM
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_HW_AMP
+	bool "Audio HW Support AMP"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW
+	depends on AMP_AUDIO_PB_API_ALIAS || AMP_AUDIO_CAP_API_ALIAS
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_HW_BT
+	bool "Audio HW Support BT"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW
+	select A2DP_USE_AUDIO_SYSTEM
+	select COMPONENTS_RINGBUFFER
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_HW_USB
+	bool "Audio HW Support USB"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_HW_EQ
+	bool "Audio HW Support EQ"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW
+	depends on SND_COMMON_SUNXI_ALG_CFG
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_HW_AW_EQ
+	bool "Audio HW Support AW EQ"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW
+	depends on COMPONENTS_PROCESS_EQ
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_HW_DRC
+	bool "Audio HW Support DRC"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW
+	depends on SND_COMMON_SUNXI_ALG_CFG
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_TRACK
+	bool "Audio Track Support"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW
+	depends on !AMP_AUDIO_PB_API_UNIQUE
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_RECORD
+	bool "Audio Record Support"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_HW
+	depends on !AMP_AUDIO_CAP_API_UNIQUE
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_UTILS
+	bool "Audio System Utils"
+	depends on (AMP_AUDIO_PB_API_UNIQUE && AMP_AUDIO_CAP_API_UNIQUE) || (COMPONENTS_AW_AUDIO_SYSTEM_TRACK && COMPONENTS_AW_AUDIO_SYSTEM_RECORD)
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_UTILS_LOOP
+	bool "Audio System loopback utils"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_UTILS
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_UTILS_LOOP_AEC
+	bool "loopback utils support aec"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_UTILS_LOOP
+	depends on COMPONENTS_PROCESS_AEC
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_PLUGIN
+	bool "Audio Plugin Support"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM
+	depends on COMPONENTS_SPEEXDSP
+	default n
+
+config COMPONENTS_AW_AUDIO_SYSTEM_PLUGIN_RESAMPLE_ADJUST
+	bool "Audio Plugin resample adjust"
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_PLUGIN
+	default n
+
+endmenu

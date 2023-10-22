@@ -1,0 +1,365 @@
+# Bluetooth configuration options
+
+# Copyright (c) 2016 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+
+
+if COMPONENTS_ZEPHYR
+
+config BLEHOST
+	bool
+	depends on COMPONENTS_ZEPHYR
+	default y
+	help
+	  If this option is enabled, BLE Host used.
+
+config BLE_FEATURE
+	bool
+	depends on COMPONENTS_ZEPHYR
+	default y
+	help
+	  If this option is enabled, BLE Host used.
+
+config BLEHOST_Z_ITERABLE_SECTION
+	bool "Use iterable section instead with XRadio implement"
+	default y
+	help
+	  Enable this configure will define some host variable in specific
+	  section.
+	  Disable this will use XRadio implement, some host variable will be
+	  a list node, and some will be a vector, the slab will be implement
+	  by malloc and free.
+
+#module = BT
+#module-str = bt
+#source "src/ble/logging/Kconfig.template.log_config"
+
+choice
+	prompt "Max compiled-in log level for bt"
+	default BT_LOG_LEVEL_INF
+	depends on LOG
+
+config BT_LOG_LEVEL_OFF
+	bool "Off"
+
+config BT_LOG_LEVEL_ERR
+	bool "Error"
+
+config BT_LOG_LEVEL_WRN
+	bool "Warning"
+
+config BT_LOG_LEVEL_INF
+	bool "Info"
+
+config BT_LOG_LEVEL_DBG
+	bool "Debug"
+
+endchoice
+
+config BT_LOG_LEVEL
+	int
+	depends on LOG
+	default 0 if BT_LOG_LEVEL_OFF
+	default 1 if BT_LOG_LEVEL_ERR
+	default 2 if BT_LOG_LEVEL_WRN
+	default 3 if BT_LOG_LEVEL_INF
+	default 4 if BT_LOG_LEVEL_DBG
+
+choice
+	prompt "Bluetooth Stack Selection"
+	default BT_HCI
+	help
+	  Select the Bluetooth stack to compile.
+
+config BT_HCI
+	bool "HCI-based"
+	help
+	  HCI-based stack with optional host & controller parts and an
+	  HCI driver in between.
+
+config BT_CUSTOM
+	bool "Custom"
+	help
+	  Select a custom, non-HCI based stack. If you're not sure what
+	  this is, you probably want the HCI-based stack instead.
+
+endchoice
+
+# The Bluetooth subsystem requires the system workqueue to execute at
+# a cooperative priority.
+#config SYSTEM_WORKQUEUE_PRIORITY
+#   range -256 -1
+
+if BT_HCI
+
+config BT_HCI_RAW
+	bool "RAW HCI access"
+	help
+	  This option allows to access Bluetooth controller
+	  from the application with the RAW HCI protocol.
+
+config BT_HCI_RAW_RESERVE
+	int "Buffer headroom needed for HCI transport"
+	depends on BT_HCI_RAW
+	default 0
+	help
+	  This option is used by the HCI raw transport implementation to
+	  declare how much headroom it needs for any HCI transport headers.
+
+config BT_PERIPHERAL
+	bool "Peripheral Role support"
+	select BT_BROADCASTER
+	select BT_CONN
+	default y if BT_HCI_RAW
+	help
+	  Select this for LE Peripheral role support.
+
+config BT_CENTRAL
+	bool "Central Role support"
+	select BT_OBSERVER
+	select BT_CONN
+	default y if BT_HCI_RAW
+	help
+	  Select this for LE Central role support.
+
+menu "Broadcaster"
+	visible if !BT_PERIPHERAL
+
+config BT_BROADCASTER
+	bool "Broadcaster Role support"
+	default y if !BT_OBSERVER
+	help
+	  Select this for LE Broadcaster role support.
+
+endmenu
+
+config BT_EXT_ADV
+	bool "Extended Advertising and Scanning support [EXPERIMENTAL]"
+	help
+	  Select this to enable Extended Advertising API support.
+	  This enables support for advertising with multiple advertising sets,
+	  extended advertising data, and advertising on LE Coded PHY.
+	  It enables support for receiving extended advertising data as a
+	  scanner, including support for advertising data over the LE coded PHY.
+	  It enables establishing connections over LE Coded PHY.
+
+if BT_EXT_ADV
+config BT_EXT_ADV_LEGACY_SUPPORT
+	bool "Support starting advertising through legacy commands"
+	help
+	  Select this to enable the use of the Legacy Advertising HCI commands.
+	  This option should be used where the capabilities of the controller
+	  is not known.
+	  If this option is not enabled the controller must support the extended
+	  advertising feature.
+
+config BT_EXT_ADV_MAX_ADV_SET
+	int "Maximum number of simultaneous advertising sets"
+	range 1 64
+	default 1
+	help
+	  Maximum number of simultaneous Bluetooth advertising sets
+	  supported.
+
+config BT_PER_ADV
+	bool "Periodic Advertising and Scanning support [EXPERIMENTAL]"
+	help
+	  Select this to enable Periodic Advertising API support. This allows
+	  the device to send advertising data periodically at deterministic
+	  intervals. Scanners can synchronize to the periodic advertisements
+	  to periodically get the data.
+
+config BT_PER_ADV_SYNC
+	bool "Periodic advertising sync support [EXPERIMENTAL]"
+	depends on BT_OBSERVER
+	help
+	  Select this to enable Periodic Advertising Sync API support.
+	  Syncing with a periodic advertiser allows the device to periodically
+	  and deterministic receive data from that device in a connectionless
+	  manner.
+
+if BT_PER_ADV_SYNC
+config BT_PER_ADV_SYNC_MAX
+	int "Maximum number of simultaneous periodic advertising syncs"
+	range 1 64
+	default 1
+	help
+	  Maximum number of simultaneous periodic advertising syncs supported.
+endif # BT_PER_ADV_SYNC
+
+endif # BT_EXT_ADV
+
+menu "Observer"
+	visible if !BT_CENTRAL
+
+config BT_OBSERVER
+	bool "Observer Role support"
+	help
+	  Select this for LE Observer role support.
+
+endmenu
+
+#source "src/ble/subsys/bluetooth/services/Kconfig"
+
+config BT_CONN
+	bool
+
+config BT_MAX_CONN
+	int "Maximum number of simultaneous connections"
+	depends on BT_CONN
+	range 1 64
+	default 1
+	help
+	  Maximum number of simultaneous Bluetooth connections
+	  supported.
+
+if BT_CONN
+config BT_HCI_ACL_FLOW_CONTROL
+	bool "Controller to Host ACL flow control support"
+	# Enable if building a Host-only build
+	default y if !BT_CTLR  && !BT_STM32_IPM
+	# Enable if building a Controller-only build
+	default y if BT_HCI_RAW
+	select POLL
+	help
+	  Enable support for throttling ACL buffers from the controller
+	  to the host. This is particularly useful when the host and
+	  controller are on separate cores since it ensures that we do
+	  not run out of incoming ACL buffers.
+
+config BT_REMOTE_VERSION
+	bool "Enable fetching of remote version"
+	# Enable if building a Controller-only build
+	default y if BT_HCI_RAW
+	help
+	  Enable this to get access to the remote version in the Controller and
+	  in the Host through bt_conn_get_info(). The fields in question can
+	  be then found in the bt_conn_info struct.
+
+config BT_PHY_UPDATE
+	bool "PHY Update"
+	default y
+	help
+	  Enable support for Bluetooth 5.0 PHY Update Procedure.
+
+config BT_DATA_LEN_UPDATE
+	bool "Data Length Update"
+	default y
+	help
+	  Enable support for Bluetooth v4.2 LE Data Length Update procedure.
+endif # BT_CONN
+
+config BT_DEINIT
+	bool "BLE Deinit"
+	default n
+	help
+	  Enable support for Bluetooth close function.
+
+config BT_VAR_MEM_DYNC_ALLOC
+	bool "BLE Global Variable Memory Dynamic Allocation"
+	default n
+	help
+	  Enable support for some BLE Host global variable change from static
+	  to dynamic allocation,  it will be allocated in init procedure, and
+	  free in deinit procedure.
+
+#config BT_ISO
+#   bool "Bluetooth Isochronous Channel Support [EXPERIMENTAL]"
+#   depends on BT_CONN
+#   help
+#     Select this to enable Isochronous Channel support.
+
+if BT_ISO
+
+config BT_ISO_MAX_CHAN
+	int "Maximum number of simultaneous ISO channels"
+	depends on BT_ISO
+	default BT_MAX_CONN
+	range 1 64
+	help
+	  Maximum number of simultaneous Bluetooth isochronous channels
+	  supported.
+
+config BT_ISO_TX_BUF_COUNT
+	int "Number of Isochronous TX buffers"
+	default 1
+	range 1 255
+	help
+	  Number of buffers available for outgoing Isochronous channel SDUs.
+
+config BT_ISO_TX_FRAG_COUNT
+	int "Number of ISO TX fragment buffers"
+	default 2
+	range 0 255
+	help
+	  Number of buffers available for fragments of TX buffers. Warning:
+	  setting this to 0 means that the application must ensure that
+	  queued TX buffers never need to be fragmented, i.e. that the
+	  controller's buffer size is large enough. If this is not ensured,
+	  and there are no dedicated fragment buffers, a deadlock may occur.
+	  In most cases the default value of 2 is a safe bet.
+
+config BT_ISO_TX_MTU
+	int "Maximum supported MTU for Isochronous TX buffers"
+	default 251
+	range 23 4095
+	help
+	  Maximum MTU for Isochronous channels TX buffers.
+
+config BT_ISO_RX_BUF_COUNT
+	int "Number of Isochronous RX buffers"
+	default 1
+	range 1 255
+	help
+	  Number of buffers available for incoming Isochronous channel SDUs.
+
+config BT_ISO_RX_MTU
+	int "Maximum supported MTU for Isochronous RX buffers"
+	default 251
+	range 23 4095
+	help
+	  Maximum MTU for Isochronous channels RX buffers.
+endif # BT_ISO
+
+# Workaround for not being able to have commas in macro arguments
+#DT_CHOSEN_Z_BT_C2H_UART := zephyr,bt-c2h-uart
+#
+#config BT_CTLR_TO_HOST_UART_DEV_NAME
+#   string "Device Name of UART Device to an external Bluetooth Host"
+#   default "$(dt_chosen_label,$(DT_CHOSEN_Z_BT_C2H_UART))" if HAS_DTS
+#   default "UART_0"
+#   depends on BT_HCI_RAW
+#   help
+#     This option specifies the name of UART device to be used
+#     to connect to an external Bluetooth Host when Zephyr is
+#     acting as a Bluetooth Controller.
+
+source "components/common/thirdparty/bluetooth/zephyr/src/common/Kconfig"
+source "components/common/thirdparty/bluetooth/zephyr/src/net/Kconfig"
+source "components/common/thirdparty/bluetooth/zephyr/src/porting/Kconfig.debug"
+source "components/common/thirdparty/bluetooth/zephyr/src/logging/Kconfig"
+source "components/common/thirdparty/bluetooth/zephyr/src/settings/Kconfig"
+source "components/common/thirdparty/bluetooth/zephyr/src/porting/Kconfig"
+source "components/common/thirdparty/bluetooth/zephyr/src/host/Kconfig"
+#source "components/common/thirdparty/bluetooth/zephyr/src/controller/Kconfig"
+#source "components/common/thirdparty/bluetooth/zephyr/src/shell/Kconfig"
+
+endif # BT_HCI
+
+config BT_COMPANY_ID
+	hex "Company Id"
+	default 0x05F1
+	range 0x0000 0xFFFF
+	help
+	  Set the Bluetooth Company Identifier for this device. The Linux
+	  Foundation's Company Identifier (0x05F1) is the default value for
+	  this option although silicon vendors and hardware manufacturers
+	  can set their own. Note that the controller's Company Identifier is
+	  controlled by BT_CTLR_COMPANY_ID. The full list of Bluetooth
+	  Company Identifiers can be found here:
+	  https://www.bluetooth.com/specifications/assigned-numbers/company-identifiers
+
+source "components/common/thirdparty/bluetooth/zephyr/src/mesh/Kconfig"
+
+endif # BT

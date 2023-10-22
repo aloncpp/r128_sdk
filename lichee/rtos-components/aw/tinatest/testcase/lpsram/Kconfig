@@ -1,0 +1,22 @@
+menuconfig TESTCASE_LPSRAM
+	bool "LPSRAM Testcase."
+	#depends on DRIVERS_LPSRAM
+	default n
+
+if TESTCASE_LPSRAM
+config LPSRAM_DATA_LEN
+	default 512k
+	string "data len"
+	help
+		This means how many data will be tested by dma.Please input "512k/1024k/.etc"
+config LPSRAM_TIMES
+	default 10
+	string "test times"
+	help
+		This means how many times to test lpsram
+config LPSRAM_STRESS
+	default 0
+	string "stress test"
+	help
+		This means whether run stress test. 0:not set, 1:stress.
+endif

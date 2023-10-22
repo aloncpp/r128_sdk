@@ -1,0 +1,5 @@
+config COMPONENTS_KALLSYMS
+	bool "AW Kallsyms Support"
+	default n
+	help
+	  Support Allwinner Kallsyms.

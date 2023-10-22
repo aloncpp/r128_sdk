@@ -1,0 +1,10 @@
+menu "Boot Reason"
+
+config COMPONENTS_BOOT_REASON
+    bool "boot reason support"
+    default n
+    depends on DRIVERS_RTC
+    help
+        support to query and record the boot reason.
+
+endmenu

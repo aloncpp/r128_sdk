@@ -1,0 +1,22 @@
+
+menu "Audio Testcase"
+	depends on COMPONENTS_AW_ALSA_LIB || COMPONENTS_AW_AUDIO_SYSTEM
+	depends on COMPONENTS_AW_ALSA_UTILS || COMPONENTS_AW_AUDIO_SYSTEM_UTILS
+
+config TESTCASE_AUDIO_MIC_CAPTURE
+	bool "Audio MIC capture testcase."
+	default n
+
+config TESTCASE_AUDIO_SPEAKER_PLAYBACK
+	bool "Audio speaker playback testcase."
+	default n
+
+config TESTCASE_AUDIO_PLAYBACK_AND_CAPTURE
+	bool "Audio playback and then capture testcase."
+	default n
+
+config TESTCASE_AUDIO_PLAYBACK_OPEN_CLOSE
+	bool "Audio open close playback soundcard testcase."
+	default n
+
+endmenu

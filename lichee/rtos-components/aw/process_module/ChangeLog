@@ -1,0 +1,9 @@
+
+V0.0.2 version
+* support eq algorithms library for software to process
+* support Arm A7, RISCV-64, XTENSA-HIFI4, XTENSA-HIFI5
+* Add Arm A7 for audio echocancel algorithms library
+
+V0.0.1 version
+* support audio echocancel algorithms library for software to process
+* support RISCV-64, XTENSA-HIFI4, XTENSA-HIFI5

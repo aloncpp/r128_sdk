@@ -1,0 +1,32 @@
+menu "CCMU Devices"
+
+config DRIVERS_CCMU
+    bool "enable ccmu driver"
+        default y
+
+config DRIVERS_SUNXI_CLK
+    bool "enable sunxi ccmu driver"
+	depends on DRIVERS_CCMU
+        default n
+
+config DRIVERS_SUNXI_CCU
+    bool "enable sunxi-ng ccmu driver"
+	depends on DRIVERS_CCMU
+        default y
+
+config HAL_TEST_CLK
+    bool "enable sunxi ccmu hal APIs test command"
+	depends on DRIVERS_SUNXI_CLK
+        default n
+
+config HAL_TEST_CCU
+    bool "enable sunxi-ng ccmu hal APIs test command"
+	depends on DRIVERS_SUNXI_CCU
+        default n
+
+config NO_INFLUENCE_ON_CLOCK_SOURCE
+    bool "donot disable parent when clk disable"
+	depends on DRIVERS_CCMU
+        default n
+
+endmenu

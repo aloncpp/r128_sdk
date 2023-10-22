@@ -1,0 +1,18 @@
+config COMPONENTS_AW_DEVFS
+    bool "Device Filesystem"
+    select COMPONENT_VFS
+    default y
+    help
+      Create device file node to VFS. For recommend, devfs mount to /dev.
+      It does not support directory, you can only control file on /dev.
+      For example, if you want to write to the first partition on nor flash,
+      you can execute like:
+            fd = open("/dev/nor0p1", O_WRONLY);
+            write(fd, buf, count);
+
+      If unsure, say Y.
+
+config COMPONENTS_AW_DEVFS_NULL_DEV
+    bool "register /dev/null"
+    depends on COMPONENTS_AW_DEVFS
+    default y

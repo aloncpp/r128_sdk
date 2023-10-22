@@ -1,0 +1,30 @@
+menu "RamFs Components Support"
+
+config COMPONENTS_RAMFS
+    bool "Tina RTOS RamFs"
+    default y
+    help
+        Tina RTOS RamFs support.
+
+config COMPONENTS_RAMFS_AUTO_MOUNT
+    bool "Tina RTOS RamFs Auto Mount"
+    default y
+	depends on COMPONENTS_RAMFS
+    help
+        Tina RTOS RamFs Auto Mount Flag.
+
+config COMPONENTS_RAMFS_PATH
+    string "Tina RTOS RamFs Mount Path"
+    default "/tmp"
+	depends on COMPONENTS_RAMFS
+    help
+        Tina RTOS RamFs Mount Path.
+
+config COMPONENTS_RAMFS_SIZE
+    int "Tina RTOS RamFs Mount Size(Kbytes)"
+	default 512
+	depends on COMPONENTS_RAMFS
+    help
+        Tina RTOS RamFs Mount Size.
+
+endmenu

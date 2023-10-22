@@ -1,0 +1,8 @@
+menu "Malloc Components Support"
+
+config COMPONENTS_MALLOC
+    bool "DSP RTOS MALLOC"
+    default n
+    help
+        replace newlibc malloc function witch FreeRTOS malloc function.
+endmenu

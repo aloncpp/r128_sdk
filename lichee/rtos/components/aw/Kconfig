@@ -1,0 +1,33 @@
+source components/aw/smartlink/Kconfig
+
+source components/aw/devfs/Kconfig
+
+source components/aw/blkpart/Kconfig
+
+source components/aw/multimedia/Kconfig
+
+source components/aw/secure_storage/Kconfig
+
+source components/aw/bluetooth/Kconfig
+
+source components/aw/watchpoint/Kconfig
+
+source components/aw/ramfs/Kconfig
+
+source components/aw/kasan/Kconfig
+
+source components/aw/memleak/Kconfig
+
+source components/aw/newlibc/Kconfig
+
+source components/aw/ostest/Kconfig
+
+source components/aw/tfm/Kconfig
+
+source components/aw/healthd/Kconfig
+
+source components/aw/camera_preview/Kconfig
+
+source components/aw/wireless_video/Kconfig
+
+source components/aw/pstore/Kconfig

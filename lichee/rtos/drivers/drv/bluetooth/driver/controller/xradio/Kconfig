@@ -1,0 +1,16 @@
+choice
+	prompt "XRADIO Driver Controller"
+	default SUN20IW2_BT_CONTROLLER
+
+config SUN20IW2_BT_CONTROLLER
+	bool "SUN20IW2 BT Controller"
+	help
+	  If this option is enabled, Xradio Sun20iw2 BT Controller is used.
+
+endchoice
+
+if SUN20IW2_BT_CONTROLLER
+menu "sun20iw2 bt controller"
+	source drivers/drv/bluetooth/driver/controller/xradio/sun20iw2/Kconfig
+endmenu
+endif

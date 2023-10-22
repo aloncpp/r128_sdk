@@ -1,0 +1,66 @@
+menu "aw bluetooth"
+
+menuconfig AW_COMPONENT_ZBLUE
+    bool "zblue"
+    default n
+    help
+      support zblue test.
+
+if AW_COMPONENT_ZBLUE
+config AW_BTETF_TOOL
+    bool "btetf tool"
+	  depends on AW_COMPONENT_ZBLUE
+    default y
+    help
+        If this option is enabled, btetf tool enable.
+endif # AW_COMPONENT_ZBLUE
+
+config AW_COMPONENT_RTLBT
+    bool "rtlbt"
+    default n
+    help
+      support rtlbt test.
+
+config AW_COMPONENT_ETF
+    bool "etf"
+    default n
+    help
+      support etf test.
+
+config AW_COMPONENT_BLUEDROID_OLD
+    bool "bluedroid old"
+    default n
+    help
+      support bluedroid_old test.
+
+config AW_COMPONENT_BLUEDROID
+    bool "bluedroid"
+    default n
+    help
+      support bluedroid test.
+
+#menuconfig ZEPHYR_BLE
+#	bool "Zephyr BLE Host"
+#	default n
+#	help
+#	  This option enables BLE Host support.
+
+config AW_COMPONENT_BLUEDROID_CTRL
+    bool "bluedroid ctrl"
+    default n
+    help
+      support bluedroid ctrl test.
+
+config AW_COMPONENT_XBTC_UART
+    bool "bluetooth uart"
+    default n
+    help
+      support bluetooth uart control.
+
+#if ZEPHYR_BLE
+
+#source "components/aw/bluetooth/zephyr/Kconfig"
+
+#endif
+
+endmenu

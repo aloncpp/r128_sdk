@@ -1,0 +1,13 @@
+menu "Backtrace Support"
+
+config DEBUG_BACKTRACE
+	bool "Enable backtrace for HIFI4/5"
+	default y
+
+if DEBUG_BACKTRACE
+config DEBUG_BACKTRACE_EXCCAUSE_STR
+    bool "Enable backtrace exccuase str"
+    default y
+
+endif
+endmenu

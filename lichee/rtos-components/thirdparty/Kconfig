@@ -1,0 +1,21 @@
+source components/common/thirdparty/md5/Kconfig
+source components/common/thirdparty/littlevgl-8/Kconfig
+source components/common/thirdparty/openamp/Kconfig
+source components/common/thirdparty/cjson/Kconfig
+source components/common/thirdparty/uuid/Kconfig
+source components/common/thirdparty/env/Kconfig
+source components/common/thirdparty/coremark/Kconfig
+source components/common/thirdparty/dhrystone/Kconfig
+source components/common/thirdparty/whetstone/Kconfig
+source components/common/thirdparty/tinycrypt/Kconfig
+source components/common/thirdparty/opus/Kconfig
+source components/common/thirdparty/network/Kconfig
+source components/common/thirdparty/bluetooth/Kconfig
+source components/common/thirdparty/unity/Kconfig
+source components/common/thirdparty/linpack/Kconfig
+source components/common/thirdparty/pi_css5_src/Kconfig
+source components/common/thirdparty/freetype/Kconfig
+source components/common/thirdparty/speexdsp/Kconfig
+source components/common/thirdparty/libjpeg-turbo/Kconfig
+source components/common/thirdparty/giflib/Kconfig
+

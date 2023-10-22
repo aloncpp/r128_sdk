@@ -1,0 +1,2 @@
+LICHEE_KERN_DEFCONF:=sun20iw2p1_dsp0_defconfig
+LICHEE_LSP:=r128s2

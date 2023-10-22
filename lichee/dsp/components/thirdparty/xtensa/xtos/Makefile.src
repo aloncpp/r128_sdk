@@ -1,0 +1,368 @@
+# Makefile for XTOS in <xtensa_tools_root>/xtensa-elf/src/xtos
+
+# Copyright (c) 2000-2017 Cadence Design Systems, Inc.
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+#
+#  This makefile assumes GNU make features
+#
+#  Invoke this Makefile like this:
+#	cd <some build directory>
+#	make -f <this file> \
+#		MAKEFILE_SRC=<this file> \
+#		XTENSA_TOOLS_ROOT=<path to Xtensa Tools> \
+#		XTENSA_ROOT=<path to Xtensa core package> \
+#		INSTLIBDIR=<path to installation directory>
+#
+
+ifndef XTENSA_TOOLS_ROOT
+XTENSA_TOOLS_ROOT := $(shell xt-ld --show-config=xttools)
+#$(error Please set XTENSA_TOOLS_ROOT to the path to Xtensa Tools)
+endif
+#  NOTE:  For now, we assume $(XTENSA_TOOLS_ROOT)/bin is on the PATH.
+ifndef XTENSA_ROOT
+XTENSA_ROOT := $(shell xt-ld --show-config=config)
+#$(error Please set XTENSA_ROOT to the path to your specific Xtensa core package)
+endif
+ifndef INSTLIBDIR
+$(error Please set INSTLIBDIR to the path where libraries and objects are installed)
+#INSTLIBDIR = $(call fixpath,$(XTENSA_ROOT)/xtensa-elf/arch/lib)
+endif
+
+#  Select the specified Xtensa configuration:
+#export XTENSA_SYSTEM = $(XTENSA_ROOT)/config
+#export XTENSA_CORE = default
+
+include $(XTENSA_TOOLS_ROOT)/misc/defs.mk
+include $(XTENSA_ROOT)/misc/build.mk
+
+ifndef SRCDIR
+$(error Please set MAKEFILE_SRC to the path to the XTOS Makefile.src)
+endif
+
+#  Native commands like $(MKPATH) and $(CP) need native directory separators:
+#fixpath = $(subst /,$S,$(1))
+
+XTCC = $(CC_FOR_TARGET)
+
+.PHONY: all install clean
+
+#  Compilation flags
+
+#  NOTE: XTOS_FUSA indicates if we are targeting a certified build.
+#  It will be set to "true" if a certified build is required.
+XSTR      = $(shell grep XCHAL_HAVE_FUNC_SAFETY `xt-xcc --show-config=config`/src/config/core.h)
+XTOS_FUSA = $(word 3, $(XSTR))
+
+#  Detect C library
+XSTR2    = $(shell grep SW_CLibrary `xt-xcc --show-config=config`/config/default-params)
+CLIB     = $(word 3, $(XSTR2))
+
+ifeq ($(CLIB), xclib)
+CSTD     = -std=c11
+else
+CSTD     = -std=c99
+endif
+
+IFLAGS   = -I$(SRCDIR)
+
+WFLAGS   = -Werror -Wall -Wextra -Wunused-variable -Wundef -Wstrict-prototypes -Wpointer-arith \
+	   -Wcast-qual -Wformat-security -Wmissing-prototypes -Wshadow -Wsign-compare -pedantic
+
+CFLAGS   = -O2 -g -mlongcalls -mno-l32r-flix $(IFLAGS) $(WFLAGS)
+
+# Section renaming. XTOS has no global writable data, so all of data/bss goes into percpu
+# sections.
+RFLAGS   = \
+	--rename-section .data=.rtos.percpu.data \
+	--rename-section .bss=.rtos.percpu.bss   \
+	--rename-section .rodata=.rtos.rodata
+
+ifeq ($(XTCC),xt-clang)
+CFLAGS += $(CSTD)
+else
+CFLAGS += -clang $(CSTD)
+endif
+
+ASFLAGS  = $(CFLAGS)
+
+#  File splitting:
+#  Compile "split" files in separate parts that can be linked independently.
+#  This allows keeping multiple related functions/etc together in one file
+#  without forcing linking of unused functions (the GNU linker takes entire
+#  object files; it does not currently provide automated dead code removal).
+#  Files are split with "#[el]if defined(__SPLIT__<tag>)" lines using normal
+#  C preprocessor syntax, where each <tag> must be unique and consist of
+#  lowercase alphanumeric and underscore characters only (no dash etc).
+#  The makefile function $(split_objs ...) returns the set of objects that
+#  result for a given list of splittable source files; each ends in a -.o
+#  suffix recognized by special rules further below.
+#
+split_objs = $(shell cd $(SRCDIR) && $(PERL) -ne '/__SPLIT__(\w+)/ and $$h{$$ARGV."--".$$1}++;\
+ END {foreach (sort keys %h) {s/\.(.)--/-$$1--/; print "$$_-.o\n";}}' $(1))
+
+
+#  Vectors, handlers, and other code to build:
+
+PERLEVEL_INTVECTOR_OBJS  = $(foreach N,2 3 4 5 6,int-vector-level$(N).o)
+PERLEVEL_INTHANDLER_OBJS = $(foreach N,2 3 4 5 6,int-handler-level$(N).o)
+PERLEVEL_INTINITLEV_OBJS = $(foreach N,1 2 3 4 5 6,int-init-level$(N).o)
+
+
+#  Common files for all XEA versions:
+
+XTOS_COMMON_OBJS = \
+	reset-vector-unpack.o \
+	shared-reset-vector.o \
+	exit.o \
+	memctl_default.o \
+	xtos-interrupt-enable.o \
+	xtos-interrupt-enabled.o \
+	xtos-interrupt-disable.o \
+	xtos-interrupt-clear.o \
+	xtos-interrupt-trigger.o \
+	xtos-set-inthandler.o \
+	xtos-set-exchandler.o
+
+#  Common non-certified files:
+
+XTOS_COMMON_NONCERT_OBJS = \
+	not_certified/bss-init-simc.o \
+	not_certified/stack-init-simc.o \
+	not_certified/xtos-simc.o \
+	not_certified/xtos-simc-lock.o \
+	not_certified/xtos-simc-mutex.o \
+	not_certified/xtos-simc-unpack.o
+
+ifeq ($(XPAL_XEA),2)
+
+RESET_VECTOR_SRC = \
+	xea2/reset-vector-xea2.S
+
+XTOS_CERT_OBJS = \
+	$(XTOS_COMMON_OBJS) \
+	xea2/exc-syscall-handler.o \
+	xea2/exc-table.o \
+	xea2/interrupt-table.o \
+	xea2/memep-enable.o \
+	$(call split_objs, xea2/memerror-vector.S) \
+	$(call split_objs, xea2/tiny-refs.S) \
+	xea2/nmi-vector.o \
+	xea2/user-vector.o \
+	xea2/exc-c-wrapper-handler.o \
+	xea2/exc-return.o \
+	xea2/int-lowpri-dispatcher.o \
+	xea2/window-vectors.o \
+	$(PERLEVEL_INTVECTOR_OBJS) \
+	$(PERLEVEL_INTHANDLER_OBJS) \
+	$(PERLEVEL_INTINITLEV_OBJS)
+
+XTOS_SIMBOARD_OBJS = \
+	xea2/debug-vector.o \
+	double-vector.o \
+	xea2/kernel-vector.o \
+	xea2/exc-unhandled.o \
+	xea2/memep-initrams.o
+
+XTOS_NONCERT_OBJS = \
+	$(XTOS_COMMON_NONCERT_OBJS) \
+	examples/exc-syscall-c-handler.o \
+	examples/init.o \
+	examples/switch_context.o \
+	not_certified/core-shutoff.o \
+	not_certified/core-save.o \
+	not_certified/core-save-c.o \
+	not_certified/core-restore.o \
+
+endif
+
+ifeq ($(XPAL_XEA),3)
+
+RESET_VECTOR_SRC = \
+	xea3/reset-vector-xea3.S
+
+XTOS_SIMBOARD_OBJS = \
+	double-vector.o \
+	xea3/double-handler-min.o \
+	xea3/exc_default_handler.o
+
+XTOS_NONCERT_OBJS = \
+	$(XTOS_COMMON_OBJS) \
+	$(XTOS_COMMON_NONCERT_OBJS) \
+	xea3/exc_dispatch.o \
+	xea3/exc_table.o \
+	xea3/int_table.o \
+	xea3/double-handler.o \
+	xea3/dispatch-vector.o \
+	not_certified/core-shutoff.o \
+	not_certified/core-save.o \
+	not_certified/core-save-c.o \
+	not_certified/core-restore.o \
+
+endif
+
+
+XTOS_BOARD_OBJS = $(XTOS_SIMBOARD_OBJS)
+XTOS_SIM_OBJS   = $(XTOS_SIMBOARD_OBJS:.o=-sim.o)
+
+#  If building the certified version, include only the subset of
+#  files that are certified.
+
+ifeq ($(XTOS_FUSA), 1)
+XTOS_OBJS = $(XTOS_CERT_OBJS)
+else
+XTOS_OBJS = $(XTOS_CERT_OBJS) $(XTOS_NONCERT_OBJS)
+endif
+
+TARGETS = \
+	_vectors.o \
+	_sharedvectors.o \
+	_sharedvectors-for-reset.o \
+	crt0-app.o \
+	crt1-boards.o \
+	crt1-tiny.o \
+	crt1-sim.o \
+	libhandlers-sim.a \
+	libhandlers-board.a \
+	libhandler-reset-unpack.a \
+	libhandler-reset.a
+
+ifeq ($(XPAL_XEA),2)
+TARGETS += \
+	libhandlers-min.a \
+	libhandlers-null.a \
+	libnosyscall.a
+endif
+
+ifdef TENSILICA_INTERNAL
+TARGETS += libhandler-reset-mp.a
+endif
+
+all: $(TARGETS)
+	@echo "XTOS_FUSA = $(XTOS_FUSA)"
+
+libhandlers-sim.a: $(XTOS_SIM_OBJS) $(XTOS_OBJS)
+
+libhandlers-board.a: $(XTOS_BOARD_OBJS) $(XTOS_OBJS)
+
+libhandlers-min.a: xea2/user-vector-min.o xea2/tiny-refs-min.o
+
+libhandlers-null.a: $(call split_objs, xea2/null-vectors.S) _vectors.o _sharedvectors.o
+
+libnosyscall.a: xea2/null-syscall.o
+
+$(PERLEVEL_INTVECTOR_OBJS): int-vector-level%.o: xea2/int-vector.S
+	$(XTCC) -c $(ASFLAGS) $(FLAGS_int-vector-level$*) $(XTFLAGS) -D_INTERRUPT_LEVEL=$* -o $@ $<
+
+$(PERLEVEL_INTHANDLER_OBJS): int-handler-level%.o: xea2/int-handler.S
+	$(XTCC) -c $(ASFLAGS) $(FLAGS_int-handler-level$*) $(XTFLAGS) -D_INTERRUPT_LEVEL=$* -o $@ $<
+
+$(PERLEVEL_INTINITLEV_OBJS): int-init-level%.o: xea2/int-initlevel.S
+	$(XTCC) -c $(ASFLAGS) $(FLAGS_int-init-level$*) $(XTFLAGS) -D_INTERRUPT_LEVEL=$* -o $@ $<
+
+
+FLAGS_memerror-vector = -mtext-section-literals
+
+#  For split-source rules, determine various things from $* (extended basename):
+#
+SPLIT_SRC = $(patsubst %/,%,$(dir $(subst -c--,.c/,$(subst -S--,.S/,$*))))
+SPLIT_FLAGS = $(FLAGS_$(basename $(SPLIT_SRC))) \
+		-D__SPLIT__$(notdir $(subst --,/,$*))
+
+#  (Okay we cheat a bit, CFLAGS matches ASFLAGS so this works; it's also simpler:)
+%-.o:
+	$(XTCC) -c $(CFLAGS) $(SPLIT_FLAGS) $(XTFLAGS) -o $@ $(SRCDIR)/$(SPLIT_SRC)
+%--sim.o:
+	$(XTCC) -c $(CFLAGS) $(SPLIT_FLAGS) $(XTFLAGS) -DSIMULATOR -o $@ $(SRCDIR)/$(SPLIT_SRC)
+
+
+%.o: %.S
+	-@$(MKPATH) $(dir $@)
+	$(XTCC) -c $(ASFLAGS) $(FLAGS_$*) $(XTFLAGS) -o $@ $<
+
+%.o: %.c
+	-@$(MKPATH) $(dir $@)
+	$(XTCC) -c $(CFLAGS)  $(FLAGS_$*) $(XTFLAGS) -o $@ $<
+
+%-sim.o: %.S
+	-@$(MKPATH) $(dir $@)
+	$(XTCC) -c $(ASFLAGS) $(FLAGS_$*) $(XTFLAGS) -DSIMULATOR -o $@ $<
+
+%-sim.o: %.c
+	-@$(MKPATH) $(dir $@)
+	$(XTCC) -c $(CFLAGS)  $(FLAGS_$*) $(XTFLAGS) -DSIMULATOR -o $@ $<
+
+#  Explicit rule for crt1-sim.o to avoid using %-sim.o rule above:
+crt1-sim.o: crt1.S
+	$(XTCC) -c $(ASFLAGS) $(FLAGS_$*) $(XTFLAGS) -DSIMULATOR -o $@ $<
+
+crt1-boards.o: crt1.S
+	$(XTCC) -c $(ASFLAGS) $(FLAGS_$*) $(XTFLAGS) -o $@ $<
+
+
+# When building the reset vector, leave the literals in
+# the text section, so that the reset vector can be placed
+# at address 0 (there's no lower address for the literals).
+# (Can't do that on Xtensa TX without load/store to IRAM/IROM.)
+# Same with dispatch code, allowing use of MOVI rather than
+# explicit L32R (and thus allow alternate literal options).
+
+ifneq ($(XPAL_HAVE_IMEM_LOADSTORE),0)
+FLAGS_reset-vector = -mtext-section-literals
+FLAGS_shared-reset-vector = -mtext-section-literals
+endif
+FLAGS_xea3/dispatch-vector = -mtext-section-literals
+#FLAGS_xea3/double-handler = -mtext-section-literals
+
+reset-vector.o: $(RESET_VECTOR_SRC)
+	$(XTCC) -c $(ASFLAGS) $(XTFLAGS) $(FLAGS_reset-vector) -o $@ $<
+
+reset-vector-unpack.o: $(RESET_VECTOR_SRC)
+	$(XTCC) -c $(ASFLAGS) $(XTFLAGS) $(FLAGS_reset-vector) -DXTOS_UNPACK -o $@ $<
+
+reset-vector-mp.o: $(RESET_VECTOR_SRC)
+	$(XTCC) -c $(ASFLAGS) $(XTFLAGS) $(FLAGS_reset-vector) -DXTOS_MP -o $@ $<
+
+
+#  With ROM unpacking (the default):
+libhandler-reset-unpack.a: reset-vector-unpack.o
+
+#  Without any unpacking:
+libhandler-reset.a: reset-vector.o
+
+#  With experimental MP unpacking:
+libhandler-reset-mp.a: reset-vector-mp.o
+
+%.a:
+	-$(RM) $@
+	$(AR_FOR_TARGET) rs $@ $^
+	$(OC_FOR_TARGET) $(RFLAGS) $@
+
+install:
+	-$(MKPATH) $(INSTLIBDIR)
+	$(CP) $(TARGETS) $(INSTLIBDIR)
+	@$(RM) *.a
+
+clean:
+	-$(RM) *.o *.a */*.o
+
+# NOTE: Header file dependencies not specified!
+

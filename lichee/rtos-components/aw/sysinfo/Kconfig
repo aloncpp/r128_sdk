@@ -1,0 +1,9 @@
+menu "sysinfo Support"
+
+config COMPONENTS_SYSINFO
+    bool "sysinfo support"
+    default n
+    help
+        sysinfo support.
+
+endmenu

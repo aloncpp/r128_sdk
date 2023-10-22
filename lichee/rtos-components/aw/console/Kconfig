@@ -1,0 +1,24 @@
+menu "Multi-Console Components Support"
+
+config COMPONENTS_MULTI_CONSOLE
+    bool "Tina RTOS Multi-Console"
+    default n
+    help
+        Tina RTOS Multi-Console support.
+
+if COMPONENTS_MULTI_CONSOLE
+
+config MULTI_CONSOLE_DEBUG
+    bool "Tina RTOS Multi-Console Debug"
+    default n
+    help
+        Tina RTOS Multi-Console Debug.
+
+config MULTI_CONSOLE_REDIRECT_CMD
+    bool "Tina RTOS Multi-Console Redirect Command"
+    default n
+    help
+        Tina RTOS Multi-Console Redirece Command.
+endif
+
+endmenu

@@ -1,0 +1,35 @@
+menu "aw network"
+config COMPONENTS_TCPIP
+	bool "tcp ip adapter"
+	select DRIVERS_RFKILL
+	default n
+
+config COMPONENTS_LOOPIF_TEST
+	bool "loop interface test demo"
+	default n
+
+config COMPONENTS_WIFI
+	bool "wifi test demo"
+	default n
+
+config COMPONENTS_WLAN_CSFC
+	bool "wifi fast connect test demo"
+	default n
+	select DRIVERS_TRNG
+	depends on COMPONENTS_WIFIMANAGER
+
+config COMPONENTS_WLAN_MAC
+	bool "get mac_addr test demo"
+	default n
+	select DRIVERS_TRNG
+	select DRIVERS_EFUSE
+	depends on COMPONENTS_WIFIMANAGER
+
+config COMPONENTS_WLAN_COUNTRY_CODE
+	bool "set/get country code optional"
+	default n
+	select DRIVERS_TRNG
+	depends on COMPONENTS_WIFIMANAGER
+
+source components/common/aw/network/service/Kconfig
+endmenu

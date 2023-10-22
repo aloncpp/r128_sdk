@@ -1,0 +1,288 @@
+config KERNEL_FREERTOS
+    bool "support freertos kernel"
+    default y
+
+config KERNEL_FREERTOS_PLUS_POSIX
+    bool "support posix"
+    default y
+
+choice
+prompt "Heap Memory Manager"
+default	HEAP_4
+
+config RTT_SLAB
+    bool "Use rtt-slab to allocate memory"
+
+config	HEAP_4
+	bool "Use heap-4 to allocate memory"
+
+config	HEAP_MULTIPLE
+	bool "Use heap-multiple to allocate memory"
+
+endchoice
+
+config DYNAMIC_HEAP_SIZE
+	bool "dynamic default heap size"
+	default y
+
+if HEAP_MULTIPLE
+choice
+prompt "Default Heap Ram"
+default DEFAULT_SRAM_HEAP
+
+config	DEFAULT_DRAM_HEAP
+    depends on DRAM
+    bool "heap in dram"
+
+config	DEFAULT_SRAM_HEAP
+    depends on SRAM
+    bool "heap in sram"
+
+config	DEFAULT_LPSRAM_HEAP
+    bool "heap in lpsram"
+
+config	DEFAULT_HPSRAM_HEAP
+    bool "heap in hpsram"
+
+endchoice
+
+config SRAM_HEAP
+    bool "sram heap"
+	default y
+
+config SRAM_HEAP_DYNAMIC_ADDR
+	bool "sram heap dynamic address"
+	depends on SRAM_HEAP
+	default y
+
+config SRAM_HEAP_START_ADDR
+	depends on !SRAM_HEAP_DYNAMIC_ADDR
+	depends on SRAM_HEAP
+	hex "sram heap start address"
+	default 0x4030000
+
+config SRAM_HEAP_SIZE
+	depends on SRAM_HEAP
+	hex "sram heap size"
+	default 0x60000
+
+config LPSRAM_HEAP
+    bool "lpsram heap"
+	default n
+
+config LPSRAM_HEAP_DYNAMIC_ADDR
+	bool "lpsram heap dynamic address"
+	depends on LPSRAM_HEAP
+	default y
+
+config LPSRAM_HEAP_START_ADDR
+	depends on !LPSRAM_HEAP_DYNAMIC_ADDR
+	depends on LPSRAM_HEAP
+	hex "lpsram heap start address"
+	default 0x8030000
+
+config LPSRAM_HEAP_SIZE
+	depends on LPSRAM_HEAP
+	hex "lpsram heap size"
+	default 0x100000
+
+config HPSRAM_HEAP
+    bool "hpsram heap"
+	default n
+
+config HPSRAM_HEAP_DYNAMIC_ADDR
+	bool "hpsram heap dynamic address"
+	depends on HPSRAM_HEAP
+	default y
+
+config HPSRAM_HEAP_START_ADDR
+	depends on !HPSRAM_HEAP_DYNAMIC_ADDR
+	depends on HPSRAM_HEAP
+	hex "hpsram heap start address"
+	default 0xc030000
+
+config HPSRAM_HEAP_SIZE
+	depends on HPSRAM_HEAP
+	hex "hpsram heap size"
+	default 0x100000
+
+endif
+
+choice
+prompt "Backtrace Select"
+default DEBUG_BACKTRACE
+
+config DEBUG_BACKTRACE
+    bool "debug backtrace by machine code"
+	help
+	backtrace by parsing machine code
+
+config DEBUG_BACKTRACE_FRAME_POINTER
+    bool "debug backtrace by frame pointer"
+	help
+	backtrace by frame pointer
+
+config DEBUG_BACKTRACE_NONE
+    bool "no backtrace"
+	help
+	no backtrace
+
+endchoice
+
+config EXCEPTION_CAUSE_STR
+    bool "enable exception cause str"
+    default y
+
+menu "Ram config"
+
+menu "Dram"
+
+config DRAM
+    bool "enable dram support"
+    default y
+
+config VIRTUAL_DRAM_ADDR
+    hex "virtual dram begin address"
+    depends on DRAM
+    default 0x40000000
+
+config DRAM_SIZE
+    hex "dram size (bytes)"
+    depends on DRAM
+    default 0x1000000
+
+endmenu
+
+menu "Sram"
+
+config SRAM
+    bool "enable sram support"
+    default y
+
+config SRAM_START_ADDRESS
+	hex "sram start address"
+	depends on SRAM
+	default 0x04000000
+
+config SRAM_LENGTH
+	hex "sram length in Bytes"
+	depends on SRAM
+	default 0x100000
+
+endmenu
+
+menu "Lspsram"
+config PSRAM
+	bool "enable psram support"
+	select SECTION_ATTRIBUTE_PSRAM
+	default n
+
+config PSRAM_START_ADDRESS
+	hex "psram start address"
+	depends on PSRAM
+	default 0x08000000
+
+config PSRAM_LENGTH
+	hex "psram length in Bytes"
+	depends on PSRAM
+	default 0x400000
+
+config SECTION_ATTRIBUTE_PSRAM
+	depends on PSRAM
+	bool "enable psram attribute support"
+	default y
+
+endmenu
+
+menu "Hspsram"
+config HPSRAM
+	bool "enable hpsram support"
+	select SECTION_ATTRIBUTE_HPSRAM
+	default n
+
+config HPSRAM_START_ADDRESS
+	hex "hpsram start address"
+	depends on HPSRAM
+	default 0x0c000000
+
+config HPSRAM_LENGTH
+	hex "hpsram length in Bytes"
+	depends on HPSRAM
+	default 0x400000
+
+config SECTION_ATTRIBUTE_HPSRAM
+	depends on HPSRAM
+	bool "enable hpsram attribute support"
+	default y
+
+config HPSRAM_INIT_IN_OS
+	bool "init hpsram in os, just for debug on fpga"
+	default n
+
+endmenu
+
+endmenu
+
+config TOTAL_HEAP_SIZE
+    hex "total heap size (bytes)"
+    default 0x1000000
+
+config HEAP_MIN_ALIGNMENT_SIZE
+    int "heap min alignment size (bytes)"
+    default 8
+
+menuconfig CPU_PRIVATE_DATA
+    bool "enable cpu private data"
+    default n
+    help
+        enable cpu private data
+        If unsure, say Y.
+
+if CPU_PRIVATE_DATA
+config CPU_PRIVATE_DATA_ADDR
+    hex "cpu private data address (align to 0x1000)"
+    default 0x48FFC000
+
+config CPU_PRIVATE_DATA_SIZE
+    hex "cpu private data size (align to 0x1000)"
+    default 0x2000
+
+endif
+
+config SMP
+    bool "Enable SMP"
+    depends on (ARCH_SUN8IW18P1 || ARCH_SUN8IW20P1)
+    default y
+
+config HZ
+    int "Tick frequency, Hz"
+    range 10 1000
+    default 1000 if SMP
+    help
+    System's tick frequency, Hz.
+
+config CLI_UART_PORT_LOCK
+    bool "uart hwspinlock"
+    depends on DRIVERS_HWSPINLOCK
+    default n
+
+config OS_USE_IDLE_HOOK
+	bool "idle hook"
+	default y
+
+choice
+prompt "Io Lock"
+default UART_CLI_USE_MUTEX
+
+config UART_CLI_USE_NONE
+	bool "Lock None"
+
+config UART_CLI_USE_MUTEX
+	bool "Use Mutex"
+
+config UART_CLI_USE_SPINLOCK
+	bool "Use SpinLock"
+
+endchoice
+
+

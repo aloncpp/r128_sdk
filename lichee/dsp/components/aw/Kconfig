@@ -1,0 +1,19 @@
+source components/aw/sound/Kconfig
+source components/aw/standby/Kconfig
+source components/aw/oemhead/Kconfig
+source components/aw/backtrace/Kconfig
+source components/aw/linux_debug/Kconfig
+
+source components/aw/pm_client/Kconfig
+source components/aw/watchpoint/Kconfig
+
+menu "Testbench (for development)"
+source components/aw/testbench/Kconfig
+endmenu
+
+menu "Miscellaneous Support"
+source components/aw/misc/Kconfig
+endmenu
+
+source components/aw/malloc/Kconfig
+source components/aw/safe_printf/Kconfig

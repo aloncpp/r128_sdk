@@ -1,0 +1,58 @@
+menu "AW Sound Compenents"
+
+choice
+	prompt "Allwinner alsa library"
+	depends on DRIVERS_SOUND
+	default COMPONENTS_AW_ALSA_LIB_NONE
+
+config COMPONENTS_AW_ALSA_LIB_NONE
+	bool "none"
+
+config COMPONENTS_AW_ALSA_LIB
+	bool "alsa library"
+	help
+	  This is library package for aw-alsa, only used for Allwinner FreeRTOS.
+
+config COMPONENTS_AW_TINY_ALSA_LIB
+	bool "tiny alsa library"
+	select SND_CORE_TINY
+	help
+	  This is library package for aw-tiny-alsa, only used for Allwinner FreeRTOS.
+endchoice
+
+config COMPONENTS_AW_ALSA_UTILS
+	bool "alsa library utils select"
+	depends on COMPONENTS_AW_ALSA_LIB \
+		|| COMPONENTS_AW_TINY_ALSA_LIB
+	default n
+	help
+	  This is the choice of alsa lib utils
+
+config COMPONENTS_AW_ALSA_UTILS_AMIXER
+	bool "alsa library utils amixer"
+	depends on COMPONENTS_AW_ALSA_UTILS
+	default y
+	help
+	  This is the choice of compile amixer
+
+config COMPONENTS_AW_ALSA_UTILS_APLAY
+	bool "alsa library utils aplay"
+	depends on COMPONENTS_AW_ALSA_UTILS
+	default y
+	help
+	  This is the choice of compile aplay
+
+config COMPONENTS_AW_ALSA_UTILS_ARECORD
+	bool "alsa library utils arecord"
+	depends on COMPONENTS_AW_ALSA_UTILS
+	default y
+	help
+	  This is the choice of compile arecord
+
+config COMPONENTS_AW_ALSA_UTILS_ALOOP
+	bool "alsa library utils aloop"
+	depends on COMPONENTS_AW_ALSA_UTILS
+	default n
+	help
+	  This is the choice of compile aloop
+endmenu

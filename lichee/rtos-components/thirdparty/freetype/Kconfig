@@ -1,0 +1,4 @@
+config COMPONENT_FREETYPE
+    bool "freetype"
+    default n
+

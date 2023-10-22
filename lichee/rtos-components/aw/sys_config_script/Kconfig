@@ -1,0 +1,31 @@
+menuconfig COMPONENTS_AW_SYS_CONFIG_SCRIPT
+	bool "sys_config support"
+	default n
+	help
+		Enable r128 sys_config interface support
+
+if COMPONENTS_AW_SYS_CONFIG_SCRIPT
+
+choice
+	prompt "choice build type"
+	default SYS_CONFIG_PACK
+
+	config SYS_CONFIG_BUILDIN
+		bool "compile in img"
+		help
+			if enable this option, sys_config.bin will build in output file
+
+	config SYS_CONFIG_PACK
+		bool "pack in fixed address"
+		help
+			if enable sys_config.bin will be loaded in fixed address
+endchoice
+
+if SYS_CONFIG_PACK
+	config SYS_CONFIG_PACK_ADDRESS
+		default 0x8000000
+		hex "sysconfig pack in fixed address"
+
+endif
+
+endif

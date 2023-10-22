@@ -1,0 +1,188 @@
+menuconfig COMPONENTS_AW_IOBOX
+    bool "iobox"
+    depends on COMPONENT_CLI_COMMANDS
+    default n
+    help
+        I/O command for console.
+
+        If unsure, say Y.
+
+config COMPONENTS_AW_IOBOX_LS
+    bool "ls"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        ls is used to list the contents of directories.
+
+config COMPONENTS_AW_IOBOX_CAT
+    bool "cat"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        cat is used to concatenate files and print them to the standard
+        output. Enable this option if you wish to enable the 'cat' utility.
+
+config COMPONENTS_AW_IOBOX_HEXDUMP
+    bool "hexdump"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        The hexdump utility is used to display binary data in a readable
+        way that is comparable to the output from most hex editors.
+
+config COMPONENTS_AW_IOBOX_CP
+    bool "cp"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        cp is used to copy files and directories.
+        (do not support directories now)
+
+config COMPONENTS_AW_IOBOX_MV
+    bool "mv"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        mv is used to move or rename files or directories.
+        (do not support directories now)
+
+config COMPONENTS_AW_IOBOX_RM
+    bool "rm"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        rm is used to remove files or directories.
+        (do not support directories now)
+
+config COMPONENTS_AW_IOBOX_UNLINK
+    bool "unlink"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        unlink deletes a file by calling unlink().
+        (do not support directories now)
+
+config COMPONENTS_AW_IOBOX_LINK
+    bool "link"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        link creates hard links between files.
+        (do not support directories now)
+
+config COMPONENTS_AW_IOBOX_RWCHECK
+    bool "rwcheck"
+    depends on COMPONENTS_AW_IOBOX
+    default n
+    help
+        do read/write stress test.
+
+config COMPONENTS_AW_IOBOX_RWDEV
+    bool "rwdev"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+	do read/write test on raw device.
+
+config COMPONENTS_AW_IOBOX_RWSPEED
+    bool "rwspeed"
+    depends on COMPONENTS_AW_IOBOX
+    default n
+    help
+        get seq read/write speed.
+
+config COMPONENTS_AW_IOBOX_VI
+    bool "vi"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        Enable support for TinyAra tiny VI work-alike editor.           
+
+        Omitted features:                                               
+                - No keypad cursor control support                      
+                - No word oriented operations.                          
+
+        Assumptions and Limitations:                                    
+                - A VT100 host terminal is assumed.  At 115200 BAUD, screen
+                  update times with a 24x64 edit region are noticeable but 
+                  acceptable.                                           
+                - A fixed width character set (like Courier) is assumed 
+                - Files are edited in memory so unless you have a lot of memory
+                  to spare, this editor will only be useful for very small files.
+
+        Size: As of 2013-01-30, it appears that the size will vary from 
+        about 8.5 to 10.5KB, depending upon the efficiency of the          
+        underlying architecture.
+
+if COMPONENTS_AW_IOBOX_VI
+
+config COMPONENTS_AW_IOBOX_VI_COLS
+    int "Display width (columns)"
+    default 128
+    help
+        The editor does not have the capability to query the display for
+        its width or height.  This setting provides the default width of
+        the display in columns.  The actually width can be overridden using
+        command line options.
+
+config COMPONENTS_AW_IOBOX_VI_ROWS
+    int "Display height (rows)"
+    default 64
+    help
+        The editor does not have the capability to query the display for
+        its width or height.  This setting provides the default height of
+        the display in rows.  The actually width can be overridden using
+        command line options.
+
+config COMPONENTS_AW_IOBOX_VI_DEBUGLEVEL
+    int "Debug level"
+    default 0
+    range 0 2
+    help
+        0=Debug off; 1=Print errors on console; 2=Print debug information
+        on the console.
+
+        Debug output is generated with syslog.  The editor works on
+        /dev/console.  In order to get both a usable display and also
+        readable debug output, syslog'ing should sent to some device other
+        than /dev/console (which is the default).
+
+endif
+
+config COMPONENTS_AW_IOBOX_DF
+    bool "df"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        show mount information.
+
+config COMPONENTS_AW_IOBOX_GREP
+    bool "grep"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+        search strings.
+
+config COMPONENTS_AW_IOBOX_MKDIR
+    bool "mkdir"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+    help
+	make directories.
+
+config COMPONENTS_AW_IOBOX_TAIL
+    bool "tail"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+
+config COMPONENTS_AW_IOBOX_TOUCH
+    bool "touch"
+    depends on COMPONENTS_AW_IOBOX
+    default y
+
+config COMPONENTS_AW_IOBOX_MEMTOFILE
+    bool "mem_to_file"
+    depends on COMPONENTS_AW_IOBOX
+    default n
+    help
+        append memory data to file.

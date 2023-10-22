@@ -1,0 +1,13 @@
+obj-$(CONFIG_COMPONENTS_LWIP_2_1_2) += lwip-2.1.2/
+obj-$(CONFIG_COMPONENTS_LWIP_2_0_3) += lwip-2.0.3/
+obj-$(CONFIG_COMPONENTS_UDHCPD) += udhcp-0.9.8/
+obj-$(CONFIG_COMPONENTS_PING) += ping/
+obj-$(CONFIG_COMPONENTS_MBEDTLS_2_16_0) += mbedtls-2.16.0/
+obj-$(CONFIG_COMPONENTS_MBEDTLS_2_7_0) += mbedtls-2.7.0/
+obj-$(CONFIG_COMPONENTS_HTTPCLIENT) += httpclient/
+obj-$(CONFIG_COMPONENTS_WEBSOCKET) += websocket/
+obj-$(CONFIG_COMPONENTS_NGHTTP2) += nghttp2/
+obj-$(CONFIG_COMPONENTS_SNTP) += sntp/
+obj-$(CONFIG_COMPONENTS_NOPOLL) += nopoll/
+obj-$(CONFIG_COMPONENTS_SHTTPD) += shttpd/
+obj-$(CONFIG_COMPONENTS_MQTT) += mqtt/

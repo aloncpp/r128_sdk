@@ -1,0 +1,41 @@
+obj-y += board/trace/trace_task.o
+obj-y += board/trace/cycle_queue.o
+obj-y += board/traceusart/trace_uart.o
+obj-y += board/bsp/platform_utils.o
+obj-y += board/hci/hci_board.o
+obj-y += board/hci/h5/btrtl_fwconfig.o
+obj-y += board/common/os/freertos_v8.1.2/osif_freertos.o
+obj-y += board/common/src/hci_adapter.o
+
+obj-y += app.o
+obj-y += blue_cmd.o
+obj-y += blue_cmd_legacy.o
+obj-y += bt_a2dp.o
+obj-y += bt_avrcp.o
+obj-y += bt_gap.o
+obj-y += bt_hfp.o
+obj-y += bt_link.o
+obj-y += bt_sdp.o
+obj-y += customer_api.o
+obj-y += bt_gatt_server_dynamic.o
+obj-y += bt_gatt_server.o
+obj-y += bt_le_peripheral.o
+obj-y += lib/libbtstack.o
+
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/app
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/bluetooth/gap
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/platform
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/os
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/bluetooth/profile
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/bluetooth/profile/client
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/bluetooth/profile/legacy
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/board
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/board/bsp
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/board/trace
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/board/common
+CFLAGS += -I components/common/thirdparty/bluetooth/rtl_bt_stack/inc/bluetooth/profile/server
+CFLAGS += -I components/aw/bluetooth
+CFLAGS += -I components/aw/bluetooth/bt_adapter/rtl8723ds
+

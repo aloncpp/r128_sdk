@@ -1,0 +1,28 @@
+config COMPONENTS_USB_GADGET_UACD
+    bool "uacd service"
+    select DRIVERS_USB_UDC
+    default n
+    help
+	uacd service
+
+choice
+    prompt "uacd audio function"
+    depends on COMPONENTS_USB_GADGET_UACD
+    default COMPONENTS_USB_GADGET_UACD_NONE
+
+    config COMPONENTS_USB_GADGET_UACD_NONE
+    bool "none"
+
+    config COMPONENTS_USB_GADGET_UACD_WITH_AS
+    bool "AudioSystem local audio"
+    depends on COMPONENTS_AW_AUDIO_SYSTEM
+    help
+	uacd audio function with AudioSystem
+
+    config COMPONENTS_USB_GADGET_UACD_WITH_ALSA
+    bool "ALSA api local audio"
+    depends on COMPONENTS_AW_TINY_ALSA_LIB || COMPONENTS_AW_ALSA_LIB
+    help
+	uacd audio function with alsa api
+
+endchoice

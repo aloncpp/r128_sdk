@@ -1,0 +1,7 @@
+menu "unity test framework"
+
+config COMPONENT_UNITY
+    bool "unity test framework"
+    default n
+
+endmenu

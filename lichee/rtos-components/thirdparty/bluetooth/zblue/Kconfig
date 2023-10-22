@@ -1,0 +1,238 @@
+# Bluetooth configuration options
+
+# Copyright (c) 2016 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+menuconfig COMPONENTS_ZBLUESTACK
+	bool "zblue"
+	select COMPONENT_TINYCRYPT
+    default n
+	help
+	  This option enables Bluetooth host support.
+
+if COMPONENTS_ZBLUESTACK
+
+config BLEHOST
+    bool
+	depends on COMPONENTS_ZBLUESTACK
+    default y
+    help
+        If this option is enabled, BLE Host used.
+
+#module = COMPONENTS_ZBLUESTACK
+#module-str = bt
+#source "src/ble/subsys/logging/Kconfig.template.log_config"
+
+choice
+	prompt "Bluetooth Stack Selection"
+	default COMPONENTS_ZBLUESTACK_HCI
+	help
+	  Select the Bluetooth stack to compile.
+
+config BT_HCI
+	bool "HCI-based"
+	help
+	  HCI-based stack with optional host & controller parts and an
+	  HCI driver in between.
+
+config BT_CUSTOM
+	bool "Custom"
+	help
+	  Select a custom, non-HCI based stack. If you're not sure what
+	  this is, you probably want the HCI-based stack instead.
+
+endchoice
+
+# The Bluetooth subsystem requires the system workqueue to execute at
+# a cooperative priority.
+#config SYSTEM_WORKQUEUE_PRIORITY
+#	range -256 -1
+
+if BT_HCI
+
+config BT_HCI_RAW
+	bool "RAW HCI access"
+	help
+	  This option allows to access Bluetooth controller
+	  from the application with the RAW HCI protocol.
+
+config BT_HCI_RAW_RESERVE
+	int "Buffer headroom needed for HCI transport"
+	depends on BT_HCI_RAW
+	default 0
+	help
+	  This option is used by the HCI raw transport implementation to
+	  declare how much headroom it needs for any HCI transport headers.
+
+config BT_PERIPHERAL
+	bool "Peripheral Role support"
+	select BT_BROADCASTER
+	select BT_CONN
+	default y if BT_HCI_RAW
+	help
+	  Select this for LE Peripheral role support.
+
+config BT_CENTRAL
+	bool "Central Role support"
+	select BT_OBSERVER
+	select BT_CONN
+	default y if BT_HCI_RAW
+	help
+	  Select this for LE Central role support.
+
+menu "Broadcaster"
+	visible if !BT_PERIPHERAL
+
+config BT_BROADCASTER
+	bool "Broadcaster Role support"
+	default y if !BT_OBSERVER
+	help
+	  Select this for LE Broadcaster role support.
+
+endmenu
+
+config BT_EXT_ADV
+	bool "Extended Advertising and Scanning support [EXPERIMENTAL]"
+	help
+	  Select this to enable Extended Advertising API support.
+	  This enables support for advertising with multiple advertising sets,
+	  extended advertising data, and advertising on LE Coded PHY.
+	  It enables support for receiving extended advertising data as a
+	  scanner, including support for advertising data over the LE coded PHY.
+	  It enables establishing connections over LE Coded PHY.
+
+if BT_EXT_ADV
+config BT_EXT_ADV_LEGACY_SUPPORT
+	bool "Support starting advertising through legacy commands"
+	help
+	  Select this to enable the use of the Legacy Advertising HCI commands.
+	  This option should be used where the capabilities of the controller
+	  is not known.
+	  If this option is not enabled the controller must support the extended
+	  advertising feature.
+
+config BT_EXT_ADV_MAX_ADV_SET
+	int "Maximum number of simultaneous advertising sets"
+	range 1 64
+	default 1
+	help
+	  Maximum number of simultaneous Bluetooth advertising sets
+	  supported.
+
+endif # BT_EXT_ADV
+
+menu "Observer"
+	visible if !BT_CENTRAL
+
+config BT_OBSERVER
+	bool "Observer Role support"
+	help
+	  Select this for LE Observer role support.
+
+endmenu
+
+#source "src/ble/subsys/bluetooth/services/Kconfig"
+
+config BT_CONN
+	bool
+
+config BT_DEINIT
+	bool "Support deinit"
+	help
+	  deinit supported.
+
+config BT_MAX_CONN
+	int "Maximum number of simultaneous connections"
+	depends on BT_CONN
+	range 1 64
+	default 1
+	help
+	  Maximum number of simultaneous Bluetooth connections
+	  supported.
+
+if BT_CONN
+config BT_HCI_ACL_FLOW_CONTROL
+	bool "Controller to Host ACL flow control support"
+	# Enable if building a Host-only build
+	default y if !BT_CTLR  && !BT_STM32_IPM
+	# Enable if building a Controller-only build
+	default y if BT_HCI_RAW
+	select POLL
+	help
+	  Enable support for throttling ACL buffers from the controller
+	  to the host. This is particularly useful when the host and
+	  controller are on separate cores since it ensures that we do
+	  not run out of incoming ACL buffers.
+
+config BT_REMOTE_VERSION
+	bool "Enable fetching of remote version"
+	# Enable if building a Controller-only build
+	default y if BT_HCI_RAW
+	help
+	  Enable this to get access to the remote version in the Controller and
+	  in the Host through bt_conn_get_info(). The fields in question can
+	  be then found in the bt_conn_info struct.
+
+config BT_PHY_UPDATE
+	bool "PHY Update"
+	default y
+	help
+	  Enable support for Bluetooth 5.0 PHY Update Procedure.
+
+config BT_DATA_LEN_UPDATE
+	bool "Data Length Update"
+	default y
+	help
+	  Enable support for Bluetooth v4.2 LE Data Length Update procedure.
+endif # BT_CONN
+
+# Workaround for not being able to have commas in macro arguments
+#DT_CHOSEN_Z_BT_C2H_UART := zephyr,bt-c2h-uart
+#
+#config BT_CTLR_TO_HOST_UART_DEV_NAME
+#	string "Device Name of UART Device to an external Bluetooth Host"
+#	default "$(dt_chosen_label,$(DT_CHOSEN_Z_BT_C2H_UART))" if HAS_DTS
+#	default "UART_0"
+#	depends on BT_HCI_RAW
+#	help
+#	  This option specifies the name of UART device to be used
+#	  to connect to an external Bluetooth Host when Zephyr is
+#	  acting as a Bluetooth Controller.
+
+source "components/common/thirdparty/bluetooth/zblue/host/Kconfig"
+source "components/common/thirdparty/bluetooth/zblue/common/Kconfig"
+source "components/common/thirdparty/bluetooth/zblue/port/Kconfig.kernel"
+source "components/common/thirdparty/bluetooth/zblue/port/Kconfig.debug"
+source "components/common/thirdparty/bluetooth/zblue/port/Kconfig.platform"
+source "components/common/thirdparty/bluetooth/zblue/settings/Kconfig.setting"
+#source "src/ble/controller/Kconfig"
+#source "src/ble/shell/Kconfig"
+
+config NET_BUF_USER_DATA_SIZE
+	int "Size of user_data available in every network buffer"
+	default 8 if (BT || NET_TCP2) && 64BIT
+	default 4
+	range 4 65535 if BT || NET_TCP2
+	range 0 65535
+	help
+	  Amount of memory reserved in each network buffer for user data. In
+	  most cases this can be left as the default value.
+
+endif # BT_HCI
+
+config BT_COMPANY_ID
+	hex "Company Id"
+	default 0x05F1
+	range 0x0000 0xFFFF
+	help
+	  Set the Bluetooth Company Identifier for this device. The Linux
+	  Foundation's Company Identifier (0x05F1) is the default value for
+	  this option although silicon vendors and hardware manufacturers
+	  can set their own. Note that the controller's Company Identifier is
+	  controlled by BT_CTLR_COMPANY_ID. The full list of Bluetooth
+	  Company Identifiers can be found here:
+	  https://www.bluetooth.com/specifications/assigned-numbers/company-identifiers
+
+source "components/common/thirdparty/bluetooth/zblue/host/mesh/Kconfig"
+
+endif # COMPONENTS_ZBLUESTACK

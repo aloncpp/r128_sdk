@@ -1,0 +1,29 @@
+menu "RPData Components Support"
+
+config COMPONENTS_RPDATA
+	bool "AW RPData Support"
+	depends on COMPONENTS_AMP
+	select AMP_RPDATA_STUB
+	select AMP_RPDATA_SERVICE
+	default n
+	help
+	  Support Allwinner Remote Processor Data, allocate buffers and transmit/receive
+	  their references to/from remote processor.
+
+config COMPONENTS_RPDATA_DEMO
+	bool "AW RPData Demo"
+	depends on COMPONENTS_RPDATA
+	default n
+	select COMPONENTS_MD5
+	help
+	  Support RPData demo, test api
+
+config COMPONENTS_RPDATA_AUDIO_DEMO
+	bool "AW RPData Audio Demo"
+	depends on COMPONENTS_RPDATA
+	depends on COMPONENTS_AW_AUDIO_SYSTEM_RECORD
+	default n
+	help
+	  Support RPData Audio demo, record and data transmit
+
+endmenu

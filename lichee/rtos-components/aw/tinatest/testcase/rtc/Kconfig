@@ -1,0 +1,5 @@
+config TESTCASE_RTC
+	bool "RTC Testcase."
+	depends on DRIVERS_RTC
+	default n
+

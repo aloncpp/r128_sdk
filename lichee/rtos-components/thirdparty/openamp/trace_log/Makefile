@@ -1,0 +1,1 @@
+obj-y += openamp_log.o

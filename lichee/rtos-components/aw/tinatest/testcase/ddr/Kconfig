@@ -1,0 +1,4 @@
+config TESTCASE_DDR
+	bool "DDR Testcase."
+	default n
+

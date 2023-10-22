@@ -1,0 +1,19 @@
+menuconfig DRIVERS_KEYBOARD
+	default n
+	bool "keyboard driver"
+
+if DRIVERS_KEYBOARD
+
+config DRIVERS_SUNXI_KEYBOARD
+    bool "enable sunxi-keyboard drivers"
+        default n
+
+config DRIVERS_GPIO_KEY_POLLED
+    bool "enable gpio key polled drivers"
+        default n
+
+config DRIVERS_GPADC_KEY
+    bool "enable gpadc key drivers"
+	default n
+
+endif

@@ -1,0 +1,72 @@
+config AW_TEST_MEM
+	bool "Memory test"
+	default n
+
+config AW_TEST_CACHE
+	bool "Cache test"
+	default n
+
+config AW_TEST_TIMER
+	bool "Timer test"
+	default n
+
+menu "DSPFREQ option features"
+
+config AW_DSPFREQ
+	bool "Get/Set DSP freq."
+	default y
+
+config SUPPORT_32K
+	bool "support change dsp's freq to 32k"
+	default n
+
+config CLOSE_PLL_AUDIO0
+	bool "close pll_audio0 when suspend."
+	default n
+
+config CLOSE_DXCO
+	bool "close 24mdxco when suspend."
+	depends on SUPPORT_32K && CLOSE_PLL_AUDIO0
+	default n
+
+endmenu
+
+menu "dump reg option features"
+config ADJUST_REG
+	bool "adujst and dump some reg when suspend."
+	default n
+
+config CLOSE_SUART_PIN
+	bool "close suart pins(PL8/PL9) when suspend."
+	default n
+
+endmenu
+
+
+config AW_HARDWARE_PERF
+	bool "HARDWARE performance"
+	select DRIVERS_TIMER
+	default n
+
+config AW_JTAG_DEBUG
+	bool "Setup JTAG for DSP"
+	default y
+
+config JTAG_DEBUG_DSP1
+	bool "DSP1 power control for JTAG debugging"
+	depends on AW_JTAG_DEBUG
+	default y
+	---help---
+		If we wants to just debug DSP0 through JTAG,
+		we must power down DSP1, otherwise it will
+		lead to an connection error.
+
+config MEMTESTER
+	bool "Memtester (based on Linux)"
+	default n
+
+menu "Performance Testing"
+source "components/aw/testbench/performance/Kconfig"
+endmenu
+
+source "components/aw/testbench/vfpu_test/Kconfig"

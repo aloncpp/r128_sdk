@@ -1,0 +1,73 @@
+if ARCH_ARM_ARMV8M
+
+config CPU_CM33F
+	bool "support CM33F feature"
+	default n
+	help
+		Say y to support CM33F feature, such as MSPLIMIT/PSPLIMIT.
+
+config ARCH_ARM_ARMV8M_IRQ_DEFAULT_PRIORITY
+	int "IRQ Default Priority"
+	default 4
+	help
+		* It is recommended to set default priority value
+		* greater than 1, otherwise it may cause the interrupt
+		* to be unshielded and cause the system to be abnormal.
+
+config VECTOR_TABLE_ALIGNMENT
+	hex "Interrupt vector table alignment"
+	default 0x400
+	help
+		This configuration is the address alignment of interrupt vector table.
+		You must align the offset to the number of exception entries in the vector table.
+		It default align to 1024(0x400) byte boundary(support max 256 exception).
+		The minimun alignment is 32 words(128 bytes), enough for up to 16 interrupts.
+		For more interrupts, adjust the alignment by rounding up to the next power of two.
+		For example, if you require 21 interrupts, the alignment must be on a 64-word boundary
+		because the required table size is 37 words, and the next power of two is 64.
+
+config ARCH_ARMV8M_DEFAULT_BOOT_RISCV
+	bool "default boot riscv"
+	default n
+	help
+		default boot riscv
+
+config ARCH_ARMV8M_DEFAULT_BOOT_DSP
+	bool "default boot dsp"
+	default n
+	help
+		default boot dsp
+
+menu "xradio sys config"
+
+choice
+	prompt "Select Wlan Clk Src"
+	default WLAN_CLK_BY_RFIP0_DPLL
+	help
+		select clock source for ck_160_wlan(160M)
+
+config WLAN_CLK_BY_RFIP0_DPLL
+	bool "rfip0_dpll"
+
+config WLAN_CLK_BY_RFIP1_DPLL
+	bool "rfip1_dpll"
+endchoice
+
+choice
+	prompt "Select Bt Clk Src"
+	default BT_CLK_BY_RFIP0_DPLL
+	help
+		select clock source for ck_192_bt(192M)
+
+config BT_CLK_BY_RFIP0_DPLL
+	bool "rfip0_dpll"
+
+config BT_CLK_BY_RFIP1_DPLL
+	bool "rfip1_dpll"
+endchoice
+
+endmenu
+
+source arch/arm/armv8m/sun20iw2p1/Kconfig
+
+endif

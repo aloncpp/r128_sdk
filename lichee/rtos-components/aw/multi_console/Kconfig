@@ -1,0 +1,44 @@
+menu "Multi Console Support"
+
+config MULTI_CONSOLE
+	bool "Multi Console Support"
+	default n
+	help
+	  Support AW Multi Console component.
+
+config MULTI_CONSOLE_DEBUG
+	bool "Multi Console Debug Mode"
+	default n
+	depends on MULTI_CONSOLE
+	help
+	  Enable AW Multi Console Debug.
+
+config UART_MULTI_CONSOLE
+	bool "Uart Multi Console Support"
+	default n
+	depends on DRIVERS_UART
+	help
+	  Support AW Uart Multi Console component.
+
+config UART_MULTI_CONSOLE_AS_MAIN
+	bool "Uart Multi Console As Main Console"
+	default n
+	depends on UART_MULTI_CONSOLE
+	help
+	  Support AW Uart Multi Console component.
+
+config RPMSG_MULTI_CONSOLE
+	bool "Rpmsg Multi Console Support"
+	default n
+	depends on RPMSG_CLIENT
+	help
+	  Support AW RPMSG Multi Console component.
+
+config RPMSG_CONSOLE_CACHE
+	bool "Rpmsg Multi Console Enable Cache Cmd"
+	default n
+	depends on RPMSG_MULTI_CONSOLE
+	help
+	  Rpmsg Multi Console Enable Cache Cmd.
+
+endmenu

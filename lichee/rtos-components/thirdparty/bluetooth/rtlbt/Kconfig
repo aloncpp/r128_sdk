@@ -1,0 +1,3 @@
+config COMPONENTS_RTLBTSTACK
+	bool "rlt_bt_stack"
+	default n

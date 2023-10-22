@@ -1,0 +1,162 @@
+# Bluetooth common configuration options
+
+# Copyright (c) 2017 Nordic Semiconductor ASA
+# Copyright (c) 2016 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+#config BT_HAS_HCI_VS
+#	bool
+#	help
+#	  This option is set by the Bluetooth controller to indicate support
+#	  for the Zephyr HCI Vendor-Specific Commands and Event.
+#
+#config BT_HCI_VS
+#	bool "Zephyr HCI Vendor-Specific Commands"
+#	depends on BT_HAS_HCI_VS || !BT_CTLR
+#	default y if BT_HAS_HCI_VS
+#	help
+#	  Enable support for the Zephyr HCI Vendor-Specific Commands in the
+#	  Host and/or Controller. This enables Set Version Information,
+#	  Supported Commands, Supported Features vendor commands.
+#
+#config BT_HCI_VS_EXT
+#	bool "Zephyr HCI Vendor-Specific Extensions"
+#	depends on BT_HCI_VS
+#	default y
+#	help
+#	  Enable support for the Zephyr HCI Vendor-Specific Extensions in the
+#	  Host and/or Controller. This enables  Write BD_ADDR, Read Build Info,
+#	  Read Static Addresses and Read Key Hierarchy Roots vendor commands.
+#
+#config BT_HCI_VS_EXT_DETECT
+#	bool "Use heuristics to guess HCI vendor extensions support in advance"
+#	depends on BT_HCI_VS_EXT && !BT_CTLR
+#	default y if BOARD_QEMU_X86 || BOARD_QEMU_CORTEX_M3 || BOARD_NATIVE_POSIX
+#	help
+#	  Use some heuristics to try to guess in advance whether the controller
+#	  supports the HCI vendor extensions in advance, in order to prevent
+#	  sending vendor commands to controller which may interpret them in
+#	  completely different ways.
+
+#config BT_HCI_MESH_EXT
+#	bool "Mesh HCI Command support"
+#	depends on BT_BROADCASTER && BT_OBSERVER && !BT_LL_SW_SPLIT
+#	help
+#	  Enable support for the Bluetooth Mesh HCI Commands.
+
+#config BT_WAIT_NOP
+#	bool "Wait for \"NOP\" Command Complete event during init"
+#	help
+#	  Emit a Command Complete event from the Controller (and wait for it
+#	  from the Host) for the NOP opcode to indicate that the Controller is
+#	  ready to receive commands.
+
+config BT_RPA
+	bool
+	select TINYCRYPT
+	select TINYCRYPT_AES
+
+config BT_ASSERT
+	bool "Custom Bluetooth assert implementation"
+	default y
+	help
+	  Use a custom Bluetooth assert implementation instead of the
+	  kernel-wide __ASSERT() when CONFIG_ASSERT is disabled.
+
+if BT_ASSERT
+
+config BT_ASSERT_VERBOSE
+	bool "Print out an assert string when using BT_ASSERT"
+	default y
+	help
+	  When CONFIG_BT_ASSERT is enabled, this option turns on printing the
+	  cause of the assert to the console using printk().
+
+config BT_ASSERT_PANIC
+	bool "Use k_panic() instead of k_oops()"
+	help
+	  When CONFIG_BT_ASSERT is enabled, this option makes the code call
+	  k_panic() instead of k_oops() when an assertion is triggered.
+
+endif # BT_ASSERT
+
+config BT_DEBUG
+	# Hidden option to make the conditions more intuitive
+	bool
+
+choice
+	prompt "Bluetooth debug type"
+	default BT_DEBUG_NONE
+
+config BT_DEBUG_NONE
+	bool "No debug log"
+	help
+	  Select this to disable all Bluetooth debug logs.
+
+config BT_DEBUG_LOG
+	bool "Normal printf-style to console"
+	select BT_DEBUG
+	select LOG
+	help
+	  This option enables Bluetooth debug going to standard
+	  serial console.
+
+config BT_DEBUG_LOG_WITH_HCI_PRINT
+	bool "Print hci log"
+	select BT_DEBUG
+	select LOG
+
+config BTSNOOP
+	bool "Monitor protocol over UART by command btsnoop start-up with HcidumpXr.exe"
+	select BT_DEBUG
+	select LOG
+
+#config BT_DEBUG_MONITOR
+#	bool "Monitor protocol over UART"
+#	select BT_DEBUG
+#	select LOG
+#	select CONSOLE_HAS_DRIVER
+#	help
+#	  Use a custom logging protocol over the console UART
+#	  instead of plain-text output. Requires a special application
+#	  on the host side that can decode this protocol. Currently
+#	  the 'btmon' tool from BlueZ is capable of doing this.
+#
+#	  If the target board has two or more external UARTs it is
+#	  possible to keep using UART_CONSOLE together with this option,
+#	  however if there is only a single external UART then
+#	  UART_CONSOLE needs to be disabled (in which case printk/printf
+#	  will get encoded into the monitor protocol).
+
+endchoice
+
+if BT_DEBUG
+
+# Workaround for not being able to have commas in macro arguments
+#DT_CHOSEN_Z_BT_MON_UART := zephyr,bt-mon-uart
+#
+#config BT_MONITOR_ON_DEV_NAME
+#	string "Device Name of Bluetooth monitor logging UART"
+#	depends on BT_DEBUG_MONITOR
+#	default "$(dt_chosen_label,$(DT_CHOSEN_Z_BT_MON_UART))" if HAS_DTS
+#	default "UART_0"
+#	help
+#	  This option specifies the name of UART device to be used
+#	  for the Bluetooth monitor logging.
+
+# Driver like virtual hci have not used the BT LOG now.
+#config BT_DEBUG_HCI_DRIVER
+#	bool "Bluetooth HCI driver debug"
+#	help
+#	  This option enables debug support for the active
+#	  Bluetooth HCI driver, including the Controller-side HCI layer
+#	  when included in the build.
+
+config BT_DEBUG_RPA
+	bool "Bluetooth Resolvable Private Address (RPA) debug"
+	depends on BT_RPA
+	help
+	  This option enables debug support for the Bluetooth
+	  Resolvable Private Address (RPA) generation and resolution.
+
+endif # BT_DEBUG

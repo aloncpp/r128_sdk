@@ -1,0 +1,25 @@
+
+menu "WiFi Testcase"
+	depends on DRIVERS_XRADIO
+
+config TESTCASE_WIFION
+	bool "Wifi on Testcase."
+	default n
+
+config TESTCASE_WIFIOFF
+	bool "Wifi off Testcase."
+	default n
+
+config TESTCASE_WIFISCAN
+	bool "Wifi scan Testcase."
+	default n
+
+config TESTCASE_WIFICON
+	bool "Wifi connect Testcase."
+	default n
+
+config TESTCASE_WIFIRM
+	bool "Wifi disconnect Testcase."
+	default n
+
+endmenu

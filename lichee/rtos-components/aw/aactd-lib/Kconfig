@@ -1,0 +1,9 @@
+menu "aw aactd lib"
+
+config COMPONENTS_AACTD_LIB
+    bool "Audio Calibration Tool Library"
+    default n
+    help
+        "A library for applications that communicate with aactd."
+
+endmenu

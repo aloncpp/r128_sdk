@@ -1,0 +1,4 @@
+config TESTCASE_THROUGHPUT
+	bool "rw-throughput Testcase."
+	default n
+

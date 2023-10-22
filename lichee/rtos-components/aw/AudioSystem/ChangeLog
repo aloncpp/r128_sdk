@@ -1,0 +1,132 @@
+V0.1.12			2023.06.25
+* fix capture resample adjust
+
+V0.1.11			2023.06.25
+* update MT rb appl_ptr, and add as_bt appl_ptr detect
+
+V0.1.10			2023.06.16
+support AudioRecord resample adjust
+
+V0.1.9 			2023.06.16
+* fix resample adjust function, support 8K/16K/48K/96K
+
+V0.1.8 			2023.05.11
+* update AudioSystem with osal api
+
+V0.1.7 			2023.05.09
+* fix AudioTrack softvol api
+* softvol support sys_config
+
+V0.1.6 			2023.05.06
+* support AT resample adjust function
+
+V0.1.5 			2023.05.05
+* fix SnoopThread start/stop bug
+
+V0.1.4 			2023.03.06
+* support AW(AllWinner) EQ SW  audio_hw
+
+V0.1.3 			2023.02.25
+* support EQ/DRC offline config
+
+V0.1.2 			2022.12.07
+* support sys_config
+
+V0.1.1 			2022.10.11
+* modify task priority
+
+V0.1.0 			2022.09.06
+* add tbuffer into AudioTrack
+
+V0.0.25 		2022.08.31
+* fix mem leak with ap_update_mode
+* add bt src audio hw
+* audio hw fix boundary
+
+V0.0.24 		2022.08.18
+* update sem api
+* add change AT/AR timeout api
+
+V0.0.23 		2022.07.13
+* audio_hw support alias name
+
+V0.0.22 		2022.07.12
+* fix channel_map bug
+
+V0.0.21 		2022.07.08
+* support capture ahw_elem
+
+V0.0.20 		2022.07.08
+* support AT/AR channel map api
+* change audio_hw_elem struct
+
+V0.0.19 		2022.06.16
+* fix audio_hw elem match rule
+* move wav parser into as_test
+
+V0.0.18 		2022.06.10
+* MixerThread/SnoopThread alloc align rb_buf
+
+V0.0.17 		2022.06.09
+* support as print with core name
+* fix AR reset function
+
+V0.0.16 		2022.06.08
+* fix as_amp frames caculate error
+* modify format-bits convert function
+* fix AudioRecord overrun abnormal
+
+V0.0.15 		2022.05.06
+* support amp audio audio_hw
+
+V0.0.14 		2022.04.27
+* pcm_merge support 32bit
+
+V0.0.13 		2022.04.25
+* capture and playback support 32bit
+* audio plugin support 32bit
+* add bits convert plugin
+
+V0.0.12 		2022.04.09
+* support audio_hw, as_pcm, contains pcm/multi_pcm
+
+V0.0.11 		2021.10.11
+* audio effect rename to audio plugin
+
+V0.0.10 		2021.10.08
+* support softvol component
+
+V0.0.9 			2021.09.17
+* modify header
+* change AudioTrackWrite/AudioRecordRead size to bytes from frames
+
+V0.0.7 -> V0.0.8 	2021.07.27
+* add as_pcm
+
+V0.0.6 -> V0.0.7 	2021.06.05
+* support AudioRecord with resample
+
+V0.0.5 -> V0.0.6 	2021.06.03
+* update channel map component
+
+V0.0.4 -> V0.0.5 	2021.06.03
+* support SnoopThread
+* support AudioRecord
+* add ar testcase into as_test
+
+V0.0.3 -> V0.0.4 	2021.06.02
+* support resample component
+
+V0.0.2 -> V0.0.3 	2021.06.02
+* support Audio Effects Component
+* support channel map component
+
+V0.0.1 -> V0.0.2
+* add builtin wav file
+* support some AudioTrack function(destroy)
+
+V0.0.1 version
+* support mixer main Thread
+* support multi AudioTrack playback
+* support mix function
+* add AudioTrack test

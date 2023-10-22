@@ -1,0 +1,25 @@
+menuconfig COMPONENTS_LIBJPEG_TURBO
+	bool "libjpeg-turbo"
+	default n
+
+if COMPONENTS_LIBJPEG_TURBO
+
+config LIBJPEG_CJPEG
+	bool "libjpeg code command cjpeg"
+ 	default n
+		help
+		support cjpeg command
+
+config LIBJPEG_DJPEG
+	bool "libjpeg decode command djpeg"
+	default n
+		help
+		support djepg command
+
+config LIBJPEG_TEST_DEMO
+	bool "libjpeg test demo jpeg_test"
+	default n
+		help
+		libjpeg-turbo test demo - jpeg_test
+
+endif

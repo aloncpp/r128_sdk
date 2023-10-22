@@ -1,0 +1,13 @@
+menu "Calibrate RC_LF Component Support"
+
+config COMPONENTS_CAL_RC_LF
+    bool "Provide software API to calibrate the counter value of timer whose input clock is RC_LF/32"
+    default n
+	depends on ARCH_SUN20IW2P1
+
+config COMPONENTS_CAL_RC_LF_TEST
+    bool "Test command for Calibrate RC_LF Component"
+    default n
+	depends on COMPONENTS_CAL_RC_LF && DRIVERS_RCCAL
+
+endmenu

@@ -1,0 +1,3 @@
+config BITOPS_FLS
+	bool "Generic bitops fls support (based on Linux)"
+	default y

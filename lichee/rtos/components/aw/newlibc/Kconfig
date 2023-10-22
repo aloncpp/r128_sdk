@@ -1,0 +1,7 @@
+menu "Newlibc Components Support"
+
+config ARCH_MEMCPY_OPTIMIZE
+    bool "Tina RTOS Memcpy Optimize"
+    default y
+
+endmenu

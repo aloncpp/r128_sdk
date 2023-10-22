@@ -1,0 +1,67 @@
+menu "bluetooth drivers"
+config DRIVERS_BLUETOOTH_XRADIO
+	default n
+	bool "BLUETOOTH xradio driver"
+
+if DRIVERS_BLUETOOTH_XRADIO
+
+config BT_DRIVERS_LIB
+	bool "Enable Blutooth Drivers Lib"
+	default y
+	help
+		this will use blutooth drivers lib.
+
+source drivers/drv/bluetooth/driver/Kconfig
+
+config BT_DRIVERS_LOG
+	bool "Enable Blutooth Drivers HCI Log Parse"
+	default n
+	help
+		this will use blutooth drivers hci log parse.
+
+	if BT_DRIVERS_LOG
+
+		config BT_DRIVERS_LOG_HCIDUMP
+			bool "Enable Blutooth Drivers Log hcidump"
+			default n
+
+		config BT_DRIVERS_LOG_BTSNOOP
+			bool "Enable Blutooth Drivers Log btsnoop"
+			default n
+
+		if BT_DRIVERS_LOG_BTSNOOP
+			config BT_DRIVERS_LOG_EXTRA_STACK_SIZE
+				int "The extra thread stack size of using FileSystem"
+				default 512
+		endif
+
+	endif
+
+choice
+	prompt "Distribution method"
+	default BT_DIST_MODE_CORRESPOND
+
+config BT_DIST_MODE_ALL
+	bool "Distribute ALL"
+
+config BT_DIST_MODE_CORRESPOND
+	bool "Distribute Corresponding"
+
+endchoice
+
+if BT_DIST_MODE_CORRESPOND
+config BT_DIST_MODE_CORRESPOND_DEBUG
+	bool "corresponding mode debug log"
+	default n
+	help
+	  If this option is enabled, would should corresponding mode debug log.
+endif
+
+config BT_DRIVERS_LIB_LOG_LEVEL
+	int "Blutooth Drivers Lib Log Level"
+	default 2
+	help
+	  this will set blutooth drivers lib log level.
+
+endif
+endmenu

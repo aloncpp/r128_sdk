@@ -1,0 +1,7 @@
+menu "HAL OSAL API"
+
+config HAL_OSAL
+    bool "enable osal API for hal"
+	default y
+
+endmenu

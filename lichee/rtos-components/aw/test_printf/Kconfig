@@ -1,0 +1,7 @@
+menu "Test printf Components Support"
+
+config COMPONENTS_TEST_PRINTF
+    bool "printf API test with some possible race condition"
+    default n
+
+endmenu

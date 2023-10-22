@@ -1,0 +1,78 @@
+menu "service"
+config COMPONENTS_SERVICE_UDHCPD
+	bool "udhcpd demo"
+	select COMPONENTS_UDHCPD
+	default n
+	help
+		this is udhcpd command example
+
+config COMPONENTS_SERVICE_SNTP
+	bool "sntp demo"
+	select COMPONENTS_SNTP
+	default n
+	help
+		this is sntp command example
+
+config COMPONENTS_SERVICE_IPERF
+	bool "iperf demo"
+	default n
+	select NEWLIBC_NANO_SCANF_FLOAT
+	help
+		this is iperf command example
+
+config COMPONENTS_SERVICE_PING
+	bool "ping demo"
+	depends on COMPONENTS_PING
+	default n
+	help
+		this is ping command example
+
+config COMPONENTS_SERVICE_NOPOLL
+	bool "nopoll demo"
+	select COMPONENTS_NOPOLL
+	default n
+	help
+		this is nopoll command example
+
+config COMPONENTS_SERVICE_MQTT
+	bool "mqtt demo"
+	select COMPONENTS_MQTT
+	default n
+	help
+		this is mqtt command example
+
+config COMPONENTS_SERVICE_SHTTPD
+	bool "shttpd demo"
+	select COMPONENTS_SHTTPD
+	default n
+	help
+		this is shttpd command example
+
+if COMPONENTS_MBEDTLS_2_16_0
+config COMPONENTS_SERVICE_MBEDTLS
+	bool "mbedtls demo"
+	default n
+	help
+		this is mbedtls command example
+endif
+
+config COMPONENTS_SERVICE_HTTPCLIENT
+	bool "httpc demo"
+	select COMPONENTS_HTTPCLIENT
+	default n
+	help
+		this is httpclient command example
+
+config COMPONENTS_SERVICE_MINI_WGET
+	bool "mini_wget"
+	default n
+	help
+		this is wget command example
+
+config COMPONENTS_SERVICE_TELNET
+	bool "telnet"
+	default n
+	help
+		this is telnet command example
+
+endmenu

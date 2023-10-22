@@ -1,0 +1,8 @@
+menu "StackProtector Components Support"
+
+config COMPONENTS_STACK_PROTECTOR
+    bool "Tina RTOS Stack Protector"
+    default n
+    help
+        Tina RTOS Stack Protector support.
+endmenu

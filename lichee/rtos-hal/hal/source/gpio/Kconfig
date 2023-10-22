@@ -1,0 +1,20 @@
+menu "GPIO Devices"
+
+config DRIVERS_GPIO
+    bool "enable gpio driver"
+        default y
+
+config HAL_TEST_GPIO
+    bool "enable gpio hal APIs test command"
+	depends on DRIVERS_GPIO
+        default n
+
+config DRIVERS_GPIO_EX_AW9523
+    bool "enable gpio chip aw9523"
+        default n
+
+config DRIVERS_GPIO_SHARE_IRQ
+    bool "enable amp gpio irq"
+        default n
+
+endmenu

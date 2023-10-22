@@ -1,0 +1,40 @@
+V0.0.7 version
+* Modify automatic speech recognition component for dump merge in 4ch plane.
+* Modify automatic speech recognition test for rpdata common interface.
+* add rpdata interface for application to call.
+
+V0.0.6 version
+* support automatic speech recognition component.
+* add automatic speech recognition test.
+* add the v1.1.0 of automatic speech recognition algorithms library.
+
+V0.0.5 version
+* Modify audio echo cancel component, it can test pass.
+* remove printf from audio echo cancel component and audio equalizer component.
+* move the v1.0.0 of audio echo cancel algorithms library to audio process module.
+
+V0.0.4 version
+* support audio echo cancel component and integrate audio echo cancel algorithms
+* add audio echo cancel component test for rpbuf
+* add the v1.0.0 of audio echo cancel algorithms library
+
+
+V0.0.3 version
+* support audio equalizer component
+* add audio equalizer component test for rpbuf
+
+
+V0.0.2 version
+* support audio echo cancel component
+* support dump component
+* support audio render component
+* add audio record and audio echo cancel component tunnel test
+* add audio record and dump component tunnel test
+* add audio record and dump component and audio render component tunnel test
+* add audio render test
+
+V0.0.1 version
+* support base component and base port
+* support base sink , source and filter component
+* support audio record component
+* add audio record untunnel test

@@ -1,0 +1,67 @@
+menu "CSI Devices"
+
+config DRIVERS_CSI
+    bool "enable csi driver"
+        default n
+
+config CSI_CAMERA
+    bool "enable csi camera driver"
+          depends on DRIVERS_CSI
+	default y
+
+menuconfig CSI_CAMERA_CHOICE
+    bool "csi camera choice"
+	  depends on DRIVERS_CSI
+          select DRIVERS_TWI
+    default y
+    help
+      select csi camera.
+
+if CSI_CAMERA_CHOICE
+
+config CSI_CAMERA_GC0308
+    bool "csi camera GC0308"
+	  depends on CSI_CAMERA_CHOICE
+    default y
+    help
+        support csi camera gc0308.
+
+config CSI_CAMERA_GC2145
+    bool "csi camera GC2145"
+	  depends on CSI_CAMERA_CHOICE
+    default n
+    help
+        support csi camera gc2145.
+
+config CSI_CAMERA_GC0328c
+    bool "csi camera GC0328c"
+	  depends on CSI_CAMERA_CHOICE
+    default n
+    help
+        support csi camera gc0328c.
+
+config CSI_CAMERA_OV7670
+    bool "csi camera ov7670"
+	  depends on CSI_CAMERA_CHOICE
+    default n
+    help
+        support csi camera ov7670.
+
+endif
+
+config JPEG_ENCODER
+    bool "enable jpeg encoder"
+    depends on DRIVERS_CSI
+          select DRIVERS_SYSCTL
+    default y
+    help
+       support jpeg encoder
+
+config HAL_TEST_CSI
+    bool "enable csi demo test command"
+	depends on DRIVERS_CSI
+        default n
+
+endmenu
+
+

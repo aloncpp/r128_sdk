@@ -1,0 +1,11 @@
+menuconfig DRIVERS_MUTEKEY
+	default y
+	bool "mutekey driver"
+
+if DRIVERS_MUTEKEY
+
+config DRIVERS_MUTEKEY_GPIO
+    bool "enable gpio mutekey drivers"
+    default y
+
+endif

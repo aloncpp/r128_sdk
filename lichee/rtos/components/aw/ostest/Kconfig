@@ -1,0 +1,35 @@
+menu "Os Testcase Support"
+
+config COMPONENTS_OSTEST
+    bool "Os Testcase"
+    default n
+    help
+        Tina RTOS Os Testcase support.
+
+if COMPONENTS_OSTEST
+
+config COMPONENTS_OSTEST_FPU
+    bool "FPU Testcase"
+    default n
+
+config SHOW_C906_FPU_CTX_STATISTICS_INFO
+    bool "Provide command to print C906 FPU context statistics info"
+    depends on RECORD_C906_FPU_CTX_STATISTICS
+    default n
+
+config COMPONENTS_OSTEST_JPEGPERF
+    bool "JPEGPERF Testcase"
+    default n
+
+config COMPONENTS_OSTEST_HARDWARE_PERF
+    bool "HARDWARE performance"
+    select DRIVERS_TIMER
+    default n
+
+config COMPONENTS_OSTEST_OSAL
+    bool "Osal Testcase"
+    default n
+
+endif
+
+endmenu

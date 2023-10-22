@@ -1,0 +1,74 @@
+# Makefile for simulator target code in <xtensa_tools_root>/xtensa-elf/src/sim
+
+# Copyright (c) 2003-2006 by Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+#
+#  This makefile assumes GNU make features
+#
+#  Invoke this Makefile like this:
+#	cd <some build directory>
+#	make -f <this file> XTENSA_TOOLS_ROOT=<path to Xtensa Tools> \
+#		XTENSA_ROOT=<path to Xtensa core package> \
+#		INSTLIBDIR=<path to installation directory> \
+#		INSTCLIBDIR=<path to C-lib-specific installation directory>
+#
+
+ifndef XTENSA_TOOLS_ROOT
+XTENSA_TOOLS_ROOT := $(shell xt-ld --show-config=xttools)
+#$(error Please set XTENSA_TOOLS_ROOT to the path to Xtensa Tools)
+endif
+#  NOTE:  For now, we assume $(XTENSA_TOOLS_ROOT)/bin is on the PATH.
+ifndef XTENSA_ROOT
+XTENSA_ROOT := $(shell xt-ld --show-config=config)
+#$(error Please set XTENSA_ROOT to the path to your specific Xtensa core package)
+endif
+ifndef INSTLIBDIR
+$(error Please set INSTLIBDIR to the path where libraries and objects are installed)
+#INSTLIBDIR = $(call fixpath,$(XTENSA_ROOT)/xtensa-elf/arch/lib)
+endif
+
+#  Select the specified Xtensa configuration:
+#export XTENSA_SYSTEM = $(XTENSA_ROOT)/config
+#export XTENSA_CORE = default
+
+include $(XTENSA_TOOLS_ROOT)/misc/defs.mk
+
+ifndef SRCDIR
+$(error Please set MAKEFILE_SRC to the path to this Makefile.src)
+endif
+
+CFLAGS = -O2 -g -mlongcalls
+
+SIM_OBJS = close.o exit.o fstat.o getpid.o gettimeofday.o \
+	kill.o link.o lseek.o open.o read.o rename.o sbrk.o stat.o \
+	times.o unlink.o write.o simcalls.o esimcalls.o usimcalls.o \
+	msimcalls.o
+
+.PHONY: all install clean
+
+all: libsim.a
+
+libsim.a: $(SIM_OBJS)
+
+%.o: %.S
+	$(CC_FOR_TARGET) -ffunction-sections -c $(CFLAGS) -o $@ $<
+
+%.o: %.c
+	$(CC_FOR_TARGET) -ffunction-sections -c $(CFLAGS) -o $@ $<
+
+%.a:
+	$(AR_FOR_TARGET) -rc $@ $^
+
+install: all
+	-$(MKPATH) -p $(INSTLIBDIR)
+	$(CP) libsim.a $(INSTLIBDIR)
+	@$(RM) *.a
+
+clean:
+	$(RM) *.a *.o
+

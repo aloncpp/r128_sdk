@@ -1,0 +1,24 @@
+menu "Memleak Components Support"
+
+config COMPONENTS_MEMLEAK
+    bool "Tina RTOS Memleak"
+    default n
+    help
+        Tina RTOS Memleak support.
+
+if COMPONENTS_MEMLEAK
+config MEMORY_LEAK_BACKTRACE_LEVEL
+    int "Tina RTOS Memleak Backtrace Level"
+    default 16
+    help
+        Tina RTOS Memleak Backtrace Level.
+
+config DOUBLE_FREE_CHECK
+    bool "Tina RTOS Double Free Check"
+    default y
+    help
+        Tina RTOS Double Free Check Tools.
+
+endif
+
+endmenu

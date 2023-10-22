@@ -1,0 +1,37 @@
+#
+# Copyright (c) 2018 Cadence Design Systems, Inc.  ALL RIGHTS RESERVED.
+# 
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of
+# Cadence Design Systems, Inc.  They may be adapted and modified by bona fide
+# purchasers for internal use, but neither the original nor any adapted
+# or modified version may be disclosed or distributed to third parties
+# in any manner, medium, or form, in whole or in part, without the prior
+# written consent of Cadence Design Systems, Inc.
+
+# See the logging chapter in the "XTSC User's Guide" for information about this file.
+
+# Configure all loggers at INFO_LOG_LEVEL and to use two appenders named "file" and "console".
+# Change "INFO" to "NOTE" to reduce log file size and speed up simulation.
+# Change "INFO" to "VERBOSE" or "DEBUG" to increase log file size and slow down simulation.
+log4xtensa.rootLogger=INFO, file, console
+
+# Uncomment the following lines and change LOGGERNAME to desired logger name to cause
+# that logger to log at DEBUG_LOG_LEVEL.
+#log4xtensa.logger.LOGGERNAME=DEBUG, file, console
+#log4xtensa.additivity.LOGGERNAME=false
+
+# Configure appender "file" to be a FileAppender that sends its output to file "xtsc.log".
+log4xtensa.appender.file=log4xtensa::FileAppender
+log4xtensa.appender.file.File=xtsc.log
+log4xtensa.appender.file.Append=false
+log4xtensa.appender.file.layout=log4xtensa::PatternLayout
+log4xtensa.appender.file.layout.ConversionPattern=%-7p %-26c - %m%n
+
+# Configure appender "console" to be a ConsoleAppender that only
+# accepts messages at NOTE_LOG_LEVEL or higher.
+log4xtensa.appender.console=log4xtensa::ConsoleAppender
+log4xtensa.appender.console.Threshold=NOTE
+log4xtensa.appender.console.layout=log4xtensa::PatternLayout
+log4xtensa.appender.console.layout.ConversionPattern=%-7p %-26c - %m%n
+

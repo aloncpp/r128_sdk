@@ -1,0 +1,14 @@
+menuconfig COMPONENTS_PSTORE
+    bool "pstore support"
+    default n
+    select DRIVERS_SPINOR_PANIC_WRITE
+    help
+        Pstore Components.
+
+if COMPONENTS_PSTORE
+
+config PSTORE_BUFFER_SIZE
+    int "pstore buffer size(byte)"
+    default 4096
+
+endif

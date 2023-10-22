@@ -1,0 +1,4 @@
+config USB_STORAGE_CD
+	bool "USB CD support"
+	depends on USB_STORAGE
+	default y

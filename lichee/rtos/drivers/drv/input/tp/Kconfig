@@ -1,0 +1,23 @@
+menuconfig DRIVERS_TOUCHSCREEN
+	default n
+	bool "touchscreen driver"
+
+if DRIVERS_TOUCHSCREEN
+
+config DRIVERS_TOUCHSCREEN_TLSC6X
+    bool "enable tlsc6x touchscreen driver"
+    default n
+
+config DRIVERS_TOUCHSCREEN_GT911
+    bool "enable gt911 touchscreen driver"
+    default n
+
+config DRIVERS_TOUCHSCREEN_CST226SE
+    bool "enable cst226se touchscreen driver"
+    default n
+
+config DRIVERS_TEST_TOUCHSCREEN
+    bool "enable touchscreen drivers APIs test command"
+    default n
+
+endif

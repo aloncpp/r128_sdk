@@ -1,0 +1,91 @@
+menu "OpenMax Support"
+
+config COMPONENTS_OMX_SYSTEM
+	bool "OpenMax Support"
+	default n
+	help
+	  Support Allwinner OMX System component.
+
+config COMPONENTS_OMX_BASE
+	bool "OMX base Support"
+	depends on COMPONENTS_OMX_SYSTEM
+	default n
+	help
+	  Support Allwinner The Base of OMX System component.
+	  
+config COMPONENTS_OMX_BASE_FILTER
+	bool "OMX base filter Support"
+	depends on COMPONENTS_OMX_BASE
+	default n
+	help
+	  Support Allwinner OMX Base filter.
+
+config COMPONENTS_OMX_BASE_SINK
+	bool "OMX base sink Support"
+	depends on COMPONENTS_OMX_BASE
+	default n
+
+config COMPONENTS_OMX_BASE_SOURCE
+	bool "OMX base source Support"
+	depends on COMPONENTS_OMX_BASE
+	default n
+
+config COMPONENTS_OMX_BASE_AUDIO_PORT
+	bool "OMX base audio port Support"
+	depends on COMPONENTS_OMX_BASE
+	default n
+
+config COMPONENTS_OMX_BASE_CLOCK_PORT
+	bool "OMX base clock port Support"
+	depends on COMPONENTS_OMX_BASE
+	default n
+
+config COMPONENTS_OMX_AUDIO_ECHO_CANCEL
+	bool "Audio Echo Cancel Component Support"
+	depends on COMPONENTS_OMX_BASE_FILTER && COMPONENTS_OMX_BASE_AUDIO_PORT
+	default n
+
+config COMPONENTS_OMX_AUDIO_NOISE_SUPPRESS
+	bool "Audio Noise Suppression Component Support"
+	depends on COMPONENTS_OMX_BASE_FILTER && COMPONENTS_OMX_BASE_AUDIO_PORT
+	default n
+
+config COMPONENTS_OMX_AUDIO_EQUALIZER
+	bool "Audio Equalizer Component Support"
+	depends on COMPONENTS_OMX_BASE_FILTER && COMPONENTS_OMX_BASE_AUDIO_PORT
+	default n
+
+config COMPONENTS_OMX_AUDIO_ASR
+	bool "Audio Automatic Speech Recognition Component Support"
+	depends on COMPONENTS_OMX_BASE_FILTER && COMPONENTS_OMX_BASE_AUDIO_PORT
+	default n
+
+config COMPONENTS_OMX_DUMP
+	bool "DUMP Component Support"
+	depends on COMPONENTS_OMX_BASE_FILTER && COMPONENTS_OMX_BASE_AUDIO_PORT
+	default n
+
+config COMPONENTS_OMX_AUDIO_RENDER
+	bool "Audio Render Component Support"
+	depends on COMPONENTS_OMX_BASE_SOURCE && COMPONENTS_OMX_BASE_AUDIO_PORT
+	depends on COMPONENTS_AW_AUDIO_SYSTEM
+	default n
+
+config COMPONENTS_OMX_AUDIO_RECORD
+	bool "Audio Record Component Support"
+	depends on COMPONENTS_OMX_BASE_SINK && COMPONENTS_OMX_BASE_AUDIO_PORT
+	depends on COMPONENTS_AW_AUDIO_SYSTEM
+	default n
+
+config COMPONENTS_OMX_AUDIO_EFFECT
+	bool "Audio Effect Component Support"
+	depends on COMPONENTS_OMX_BASE_FILTER && COMPONENTS_OMX_BASE_AUDIO_PORT
+	default n
+
+config COMPONENTS_OMX_AUDIO_UTILS
+	bool "OMX System Utils"
+	#depends on COMPONENTS_OMX_AUDIO_ECHO_CANCEL || COMPONENTS_OMX_AUDIO_NOISE_SUPPRESS
+	depends on COMPONENTS_OMX_AUDIO_RECORD || COMPONENTS_OMX_AUDIO_RENDER || COMPONENTS_OMX_AUDIO_ECHO_CANCEL || COMPONENTS_OMX_AUDIO_EQUALIZER || COMPONENTS_OMX_AUDIO_ASR
+	default n
+
+endmenu

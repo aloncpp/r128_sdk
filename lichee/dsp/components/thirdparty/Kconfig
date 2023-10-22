@@ -1,0 +1,46 @@
+if PORT_XCC_XTENSA
+menu "Xtensa components"
+
+config COMPONENTS_XTENSA
+	bool
+	default y
+
+source "components/thirdparty/xtensa/Kconfig"
+
+endmenu
+endif
+
+if KERNEL_FREERTOS
+menu "FreeRTOS components"
+
+config COMPONENTS_FREERTOS
+	bool
+	default y
+
+source "components/thirdparty/freertos/Kconfig"
+
+endmenu
+endif
+
+menu "Algorithm common"
+config COMPONENTS_ALGO_COMMON
+	bool
+	default y
+source "components/thirdparty/algo_common/Kconfig"
+endmenu
+
+config COMPONENTS_ALGO_SAMPLE
+	bool "Algorithm sample"
+	default n
+	help
+	  This is a sample that introduced how to install algorithm.
+
+config COMPONENTS_MSGBOX_DEMO
+	bool "Msgbox demo"
+	default n
+	help
+	  This is a demo that introduces how to use msgbox
+
+config COMPONENTS_COREMARK
+	bool "Coremark"
+	default n

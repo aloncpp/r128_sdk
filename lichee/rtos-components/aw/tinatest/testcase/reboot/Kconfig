@@ -1,0 +1,20 @@
+menuconfig TESTCASE_REBOOT
+	bool "Reboot Testcase."
+
+	default n
+
+if TESTCASE_REBOOT
+config REBOOT_TIMES
+	default "10000"
+	string "reboot times"
+	help
+		This means how many reboot times need to be tested.
+		Please input the reboot times.
+
+config TESTCASE_REBOOT_PATH
+	default "/data"
+	string "reboot test path"
+	help
+		This mean which directory to run reboot test.
+
+endif

@@ -1,0 +1,7 @@
+menu "CPUFREQ Devices"
+
+config DRIVERS_CPUFREQ
+    bool "enable cpufreq device drivers"
+        default n
+
+endmenu

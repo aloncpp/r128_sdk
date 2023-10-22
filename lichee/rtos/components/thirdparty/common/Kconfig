@@ -1,0 +1,23 @@
+menu "common component"
+
+config COMPONENT_COMMON
+    bool "printf support"
+    default y
+
+choice
+    prompt "printf selection"
+    default NEWLIBC_PRINTF
+
+    config NEWLIBC_PRINTF
+        bool "newlibc printf"
+
+    config TINY_PRINTF
+        bool "tiny printf"
+
+endchoice
+
+config CUSTOM_VSPRINTF
+    bool "custom vsprintf"
+    default n
+
+endmenu

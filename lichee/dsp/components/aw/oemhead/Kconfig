@@ -1,0 +1,4 @@
+config OEMHEAD
+	prompt "add head in head"
+	def_bool y
+

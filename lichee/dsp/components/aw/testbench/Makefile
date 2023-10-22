@@ -1,0 +1,10 @@
+obj-$(CONFIG_AW_TEST_MEM) += mem_test/
+obj-$(CONFIG_AW_TEST_CACHE) += cache_test/
+obj-$(CONFIG_AW_TEST_TIMER) += timer/
+obj-$(CONFIG_AW_JTAG_DEBUG) += jtag_debug/
+obj-$(CONFIG_MEMTESTER) += memtester/
+obj-$(CONFIG_AW_DSPFREQ) += dspfreq/
+obj-$(CONFIG_AW_HARDWARE_PERF) += hw_perf/
+obj-y += performance/
+obj-y += stub/
+obj-$(CONFIG_VFPU_TEST) += vfpu_test/

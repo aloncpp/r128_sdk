@@ -1,0 +1,7 @@
+config SPI_CAMERA_BF3901
+	bool "sensor bf3901 support"
+	default y
+	---help---
+	  board bf3901 support
+
+

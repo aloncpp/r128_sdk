@@ -1,0 +1,22 @@
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_LS) += ls.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_CAT) += cat.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_HEXDUMP) += hexdump.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_CP) += cp.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_MV) += mv.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_RM) += rm.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_UNLINK) += unlink.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_LINK) += link.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_RWCHECK) += rwcheck.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_RWSPEED) += rwspeed.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_RWDEV) += rwdev.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_VI) += vi/vi.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_DF) += df.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_GREP) += grep.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_MKDIR) += mkdir.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_TAIL) += tail.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_TOUCH) += touch.o
+obj-$(CONFIG_COMPONENTS_AW_IOBOX_MEMTOFILE) += mem_to_file.o
+
+CFLAGS += -I components/thirdparty/console
+CFLAGS += -I components/thirdparty/ulog/syslog
+

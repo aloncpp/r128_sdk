@@ -1,0 +1,3 @@
+config COMPONENT_PI_CSS5
+    bool "PI Calculation Program"
+    default n

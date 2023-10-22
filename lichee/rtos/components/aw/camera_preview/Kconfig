@@ -1,0 +1,9 @@
+menu " Camera Preview to LCD Support"
+
+config COMPONENTS_CAMERA_PREVIEW
+    bool "camera preview to lcd support"
+    default n
+    help
+        camera preview to lcd support.
+
+endmenu

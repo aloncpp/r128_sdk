@@ -1,0 +1,47 @@
+menu "aw multimedia"
+config RTPLAYER_TEST
+#    select COMPONENTS_AW_ALSA_LIB
+#    select COMPONENT_VFS
+#    select COMPONENTS_TCPIP
+    select COMPONENTS_LWIP
+    select COMPONENTS_MBEDTLS
+	select LIB_MULTIMEDIA
+	depends on DRIVERS_SOUND
+	bool "test rtplayer demo"
+    default n
+
+config RTPLAYER_DIRPLAY
+    bool "rtplayer support dirplay"
+    default y
+    depends on RTPLAYER_TEST
+
+config TOTAL_AUDIO_NUM
+    int "set max num of dir-play supporting"
+    depends on RTPLAYER_DIRPLAY
+    default 30
+
+config RTRECORDER_TEST
+    bool "test cedarx recorder demo"
+	select LIB_RECORDER
+	depends on DRIVERS_SOUND
+    default n
+
+config RTOPUS_TEST
+    bool "test opus encode and decode demo"
+    default n
+
+config PLAY_FIFO
+	bool "rtos multimedia play fifo demo"
+	select LIB_MULTIMEDIA
+	depends on DRIVERS_SOUND
+	default n
+
+config LIB_MULTIMEDIA
+	bool "libs for multimedia"
+	default n
+
+config LIB_RECORDER
+	bool "libs for recorder"
+	default n
+
+endmenu

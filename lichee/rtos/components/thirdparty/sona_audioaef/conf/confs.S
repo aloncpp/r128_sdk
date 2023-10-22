@@ -1,0 +1,5 @@
+.global sona_audioaef_example_conf_start
+sona_audioaef_example_conf_start:
+.incbin "components/thirdparty/sona_audioaef/conf/sona_audioaef_example.conf"
+.global sona_audioaef_example_conf_end
+sona_audioaef_example_conf_end:

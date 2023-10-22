@@ -1,0 +1,4 @@
+config TESTCASE_TP
+	bool "TOUCH SCREEN Testcase."
+	depends on DRIVERS_TOUCHSCREEN
+	default n

@@ -1,0 +1,5 @@
+config COMPONENTS_MD5
+    bool "md5"
+    default y
+    help
+      support md5

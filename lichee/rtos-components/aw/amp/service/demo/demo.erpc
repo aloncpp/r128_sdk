@@ -1,0 +1,17 @@
+program demo
+
+enum lockErrors_t
+{
+  lErrorOk_c = 0,
+  lErrorOutofMemory_c,
+  lErrorMaxError_c
+}
+
+interface DEMO {
+
+    demo1(binary txInput) -> binary
+
+    demo2(in binary txInput,out binary txOutput) -> lockErrors_t
+
+    demo3(in binary txInput,out int8[64] txOutput,out int32 size) -> lockErrors_t
+}

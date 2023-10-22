@@ -1,0 +1,7 @@
+config SUNXI_TFM
+    bool "support TFM"
+    default y
+    help
+        TFM support.
+
+

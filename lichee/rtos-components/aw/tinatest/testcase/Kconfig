@@ -1,0 +1,17 @@
+source components/common/aw/tinatest/testcase/demo/Kconfig
+source components/common/aw/tinatest/testcase/led/Kconfig
+source components/common/aw/tinatest/testcase/key/Kconfig
+source components/common/aw/tinatest/testcase/wifi/Kconfig
+source components/common/aw/tinatest/testcase/audio/Kconfig
+source components/common/aw/tinatest/testcase/rtc/Kconfig
+source components/common/aw/tinatest/testcase/bt/Kconfig
+source components/common/aw/tinatest/testcase/uart/Kconfig
+source components/common/aw/tinatest/testcase/reboot/Kconfig
+source components/common/aw/tinatest/testcase/storage/Kconfig
+source components/common/aw/tinatest/testcase/ddr/Kconfig
+source components/common/aw/tinatest/testcase/lpsram/Kconfig
+source components/common/aw/tinatest/testcase/tp/Kconfig
+source components/common/aw/tinatest/testcase/rw-throughput/Kconfig
+source components/common/aw/tinatest/testcase/camera/Kconfig
+source components/common/aw/tinatest/testcase/g2d/Kconfig
+source components/common/aw/tinatest/testcase/display/Kconfig

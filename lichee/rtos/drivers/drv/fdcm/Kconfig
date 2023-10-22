@@ -1,0 +1,8 @@
+menu "fdcm Devices"
+
+config DRIVERS_FDCM
+    bool "enable fdcm device drivers"
+    default n
+    depends on DRIVERS_FLASHC
+
+endmenu

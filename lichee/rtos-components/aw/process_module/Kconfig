@@ -1,0 +1,16 @@
+menu "Algorithm Process Module"
+
+config COMPONENTS_PROCESS_AEC
+         bool "AEC Module"
+         default n
+         help
+           This is a AEC process module.
+
+config COMPONENTS_PROCESS_EQ
+         bool "EQ Module"
+         default n
+         help
+           This is a EQ process module.
+
+endmenu
+

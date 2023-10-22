@@ -1,0 +1,47 @@
+menu "RPBuf framework"
+
+config COMPONENTS_RPBUF
+	bool
+	help
+	  The RPBuf (Remote Processor Buffer) framework provides mechanisms to
+	  allocate buffers and transmit their references to remote processor.
+	  This allows user to exchange large data with remote processor.
+
+menuconfig COMPONENTS_RPBUF_MEASURE_TIME
+	bool "Rpbuf measure transmit time"
+	default n
+	select COMPONENTS_RPBUF
+	help
+	  It will take up part of buffer record sending time
+
+if COMPONENTS_RPBUF_MEASURE_TIME
+config COMPONENTS_RPBUF_MEASURE_TIMER_BASE
+	hex "measurement timer regiser base address"
+	default 0
+config COMPONENTS_RPBUF_DUMP_TIME_INFO
+	bool "dump buf transmit time"
+	default n
+endif # COMPONENTS_RPBUF_MEASURE_TIME
+
+config COMPONENTS_RPBUF_SERVICE_RPMSG
+	bool "RPMsg-based RPBuf service component"
+	select COMPONENTS_RPBUF
+	select COMPONENTS_OPENAMP_OPEN_AMP
+	default n
+	help
+	  Say y here to enable support for the RPMsg-based RPBuf service component.
+	  This is one kind of RPBuf service backend implemented with RPMsg.
+
+config COMPONENTS_RPBUF_CONTROLLER
+	bool "RPBuf controller component"
+	select COMPONENTS_RPBUF
+	default n
+	help
+	  Say y here to enable support for the RPBuf controller component.
+
+config COMPONENTS_RPBUF_DEMO
+	bool "RPBuf Demo"
+	select COMPONENTS_RPBUF
+	default n
+
+endmenu

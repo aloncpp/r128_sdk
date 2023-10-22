@@ -1,0 +1,35 @@
+[step1]
+	image-file="m33"
+	device="/dev/arm-b"
+	image-file="rv"
+	device="/dev/rv-b"
+	image-file="xip"
+	device="/dev/xip-b"
+	image-file="dsp"
+	device="/dev/dsp-b"
+	image-file="config"
+	device="/dev/config-b"
+	image-file="boot0"
+	device="/dev/boot0"
+	env:loadparts=arm-b@:rv-b@:dsp-b@:config-b@0x8000000
+	env:ota_mode=
+	env:xip_partition=xip-b
+	env:ota_next=reboot
+
+[step2]
+	image-file="m33"
+	device="/dev/arm-lpsram"
+	image-file="rv"
+	device="/dev/rv-lpsram"
+	image-file="xip"
+	device="/dev/rtos-xip"
+	image-file="dsp"
+	device="/dev/dsp-hpsram"
+	image-file="config"
+	device="/dev/config"
+	image-file="boot0"
+	device="/dev/boot0"
+	env:loadparts=arm-lpsram@:rv-lpsram@:dsp-hpsram@:config@0x8000000
+	env:ota_mode=
+	env:xip_partition=rtos-xip
+	env:ota_next=reboot

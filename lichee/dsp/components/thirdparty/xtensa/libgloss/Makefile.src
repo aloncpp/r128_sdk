@@ -1,0 +1,97 @@
+# Top level makefile for Tensilica's version of libgloss
+# in <xtensa_tools_root>/xtensa-elf/src/libgloss
+#
+# Copyright (c) 2003-2017 Tensilica Inc.
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+#  This makefile assumes GNU make features
+#
+#  Invoke this Makefile like this:
+#	... put $(XTENSA_TOOLS_ROOT)/bin on the PATH ...
+#	cd <some build directory>
+#	xt-make -f <path_to_this_makefile>
+
+#  Do this before including any other makefile.
+#  NOTE:  For now, we assume $(XTENSA_TOOLS_ROOT)/bin is on the PATH.
+ifndef XTENSA_TOOLS_ROOT
+XTENSA_TOOLS_ROOT := $(shell xt-ld --show-config=xttools)
+#$(error Please put <XTENSA_TOOLS_ROOT>/bin on your PATH, or set XTENSA_TOOLS_ROOT to the path to Xtensa Tools)
+endif
+ifndef XTENSA_ROOT
+XTENSA_ROOT := $(shell xt-ld --show-config=config)
+endif
+ifndef INSTLIBDIR
+$(error Please set INSTLIBDIR to the path where libraries and objects are installed)
+#INSTLIBDIR = $(call fixpath,$(XTENSA_ROOT)/xtensa-elf/arch/lib)
+endif
+
+#  Select the specified Xtensa configuration:
+#export XTENSA_SYSTEM = $(XTENSA_ROOT)/config
+#export XTENSA_CORE = default
+
+include $(XTENSA_TOOLS_ROOT)/misc/defs.mk
+
+#  GNU make doesn't like backslashes in VPATH for some reason.
+ifeq ($(ARCH_OSTYPE),win)
+VPATH := $(VPATH:\=/)
+endif
+
+srctree := ../../../..
+
+-include $(srctree)/.config
+
+CFLAGS_FOR_TARGET = -O2 -g -Wall -Werror -mlongcalls -ffunction-sections -DREENTRANT_SYSCALLS_PROVIDED
+CFLAGS_FOR_TARGET += -I$(srctree)/include -I$(srctree)/include/hal
+CFLAGS_FOR_TARGET += -I$(srctree)/drivers/rtos-hal/hal/source
+CFLAGS_FOR_TARGET += -I$(srctree)/arch/include -I$(srctree)/arch/${CONFIG_ARCH_PLATFORM}/include/
+CFLAGS_FOR_TARGET += -I$(srctree)/include/generated -include autoconf.h
+
+OBJS =  close.o fstat.o getpid.o kill.o lseek.o open.o print.o putnum.o \
+	read.o sbrk.o stat.o times.o unlink.o write.o gettimeofday.o \
+	simcalls.o
+#  Note - these exist in libsim.a:  link.o rename.o *simcalls.o
+#  Note - these don't exist in libsim.a:  print.o putnum.o
+#  Note - sbrk.c is in ../sim
+
+.PHONY: all install clean
+
+all: libgloss.a
+
+libgloss.a: $(OBJS)
+
+%.o: %.S
+	$(CC_FOR_TARGET) -c $(CFLAGS_FOR_TARGET) -o $@ $<
+
+%.o: %.c
+	$(CC_FOR_TARGET) -c $(CFLAGS_FOR_TARGET) -o $@ $<
+
+%.a:
+	$(AR_FOR_TARGET) -rc $@ $^
+
+install: all
+	@$(MKPATH) -p $(INSTLIBDIR)
+	$(CP) libgloss.a $(INSTLIBDIR)
+	@$(RM) *.a
+
+clean:
+	@$(RM) *.a *.o
+

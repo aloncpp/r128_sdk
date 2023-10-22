@@ -1,0 +1,8 @@
+config COMPONENT_THERMAL
+	bool "Thermal Support"
+	default n
+	select DRIVERS_EFUSE
+	help
+		support component aw thermal management.
+		Each thermal zone contains its own temperature.
+

@@ -1,0 +1,13 @@
+menuconfig COMPONENTS_GIFLIB
+	bool "giflib"
+	default n
+
+if COMPONENTS_GIFLIB
+
+config GIFLIB_TEST_DEMO
+	bool "giflib test demo"
+	default n
+		help
+		giflib test demo
+
+endif

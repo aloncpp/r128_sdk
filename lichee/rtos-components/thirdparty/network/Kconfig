@@ -1,0 +1,79 @@
+
+menu "network"
+
+menuconfig COMPONENTS_LWIP
+	bool "lwip"
+	default n
+	if COMPONENTS_LWIP
+		choice
+			default COMPONENTS_LWIP_2_1_2 if ARCH_SUN20IW2P1
+			default COMPONENTS_LWIP_2_0_3
+			prompt "lwip version"
+			help
+			the TCP/IP protocol suite
+		config COMPONENTS_LWIP_2_0_3
+			bool "lwip-2.0.3"
+		config COMPONENTS_LWIP_2_1_2
+			bool "lwip-2.1.2"
+		endchoice
+	endif
+
+config COMPONENTS_UDHCPD
+	bool "udhcpd (DHCP Server)"
+	default n
+
+config COMPONENTS_PING
+	bool "ping"
+	default n
+
+menuconfig COMPONENTS_MBEDTLS
+	bool "mbedtls"
+	default n
+	if COMPONENTS_MBEDTLS
+		choice
+			default COMPONENTS_MBEDTLS_2_16_0 if ARCH_SUN20IW2P1
+			default COMPONENTS_MBEDTLS_2_7_0
+			prompt "mbedtls version"
+		config COMPONENTS_MBEDTLS_2_7_0
+			bool "mbedtls-2.7.0"
+		config COMPONENTS_MBEDTLS_2_16_0
+			bool "mbedtls-2.16.0"
+		endchoice
+		if !ARCH_SUN20IW2P1
+			config COMPONENTS_MBEDTLS_TEST
+				bool "mebdtls test"
+				default n
+		endif
+	endif
+
+config COMPONENTS_HTTPCLIENT
+	bool "httpclient"
+	select COMPONENTS_MBEDTLS
+	select COMPONENTS_MBEDTLS_2_16_0
+	default n
+
+config COMPONENTS_WEBSOCKET
+	bool "websocket"
+	default n
+
+config COMPONENTS_NGHTTP2
+	bool "nghttp2"
+	default n
+
+config COMPONENTS_SNTP
+	bool "sntp"
+	default n
+
+config COMPONENTS_NOPOLL
+	bool "nopoll"
+	default n
+
+config COMPONENTS_SHTTPD
+	bool "shttpd"
+	default n
+
+config COMPONENTS_MQTT
+	bool "mqtt"
+	default n
+
+endmenu

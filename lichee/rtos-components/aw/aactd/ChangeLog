@@ -1,0 +1,8 @@
+V0.0.2 version
+* support eq sw for tuning EQ online.
+
+V0.0.1 version
+* support aactd
+* support eq hw
+* support drc hw
+* add aactd client test

@@ -1,0 +1,24 @@
+menu "aw smartlink"
+
+config COMPONENTS_SMARTCONFIG
+	bool "smartconfig"
+    select COMPONENTS_LWIP
+    select COMPONENTS_MBEDTLS
+	default n
+
+config COMPONENTS_BLINK
+	bool "blink"
+	default n
+
+config COMPONENTS_SOFT_AP_CONFIG
+	bool "soft ap config"
+    select COMPONENTS_LWIP
+    select COMPONENTS_MBEDTLS
+	default n
+
+config COMPONENTS_VOICE_PRINT
+	bool "voice print"
+	default n
+
+endmenu
+

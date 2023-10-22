@@ -1,0 +1,39 @@
+menu "AW OTA Compenents version 2"
+
+config COMPONENTS_AW_OTA_V2
+    bool "Tina RTOS OTA APP VERSION 2"
+    select COMPONENT_ENV
+    default n
+    help
+        Tina RTOS OTA support version 2.
+        If unsure, say N.
+
+config COMPONENTS_AW_OTA_V2_NETWORK
+    bool "Tina RTOS OTA APP VERSION 2 FOR NETWORK"
+    depends on COMPONENTS_AW_OTA_V2
+	select COMPONENTS_HTTPCLIENT
+	default n
+    help
+        Tina RTOS OTA version 2 for network.
+        If unsure, say N.
+
+config COMPONENTS_AW_OTA_V2_RECOVERY
+    bool "Tina RTOS OTA APP VERSION 2 Recovery"
+    default n
+    help
+        Tina RTOS OTA support version 2.
+        If unsure, say N.
+
+
+#if COMPONENTS_AW_OTA_V2
+#
+#config COMPONENTS_AW_UPGRADE_MD5SUM
+#	bool "Tina RTOS OTA MD5SUM"
+#	select COMPONENTS_MD5
+#	default y
+#	help
+#		Tina RTOS OTA md5sum after ota finished.
+#		If unsure, say N.
+#
+#endif
+endmenu

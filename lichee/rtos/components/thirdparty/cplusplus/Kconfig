@@ -1,0 +1,11 @@
+menu "cplusplus interface"
+
+config COMPONENT_CPLUSPLUS
+    bool "cplusplus interface support"
+    default y
+
+config COMPONENTS_CPLUSPLUS_UNWIND
+    bool "cplusplus unwind support"
+    default n
+
+endmenu

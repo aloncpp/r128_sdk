@@ -1,0 +1,20 @@
+choice
+	prompt "Target platform "
+	default BT_XR829
+
+config BT_XR829
+	bool "xr829 platform"
+	help
+	  Select this to choose xr829 bt platform.
+
+config BT_XR819S
+	bool "xr819s platform"
+	help
+	  Select this to choose xr819s bt platform.
+
+config BT_RTL
+	bool "rtl platform"
+	help
+	  Not support.
+
+endchoice

@@ -1,0 +1,8 @@
+menu "bluetooth"
+
+config COMPONENTS_BTMANAGER
+	select COMPONENTS_RTLBTSTACK
+	bool "btmanager"
+	default n
+
+endmenu

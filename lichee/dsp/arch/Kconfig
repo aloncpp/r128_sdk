@@ -1,0 +1,80 @@
+choice
+	prompt "Target SoC platform"
+	default ARCH_SUN50IW11
+
+config ARCH_SUN50IW11
+	bool "sun50iw11"
+	select XTENSA_HIFI4
+
+config ARCH_SUN8IW20
+	bool "sun8iw20"
+	select XTENSA_HIFI4
+
+config ARCH_SUN20IW2
+	bool "sun20iw2"
+	select XTENSA_HIFI5
+
+config ARCH_SUN55IW3
+	bool "sun55iw3"
+
+config ARCH_SUN60IW1
+	bool "sun60iw1"
+endchoice
+
+# define arch
+config ARCH_DSP
+	bool
+	default y
+
+config XTENSA_HIFI4
+bool
+	depends on ARCH_SUN50IW11 || ARCH_SUN8IW20
+	default n
+
+config XTENSA_HIFI5
+bool
+	depends on ARCH_SUN20IW2
+	default n
+
+# define include arch dir
+config ARCH_PLATFORM
+	string
+	default "sun8iw20" if ARCH_SUN8IW20
+	default "sun20iw2" if ARCH_SUN20IW2
+	default "sun50iw11" if ARCH_SUN50IW11
+	default "sun55iw3" if ARCH_SUN55IW3
+	default "sun60iw1" if ARCH_SUN60IW1
+
+# define the development board
+choice
+	prompt "Development boards"
+	default EVB_PLATFORM
+
+config FPGA_PLATFORM
+	bool "FPGA board"
+
+config EVB_PLATFORM
+	bool "EVB board"
+
+endchoice
+
+# define DSP core
+choice
+	prompt "Select DSP core"
+	default CORE_DSP0
+
+config CORE_DSP0
+	bool "Core 0"
+
+config CORE_DSP1
+	bool "Core 1"
+	depends on ARCH_SUN50IW11
+
+endchoice
+
+# define dsp core id
+config CORE_ID
+	string
+	default "dsp0" if CORE_DSP0
+	default "dsp1" if CORE_DSP1
+

@@ -1,0 +1,3 @@
+obj-$(CONFIG_COMPONENTS_AACTD_DAEMO) += daemon/
+obj-$(CONFIG_COMPONENTS_AACTD_UTILS) += utils/
+

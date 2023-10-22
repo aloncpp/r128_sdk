@@ -1,0 +1,4 @@
+menuconfig DRIVERS_UART_DEVFS
+	default y
+	bool "sunxi uart driver for devfs"
+	depends on COMPONENTS_AW_DEVFS

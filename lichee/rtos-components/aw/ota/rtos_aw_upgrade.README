@@ -1,0 +1,79 @@
+rtos aw_upgrade 接口说明V0.1
+
+概述
+	OTA需要支持升级rtos，支持升级文件系统中的指定文件
+	底层rtos是双系统，升级时由aw_upgrade负责决定判断需要更新的系统，完成数据写入以及系统切换等动作。
+
+接口
+	aw_upgrade_slice
+		作用
+			升级时调用，用于升级分片数据。
+			该函数负责将数据写入flash的对应位置，并保证写入后读出校验成功。
+		函数原型
+			aw_upgrade_slice(uint8_t* target,
+						uint8_t* buffer,
+						uint32_t offset,
+						uint32_t size,
+						uint32_t flag);
+		参数描述：
+			--target, 当前要升级的分区文件名称，是一个特定文件名，如"rtos", 或文件路径，如"/data/demo.mp3"。
+			             如果第一个字符为"/"则认为是文件系统的路径，否则认为是特定文件名，aw_upgrade 应该自己维护特定文件名和真实分区的映射。
+				     当前要升级的数据来自buffer或者文件系统，如果是文件系统，则分片文件总是放置于"/data/update/update.bin"。
+				     当前特定文件名支持: "rtos"
+			--buffer，如果为NULL，表示使用/data/update/update.bin作为源数据，非NULL则使用buffer作为源数据
+			--offset， 表示该分片在目标分区/文件的 offset 位置，以 Byte 为单位。
+			--size，表示当前的分片大小，以 Byte 为单位。
+			--flag, 表示是否是要更新到目标分区/文件的最后一片数据。
+
+	aw_upgrade_end
+		作用
+			升级完成时调用。
+			该函数负责结束的动作，包括
+			(1)设置系统切换标志，下次重启切换到新系统
+			(2)清空启动计数值
+		函数原型
+			aw_upgrade_end(uint32_t flag);
+		参数描述
+			--flag，特殊标志,未启用,传 0 即可。
+
+测试命令
+	控制台支持aw_upgrade命令用于测试
+
+		aw_upgrade 带4个参数
+			用于测试aw_upgrade_slice接口的从文件更新功能
+			调用后aw_upgrade_slice会读取/data/update/update.bin文件作为更新的数据源
+			参数分别为 target, offset, size, flag
+			示例: 假设将待更新的rtos放置到/data/data/update.bin，其大小为1097728, 则调用
+			　　　aw_upgrade rtos 0 1097728 1
+
+			      假设将待更新的rtos拆分为三份，其大小为512000,512000,73728
+			      通过网络/adb或其他方式下载第一份到/data/data/update.bin
+			　　　aw_upgrade rtos 0 512000 0
+			      通过网络/adb或其他方式下载第二份到/data/data/update.bin
+			　　　aw_upgrade rtos 512000 512000 0
+			      通过网络/adb或其他方式下载第三份(最后一份)到/data/data/update.bin
+			　　　aw_upgrade rtos 1024000 73728 1
+
+		aw_upgrade 带5个参数
+			用于测试aw_upgrade_slice接口的从buffer更新功能
+			最后一个参数指定文件，会被读到buffer中，并以buffer的形式传递给aw_upgrade_slice函数，作为更新的数据源
+			实际场景中，buffer的数据应该是从网络下载得到的
+			示例: 假设将待更新的rtos切分为/data/data/update_1.bin, update_2.bin，update_3.bin, 其大小为512000,512000,73728, 则调用
+			      aw_upgrade rtos /data/update/update_1.bin       0 512000 0
+			      aw_upgrade rtos /data/update/update_2.bin  512000 512000 0
+			      aw_upgrade rtos /data/update/update_3.bin 1024000  73728 1
+
+		aw_upgrade 不带参数
+			用于测试aw_upgrade_end接口
+			调用aw_upgrade_end(flag)
+			示例: aw_upgrade
+
+	控制台支持fw_printenv和fw_setenv命令用于测试，可读取和修改env
+
+		fw_printenv 不带参数，打印所有env
+		fw_printenv 带1个参数，打印参数指定的env
+		fw_setenv 带2个参数，设置参数一指定的env为参数二指定的值
+		示例: fw_printenv rtosAB_next
+		      fw_setenv rtosAB_next B
+
+

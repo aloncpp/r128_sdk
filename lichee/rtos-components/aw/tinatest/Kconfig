@@ -1,0 +1,26 @@
+menuconfig COMPONENTS_AW_TINATEST
+    bool "TinaTest Test Platform"
+    select COMPONENT_CLI
+    default n
+    help
+        TinaTest, which is test platform for Tina SDK. You can call it on
+        console by enter "tt".
+
+        The command "tt -p" will print all testcase enabled. You can call
+        testcase by "tt <testcase name>". You can also call all of testcases
+        without any arguments by "tt", in this case, tt will exit once
+        testcase return not equal to 0.
+
+        If unsure, say N.
+
+if COMPONENTS_AW_TINATEST
+config DRAGONMAT
+	bool "Dragonmat"
+	default n
+
+menu "TESTCASE"
+
+source components/common/aw/tinatest/testcase/Kconfig
+endmenu
+
+endif

@@ -1,0 +1,382 @@
+menu "AMP Components Support"
+
+config COMPONENTS_AMP
+    bool "Tina RTOS AMP"
+    default n
+    help
+        Tina RTOS AMP support.
+
+if COMPONENTS_AMP
+
+config AMP_BOOT_CORE_DETECT
+    bool "AMP boot core detect"
+    default n
+    help
+        save and detect boot core.
+
+config AMP_FUNCCALL_THREAD
+    bool "AMP Funcall Thread"
+    default y
+    help
+        Create task to run rpc function.
+
+config AMP_FUNCCALL_THREADPOOL
+    bool "AMP Funcall ThreadPool"
+    default n
+    depends on AMP_FUNCCALL_THREAD
+    help
+        Support AMP ThreadPool.
+
+config AMP_FUNCALL_THREADPOOL_WAIT_RECVQUEUE
+    bool "AMP Funcall ThreadPool Wait Recv Queue"
+    default n
+    depends on AMP_FUNCCALL_THREADPOOL
+
+config AMP_THREAD_PRIO_CHANGE
+    bool "AMP Change Service Task Priority"
+    default y
+    depends on AMP_FUNCCALL_THREAD
+
+config AMP_MSG_HEAP
+    bool "sunxi_amp_msg heap"
+    default n
+
+config AMP_MSG_HEAP_SIZE
+    int "sunxi_amp_msg heap size"
+    default 64
+    depends on AMP_MSG_HEAP
+    help
+        The number of sunxi_amp_msg heap.
+
+config AMP_FSYS_STUB
+    bool "AMP Fsys Stub Functions"
+    default n
+    help
+        Tina RTOS AMP support file system stub functions.
+
+config AMP_FSYS_SERVICE
+    bool "AMP FSYS Service"
+    default n
+    help
+        Tina RTOS AMP support network service.
+
+config AMP_NET_STUB
+    bool "AMP Network Stub Functions"
+	select DRIVERS_WIRELESS
+	select DRIVERS_XRADIO
+	select DRIVER_R128
+    default n
+    help
+        Tina RTOS AMP support network stub functions.
+
+config AMP_NET_SERVICE
+    bool "AMP Network Service"
+	select DRIVERS_WIRELESS
+	select DRIVERS_XRADIO
+	select DRIVER_R128
+    default n
+    help
+        Tina RTOS AMP support network service.
+
+config COMPONENTS_AMP_BT
+    bool "AMP BT Support"
+    default n
+    help
+        Tina RTOS BT AMP support.
+
+    if COMPONENTS_AMP_BT
+    config AMP_BT_STUB
+        bool "AMP Bluetooth Stub Functions"
+        default n
+        help
+            Tina RTOS AMP support bluetooth stub functions.
+
+    config AMP_BT_SERVICE
+        bool "AMP Bluetooth Service"
+        default n
+        help
+            Tina RTOS AMP support bluetooth service.
+    endif
+
+config COMPONENTS_AMP_TFM
+    bool "AMP TFM Support"
+    default n
+    help
+        Tina RTOS TFM AMP support.
+
+    if COMPONENTS_AMP_TFM
+    config AMP_TFM_STUB
+        bool "AMP TFM Stub Functions"
+        depends on ARCH_RISCV_RV64
+        default n
+        help
+            Tina RTOS TFM support bluetooth stub functions.
+
+    config AMP_TFM_SERVICE
+        bool "AMP TFM Service"
+        depends on ARCH_ARM_ARMV8M
+        default n
+        help
+            Tina RTOS AMP support TFM service.
+    endif
+
+config COMPONENTS_AMP_PM
+    bool "AMP Support PM"
+    depends on COMPONENTS_PM
+    default n
+    help
+        Tina RTOS AMP support PowerManager.
+
+    if COMPONENTS_AMP_PM
+    config AMP_PMOFM33_STUB
+        bool "AMP PM of m33 Stub Functions"
+        depends on !ARCH_ARM_ARMV8M
+        default n
+        help
+            Tina RTOS AMP support use stub functions about m33's powermanager .
+            Such as trigger suspend etc.
+
+    config AMP_PMOFM33_SERVICE
+        bool "AMP PM of m33 Service Functions"
+        depends on ARCH_ARM_ARMV8M
+        default n
+        help
+            The only enabled build at m33 core.
+            To provide service functions about m33's powermanager,
+            Such as trigger suspend etc.
+
+    config AMP_PMOFRV_STUB
+        bool "AMP PM of riscv Stub Functions"
+        depends on !ARCH_RISCV_RV64
+        default n
+        help
+            Tina RTOS AMP support use stub functions about riscv's powermanager .
+            Such as get riscv status, or notify to riscv etc.
+
+    config AMP_PMOFRV_SERVICE
+        bool "AMP PM of riscv Service Functions"
+        depends on ARCH_RISCV_RV64
+        default n
+        help
+            The only enabled build at riscv core.
+            To provide service functions about riscv's powermanager,
+            Such as get riscv status, or notify to riscv etc.
+
+    config AMP_PMOFDSP_STUB
+        bool "AMP PM of dsp Stub Functions"
+        depends on !ARCH_DSP
+        default n
+        help
+            Tina RTOS AMP support use stub functions about dsp's powermanager .
+            Such as get dsp status, or notify to dsp etc.
+
+    config AMP_PMOFDSP_SERVICE
+        bool "AMP PM of dsp Service Functions"
+        depends on ARCH_DSP
+        default n
+        help
+            The only enabled build at dsp core.
+            To provide service functions about dsp's powermanager,
+            Such as get dsp status, or notify to dsp etc.
+    endif
+
+
+config AMP_DEMO_STUB
+    bool "AMP Demo Stub Functions"
+    default n
+    help
+        Tina RTOS AMP support demo stub functions.
+
+config AMP_DEMO_SERVICE
+    bool "AMP Demo Service"
+    default n
+    help
+        Tina RTOS AMP support demo service.
+
+config AMP_CONSOLE_STUB
+    bool "AMP Console Stub Functions"
+    default n
+    help
+        Tina RTOS AMP support console stub functions.
+
+config AMP_CONSOLE_SERVICE
+    bool "AMP Console Service"
+    default n
+    depends on COMPONENT_CLI_COMMANDS
+    help
+        Tina RTOS AMP support console service.
+
+config AMP_FLASHC_STUB
+    bool "AMP Flashc Stub Functions"
+    default n
+    help
+        Tina RTOS AMP support flashc stub functions.
+
+config AMP_FLASHC_SERVICE
+    bool "AMP Flashc Service"
+    default n
+    depends on DRIVERS_FLASHC
+    help
+        Tina RTOS AMP support flashc service.
+
+config AMP_MISC_SERVICE
+    bool "AMP Misc Service"
+    default n
+    help
+        Tina RTOS AMP support misc service.
+
+config AMP_MISC_STUB
+    bool "AMP Misc Stub"
+    default n
+    help
+        Tina RTOS AMP support misc stub.
+
+config COMPONENTS_AMP_AUDIO
+    bool "AMP Audio Support"
+    default n
+    help
+        Tina RTOS Audio AMP support.
+
+    if COMPONENTS_AMP_AUDIO
+
+    config AMP_AUDIO_STUB
+        bool "AMP Audio Stub Functions"
+        default n
+        help
+            Tina RTOS AMP support audio stub functions.
+
+    choice
+	prompt "AMP Audio Remote Dir"
+	default AMP_AUDIO_REMOTE_DIR_DSP
+	depends on AMP_AUDIO_STUB
+	help
+	  AMP Audio remote dir, m33, dsp or rv
+
+	config AMP_AUDIO_REMOTE_DIR_CM33
+		bool "m33 dir"
+		depends on !ARCH_ARM_CORTEX_M33
+	config AMP_AUDIO_REMOTE_DIR_RV
+		bool "rv dir"
+		depends on !ARCH_RISCV
+	config AMP_AUDIO_REMOTE_DIR_DSP
+		bool "dsp dir"
+		depends on !ARCH_DSP
+    endchoice
+
+    choice
+	prompt "AMP Audio Playback API"
+	default AMP_AUDIO_PB_API_NONE
+	depends on AMP_AUDIO_STUB
+	help
+	  AMP Audio Playback API mode.
+          unique: is complex(with ringbuffer), is the same api name as AudioSystem, such as AudioTrackCreate
+          alias: is simple, alias api, such as AudioTrackCreateRM, is used to AudioSystem audio_hw
+
+	config AMP_AUDIO_PB_API_NONE
+		bool "not support"
+	config AMP_AUDIO_PB_API_UNIQUE
+		bool "AMP Audio Playback unique API"
+	config AMP_AUDIO_PB_API_ALIAS
+		bool "AMP Audio Playback alias API"
+    endchoice
+
+    choice
+	prompt "AMP Audio Capture API"
+	default AMP_AUDIO_CAP_API_NONE
+	depends on AMP_AUDIO_STUB
+	help
+	  AMP Audio Capture API mode.
+          unique: is complex(with ringbuffer), is the same api name as AudioSystem, such as AudioRecordCreate
+          alias: is simple, alias api, such as AudioRecordCreateRM, is used to AudioSystem audio_hw
+
+	config AMP_AUDIO_CAP_API_NONE
+		bool "not support"
+	config AMP_AUDIO_CAP_API_UNIQUE
+		bool "AMP Audio Capture unique API"
+	config AMP_AUDIO_CAP_API_ALIAS
+		bool "AMP Audio Capture alias API"
+    endchoice
+
+    config AMP_AUDIO_UTILS
+        bool "AMP Audio Utils"
+        default n
+        depends on AMP_AUDIO_STUB
+        help
+            Tina RTOS AMP support audio utils.
+
+    config AMP_AUDIO_SERVICE
+        bool "AMP Audio Service"
+        default n
+        help
+            Tina RTOS AMP support audio service.
+
+    endif
+
+
+
+config AMP_TESTS
+    bool "AMP Tests"
+    default n
+    select AMP_MISC_STUB
+    select AMP_MISC_SERVICE
+    help
+        Sunxi AMP Test Demo.
+
+if AMP_TESTS
+config AMP_TEST_RV_CALL_M33
+    bool "RV call M33 testcase"
+    default n
+
+config AMP_TEST_RV_CALL_DSP
+    bool "RV call DSP testcase"
+    default n
+
+config AMP_TEST_DSP_CALL_M33
+    bool "DSP call M33 testcase"
+    default n
+
+config AMP_TEST_DSP_CALL_RV
+    bool "DSP call RV testcase"
+    default n
+
+config AMP_TEST_M33_CALL_DSP
+    bool "M33 call DSP testcase"
+    default n
+
+config AMP_TEST_M33_CALL_RV
+    bool "M33 call RV testcase"
+    default n
+
+config AMP_TEST_RV_CALL_M33_CALL_RV
+    bool "RV call M33 call RV testcase"
+    default n
+
+config AMP_TEST_RV_CALL_DSP_CALL_RV
+    bool "RV call DSP call RV testcase"
+    default n
+
+config AMP_TEST_RV_CALL_M33_CALL_DSP
+    bool "RV call M33 call DSP testcase"
+    default n
+
+config AMP_TEST_RV_CALL_M33_CALL_DSP_CALL_RV
+    bool "RV call M33 call DSP call RV testcase"
+    default n
+
+endif
+
+config AMP_RPDATA_STUB
+    bool "AMP RP Data Stub Functions"
+    default n
+    help
+        Tina RTOS AMP support rpdata stub functions.
+
+config AMP_RPDATA_SERVICE
+    bool "AMP RP Data Service"
+    default n
+    help
+        Tina RTOS AMP support rpdata service.
+
+endif
+
+endmenu

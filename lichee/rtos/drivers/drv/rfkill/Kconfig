@@ -1,0 +1,3 @@
+config DRIVERS_RFKILL
+    bool "rfkill drivers"
+        default n

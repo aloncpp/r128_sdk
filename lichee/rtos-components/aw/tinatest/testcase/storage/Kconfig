@@ -1,0 +1,65 @@
+config TESTCASE_NORTESTER
+	bool "Nor Testcase."
+	depends on DRIVERS_SPINOR || DRIVERS_FLASHC
+	select COMPONENTS_AW_IOBOX
+	select COMPONENTS_AW_IOBOX_RWCHECK
+	select COMPONENTS_AW_IOBOX_RWSPEED
+	default n
+
+config TESTCASE_FULLDISK
+	bool "FullDisk Testcase."
+	depends on DRIVERS_SPINOR || DRIVERS_FLASHC
+	select COMPONENTS_AW_IOBOX
+	select COMPONENTS_AW_IOBOX_RWCHECK
+	select COMPONENTS_AW_IOBOX_RWSPEED
+	default n
+
+if TESTCASE_FULLDISK
+config TESTCASE_FULLDISK_PATH
+	default "/data"
+	string "fulldisk test path"
+	help
+		This mean which directory to run fulldisk test.
+
+endif
+
+config TESTCASE_SPEED
+	bool "Speed Testcase."
+	depends on DRIVERS_SPINOR || DRIVERS_FLASHC
+	select COMPONENTS_AW_IOBOX
+	select COMPONENTS_AW_IOBOX_RWCHECK
+	select COMPONENTS_AW_IOBOX_RWSPEED
+	default n
+
+if TESTCASE_SPEED
+config TESTCASE_SPEED_PATH
+	default "/data"
+	string "speed test path"
+	help
+		This mean which directory to run speed test.
+
+endif
+
+config TESTCASE_POWERFAIL
+	bool "Powerfail Testcase."
+	depends on DRIVERS_SPINOR || DRIVERS_FLASHC
+	select COMPONENTS_AW_IOBOX
+	select COMPONENTS_AW_IOBOX_RWCHECK
+	select COMPONENTS_AW_IOBOX_RWSPEED
+	default n
+
+if TESTCASE_POWERFAIL
+config TESTCASE_POWERFAIL_PATH
+	default "/data"
+	string "powerfail test path"
+	help
+		This mean which directory to run powerfail test.
+
+config POWERFAIL_TIMES
+	default "100000"
+	string "powerfail times"
+	help
+		This means how many powerfail times need to be tested.
+		Please input the powerfail times.
+
+endif

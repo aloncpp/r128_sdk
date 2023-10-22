@@ -1,0 +1,7 @@
+
+config PM_CLIENT_DSP_WAITI
+	bool "support dsp enter waiti mode when system suspend."
+	default y
+	depends on ARCH_SUN8IW20
+	help
+		Fixed a BUG that caused a dsp crash due to DRAM entering self-refresh.

@@ -1,0 +1,142 @@
+#
+# Wlan configuration
+#
+
+menuconfig DRIVERS_XRADIO
+	default n
+	select COMPONENTS_MBEDTLS
+	bool "XRADIO driver"
+
+if DRIVERS_XRADIO
+
+config DRIVERS_XRADIO_CMD
+	bool "Enable xradio test cmd"
+	default y
+	select NEWLIBC_NANO_SCANF_FLOAT if ARCH_SUN20IW2P1
+	help
+		this will use xradio test cmd.
+
+choice XRADIO_CHIP
+	default DRIVER_R128 if ARCH_SUN20IW2P1
+	default DRIVER_XR829
+	prompt "Xradio chip"
+	help
+		Specify the xradio chip.
+
+config DRIVER_XR819
+	bool "Enable xr819 driver"
+	depends on DRIVERS_XRADIO
+	help
+		this will use xr819 chip.
+
+config DRIVER_XR819S
+	bool "Enable xr819s driver"
+	depends on DRIVERS_XRADIO
+	help
+		this will use xr819s chip.
+
+config DRIVER_XR829
+	bool "Enable xr829 driver"
+	depends on DRIVERS_XRADIO
+	help
+		this will use xr829 chip.
+
+config DRIVER_R128
+	bool "Enable r128 driver"
+	depends on ARCH_SUN20IW2P1
+	help
+		this will use r128 chip.
+endchoice
+
+config XR829_40M_FW
+	bool "Use Firmware 40M for XR829"
+	depends on DRIVER_XR829
+	default y
+	help
+		this will use xr829 chip
+
+config XR819S_40M_FW
+    bool "Use Firmware 40M for XR819S"
+    depends on DRIVER_XR819S
+    default y
+    help
+               this will use xr819s chip
+# Wi-Fi Certification of WFA
+config WIFI_CERTIFIED
+    bool "Wi-Fi Certification of WFA"
+    default y
+    help
+        If this option is enabled,  Wi-Fi Certification of WFA used.
+
+# wlan station mode
+config WLAN_STA
+    bool "wlan station mode"
+    default y
+    help
+        If this option is enabled, WLAN STA mode used.
+
+config WLAN_STA_WPS
+    bool "wlan station mode with wps support"
+	depends on WLAN_STA
+    default n
+    help
+        If this option is enabled, WLAN STA WPS used.
+
+# wlan monitor mode
+config WLAN_MONITOR
+    bool "wlan monitor mode"
+    default y
+    help
+        If this option is enabled, WLAN Monitor mode used.
+
+# wlan hostap mode
+config WLAN_AP
+    bool "wlan ap mode"
+    default y
+    help
+        If this option is enabled, WLAN AP mode used.
+
+choice
+	prompt "select freq trim src"
+	depends on ARCH_SUN20IW2P1
+	default FREQ_TRIM_FROM_SDD
+	help
+		select freq trim/offset source
+
+config FREQ_TRIM_FROM_SDD
+	bool "SDD file"
+
+endchoice
+
+# wlan ETF test using ETF command line interface
+config ETF_CLI
+    bool
+    default n
+
+# wlan ETF test
+config ETF
+    bool "wlan ETF test"
+	select ETF_CLI
+	select NEWLIBC_NANO_SCANF_FLOAT if ARCH_SUN20IW2P1
+	select NEWLIBC_NANO_PRINTF_FLOAT if ARCH_SUN20IW2P1
+	#select WLAN_SHARE_RAM
+	#select WLAN_SHARE_RAM_SIZE_128K
+    default n
+    help
+        If this option is enabled, WLAN ETF test used.
+
+# Wlan use small stack
+config WLAN_SMALL_STACK_SIZE
+	bool
+	default n
+	help
+		use small stack in some CPU ARCH.
+
+# Mbuf implementation mode
+config MBUF_IMPL_MODE
+	int
+	default 0
+	help
+		0: continuous memory allocated from heap, 1: continuous memory allocated from lwip pbuf.
+
+endif

@@ -1,0 +1,5 @@
+config TESTCASE_FULLDISK
+	bool "FullDisk Testcase."
+	depends on DRIVERS_SPINOR
+	default n
+

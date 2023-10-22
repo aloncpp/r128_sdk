@@ -1,0 +1,71 @@
+//  Memory map file to generate linker scripts for programs run on the ISS.
+
+// Customer ID=17017; Build=0x9034c; Copyright (c) 2004-2015 Cadence Design Systems, Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+// CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+// A memory map is a sequence of memory descriptions and
+// optional parameter assignments.
+//
+// Each memory description has the following format:
+//   BEGIN <name>
+//     <addr> [,<paddr>] : <mem-type> : <mem-name> : <size> [,<psize>]
+//                       : [writable] [,executable] [,device] ;
+//     <segment>*
+//   END <name>
+//
+// where each <segment> description has the following format:
+//     <seg-name> : F|C : <start-addr> - <end-addr> [ : STACK ] [ : HEAP ]
+//                : <section-name>* ;
+//
+// Each parameter assignment is a keyword/value pair in the following format:
+//   <keyword> = <value>                (no spaces in <value>)
+// or
+//   <keyword> = "<value>"              (spaces allowed in <value>)
+//
+// The following primitives are also defined:
+//   PLACE SECTIONS( <section-name>* ) { WITH_SECTION(<section-name>)
+//                                       | IN_SEGMENT(<seg-name>) }
+//
+//   NOLOAD <section-name1> [ <section-name2> ... ]
+//
+// Please refer to the Xtensa LSP Reference Manual for more details.
+//
+
+VECRESET=0xc600660
+VECSELECT=0x1
+VECBASE=0xc601000
+
+BEGIN extra_mem
+0xc600000: sysextra_mem : extra_mem : 0x200000 : executable, writable ;
+ extra_mem_0 : F : 0xc600000 - 0xc60065f : .oemhead.text .oemhead.literal;
+ extra_mem_1 : F : 0xc600660 - 0xc600fff : .ResetVector.text .ResetHandler.literal .ResetHandler.text;
+ extra_mem_2 : F : 0xc601000 - 0xc60117b : .WindowVectors.text .Level2InterruptVector.literal;
+ extra_mem_3 : F : 0xc60117c - 0xc60119b : .Level2InterruptVector.text .Level3InterruptVector.literal;
+ extra_mem_4 : F : 0xc60119c - 0xc6011bb : .Level3InterruptVector.text .DebugExceptionVector.literal;
+ extra_mem_5 : F : 0xc6011bc - 0xc6011db : .DebugExceptionVector.text .NMIExceptionVector.literal;
+ extra_mem_6 : F : 0xc6011dc - 0xc6011fb : .NMIExceptionVector.text .KernelExceptionVector.literal;
+ extra_mem_7 : F : 0xc6011fc - 0xc60121b : .KernelExceptionVector.text .UserExceptionVector.literal;
+ extra_mem_8 : F : 0xc60121c - 0xc60123b : .UserExceptionVector.text .DoubleExceptionVector.literal;
+ extra_mem_9 : F : 0xc60123c - 0xc6013ff : .DoubleExceptionVector.text;
+ extra_mem_10 : C : 0xc601402 - 0xc7fffff : STACK : HEAP : .extra_mem.rodata .rodata .FSymTab .stubTab .extra_mem.literal .literal .extra_mem.text .text .extra_mem.data .data .extra_mem.bss .bss;
+END extra_mem
+

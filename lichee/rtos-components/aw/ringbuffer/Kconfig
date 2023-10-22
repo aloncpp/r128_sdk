@@ -1,0 +1,5 @@
+config COMPONENTS_RINGBUFFER
+	bool "AW Ringbuffer Support"
+	default y
+	help
+	  Support Allwinner Ringbuffer.

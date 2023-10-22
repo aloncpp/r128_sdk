@@ -1,0 +1,5 @@
+menuconfig COMPONENT_IO_MULTIPLEX
+    bool "IO Multiplex"
+    default n
+    help
+        Enable IO Multiplex.

@@ -1,0 +1,4 @@
+This library is built through Xtensa Xplorer, with these additional CFLAGS options:
+    -ffunction-sections -fdata-sections
+
+Version: v4.0.0

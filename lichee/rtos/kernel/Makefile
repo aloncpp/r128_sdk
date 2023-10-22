@@ -1,0 +1,17 @@
+obj-$(CONFIG_KERNEL_FREERTOS_PLUS_POSIX) += Posix/
+
+ifeq ($(CONFIG_KERNEL_FREERTOS), y)
+obj-$(CONFIG_ARCH_SUN8IW18P1) += FreeRTOS/
+obj-$(CONFIG_ARCH_SUN8IW20P1) += FreeRTOS/
+endif
+
+ifeq ($(CONFIG_KERNEL_FREERTOS), y)
+ifeq ($(CONFIG_ARCH_SUN8IW18P1), y)
+obj-$(CONFIG_ARCH_SUN8IW18P1) += FreeRTOS/
+else ifeq ($(CONFIG_ARCH_SUN8IW20P1), y)
+obj-$(CONFIG_ARCH_SUN8IW20P1) += FreeRTOS/
+else
+obj-y += FreeRTOS-orig/
+endif
+endif
+

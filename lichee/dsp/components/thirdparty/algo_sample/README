@@ -1,0 +1,22 @@
+
+小模型算法demo
+==============
+
+主要实现了录音的demo，算法公司在移植算法模型时，可以利用该demo去进行测试。
+具体代码参考algo_wakeup_sample.c, 工作流程：
+
+ * 初始化算法、声卡
+ * 开始录音，并进行算法处理,并可选的发送数据到CPUX
+ * 录音结束，注销相关资源
+
+测试方法
+```
+1.以采样率16K,5通道录制60s
+  DSP串口终端执行: wakeupdemo -r 16000 -c 5 -d 60
+
+2.如果想要转发数据到CPUX并保存下来：
+  DSP串口终端执行:wakeupdemo -r 16000 -c 5 -d 60 -t
+  Linux串口终端执行:arecord -Dhw:snddaudio2 -f S16_LE -r 16000 -c 5 /tmp/test.wav &
+  再通过adb将test.wav拉到PC中
+
+```

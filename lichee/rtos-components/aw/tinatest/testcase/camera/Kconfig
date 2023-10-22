@@ -1,0 +1,4 @@
+config TESTCASE_CAMERA
+	bool "Camera Testcase."
+	default n
+

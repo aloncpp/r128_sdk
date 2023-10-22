@@ -1,0 +1,108 @@
+menu "ulog support"
+
+config COMPONENT_ULOG
+    bool "ulog support"
+    default y
+
+config ULOG_OUTPUT_TIME
+    bool "Add time to ulog output"
+    default y
+    depends on COMPONENT_ULOG
+
+config ULOG_TIME_USING_TIMESTAMP
+    bool "Add timestamp to ulog output"
+    default y
+    depends on COMPONENT_ULOG
+    depends on ULOG_OUTPUT_TIME
+
+config ULOG_OUTPUT_THREAD_NAME
+    bool "Add thread name to ulog output"
+    default y
+    depends on COMPONENT_ULOG
+
+config ULOG_OUTPUT_TAG
+    bool "Add tag to ulog output"
+    default y
+    depends on COMPONENT_ULOG
+
+config ULOG_OUTPUT_LEVEL
+    bool "Add level to ulog output"
+    default y
+    depends on COMPONENT_ULOG
+
+config ULOG_USING_SYSLOG
+    bool "Enable syslog"
+    default y
+    depends on COMPONENT_ULOG
+
+config ULOG_USING_ASYNC_OUTPUT
+    bool "Enable async output"
+    default y
+    depends on COMPONENT_ULOG
+
+config ULOG_NEWLINE
+    bool "newline flag"
+	default n
+    depends on COMPONENT_ULOG
+
+config ULOG_LINE_BUF_SIZE
+    int "ulog line buffer size(bytes)"
+    default 1024
+    depends on COMPONENT_ULOG
+
+config ULOG_OUTPUT_FLOAT
+    bool "Support float to ulog output"
+    default y
+    depends on COMPONENT_ULOG
+
+config ULOG_TAG
+    string "Tag for ulog output"
+    default "Allwinner"
+    depends on COMPONENT_ULOG
+
+config ULOG_BACKEND_USING_CONSOLE
+    bool "Enable console as backend"
+    default y
+    depends on COMPONENT_ULOG
+
+config ULOG_BACKEND_USING_FILESYSTEM
+    bool "Enable file as backend"
+    default y
+    depends on COMPONENT_ULOG
+
+config COMMAND_SYSLOG_TEST
+    bool "Enable syslog command to test"
+    default n
+    depends on COMPONENT_ULOG
+
+config COMMAND_LOGGER_TEST
+    bool "Enable logger command to test"
+    default n
+    depends on ULOG_BACKEND_USING_FILESYSTEM
+
+config ULOG_FILE_SIZE
+    int "Ulog file large size(KB)"
+    default 64
+    depends on ULOG_BACKEND_USING_FILESYSTEM
+
+config ULOG_FILE_PATH
+    string "ulog file path"
+	default "/data/log_file"
+    depends on ULOG_BACKEND_USING_FILESYSTEM
+
+config ULOG_USING_FILTER
+    bool "Enable ulog filter"
+    default y
+    depends on COMPONENT_ULOG
+
+config ULOG_USING_COLOR
+    bool "Enable ulog color"
+    default n
+    depends on COMPONENT_ULOG
+
+config ULOG_USING_ISR_LOG
+    bool "Enable isr log"
+    default y
+    depends on COMPONENT_ULOG
+
+endmenu

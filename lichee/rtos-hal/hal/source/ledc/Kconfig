@@ -1,0 +1,12 @@
+menu "LEDC Devices"
+
+config DRIVERS_LEDC
+    bool "enable ledc driver"
+        default y
+
+config HAL_TEST_LEDC
+    bool "enable ledc driver APIs test command"
+	depends on DRIVERS_LEDC
+        default n
+
+endmenu

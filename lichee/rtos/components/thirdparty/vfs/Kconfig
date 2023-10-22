@@ -1,0 +1,32 @@
+menuconfig COMPONENT_VFS
+    bool "Virtual Filesystem"
+    default y
+    help
+        Enable virtual file system, which privates IO functions.
+        The follow basical IO interfaces will register to syscall:
+
+        vfs_open, vfs_write, vfs_lseek, vfs_read, vfs_close, vfs_fstat,
+        vfs_stat, vfs_link, vfs_unlink, vfs_rename
+
+        It also provide interfaces as follows:
+
+        opendir, readdir, readdir_r, telldir, seekdir, rewinddir, closedir,
+        mkdir, rmdir, fcntl, ioctl, fsync, access, truncate 
+
+        If unsure, say Y.
+
+if COMPONENT_VFS
+
+config COMPONENT_VFS_TEST
+    bool "Testcase For VFS"
+    default n
+    help
+        Enable testcase of VFS. You can get note by 'tt vfs help'.
+
+config USING_WORKDIR
+    bool "Working Directory For VFS"
+    default y
+    help
+        Add Working Directory For VFS
+
+endif

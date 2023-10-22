@@ -1,0 +1,100 @@
+menu "FlashControler Devices"
+
+config DRIVERS_FLASHC
+    bool "enable flashc driver"
+        default y
+
+if DRIVERS_FLASHC
+config HAL_TEST_FLASHC
+    bool "enable flash hal APIs test command"
+    depends on DRIVERS_FLASHC
+        default n
+
+config HAL_TEST_FLASHC_ENC
+    bool "enable flash enc hal APIs test command"
+    depends on FLASHC_ENC
+        default n
+
+config CHIP_ARCH_VER
+    int "select chip arch version for flashc"
+	default 3
+
+config XIP
+    bool "enable flashc xip"
+    depends on DRIVERS_FLASHC
+		select COMPONENTS_AW_BLKPART
+    default y
+
+config SECTION_ATTRIBUTE_XIP
+    bool "support xip_text section"
+    depends on XIP
+    default y
+
+config SECTION_ATTRIBUTE_NONXIP
+    bool "support nonxip_text section"
+    depends on XIP
+    default y
+
+config SECTION_ATTRIBUTE_SRAM
+    bool "support sram_text section"
+    depends on XIP
+    default y
+
+config FLASHC_GET_XIP_PARTITION_FROM_ENV
+    bool "support get xip partition form env"
+    depends on XIP
+    default y
+
+config FLASHC_CPU_XFER_ONLY
+    bool "disable flashc dma"
+    depends on DRIVERS_FLASHC
+    default y
+
+config FLASHC_ENC
+    bool "enable flashc enc"
+    depends on DRIVERS_FLASHC
+    default n
+
+config HAL_TEST_FLASH_CTRL
+    bool "enable flashc test command"
+    depends on DRIVERS_FLASHC
+    default n
+
+config FLASH_POWER_DOWN_PROTECT
+    bool "enable flash power down write protect"
+    depends on DRIVERS_FLASHC
+    default n
+    help
+      Some nor flash support write protection. This feature is much usefull
+      for power lose case to avoid data corruption. Most of them support zone
+      protection, which cost much for status register and to protect
+      a continuous space from head or tail. That's NOT what we need. What this
+      option used, is individual block protection. Before we do write/erase
+      operation, we unlock (unprotect) the individual block we want and still
+      protect other blocks. As you see, the unit to lock/unlock is a block.
+      Beside, it just rewrite a volatile memory, not status register, which
+      has less time and wear costs.
+
+      In a word, It spends very little time to protect data if power lose.
+
+      If unsure, please says N.
+
+config FLASH_LOW_POWER_PROTECT
+    bool "enable flash low power write protect"
+    depends on FLASH_POWER_DOWN_PROTECT
+    select DRIVERS_POWER_PROTECT
+    default n
+
+config DRIVERS_SPINOR_PANIC_WRITE
+    bool "Support write or read spinor data if crash"
+    depends on DRIVERS_FLASHC
+    select DRIVERS_FLASHC_PANIC_TRANSFER
+    default n
+
+config DRIVERS_FLASHC_PANIC_TRANSFER
+    bool "support sp transfer if crash"
+    depends on DRIVERS_FLASHC
+        default n
+
+endif
+endmenu

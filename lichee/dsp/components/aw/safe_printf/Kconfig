@@ -1,0 +1,8 @@
+menu "Safe printf Components Support"
+
+config COMPONENTS_SAFE_PRINTF
+    bool "use safe printf which support multi-core print"
+    default n
+    help
+        Use safe printf to replace the default printf in libc, the safe printf support multi-core print.
+endmenu

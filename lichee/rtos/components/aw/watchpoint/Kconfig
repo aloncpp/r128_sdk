@@ -1,0 +1,8 @@
+menu "Watchpoint Components Support"
+
+config COMPONENTS_WATCHPOINT
+    bool "Tina RTOS Watchpoint"
+    default y
+    help
+        Tina RTOS Watchpoint support.
+endmenu

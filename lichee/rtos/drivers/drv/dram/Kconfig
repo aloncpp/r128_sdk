@@ -1,0 +1,7 @@
+menu "Dram Devices"
+
+config DRIVERS_DRAM
+    bool "enable dram device drivers"
+    default y
+
+endmenu

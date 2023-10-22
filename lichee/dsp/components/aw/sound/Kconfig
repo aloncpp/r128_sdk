@@ -1,0 +1,28 @@
+menu "AW Sound Compenents Only For Dsp"
+
+config COMPONENTS_AW_ALSA_LIB_DSP
+	bool "Allwinner alsa library only for dsp"
+	depends on DRIVERS_SOUND
+	default n
+	help
+	  This is library package for aw-alsa, only used for Allwinner DSP RTOS.
+
+#source "components/aw/sound/aw-alsa-utils/Kconfig"
+
+config COMPONENTS_AW_ALSA_RPAF
+	bool "Allwinner remote process audio framework only for dsp"
+	default n
+	help
+	  This is package for aw-rpaf, only used for Allwinner DSP RTOS.
+
+source "components/aw/sound/aw-rpaf/Kconfig"
+source "components/aw/sound/aw-alsa-utils/Kconfig"
+
+config COMPONENTS_AW_ALSA_LIB_TEST_DSP
+	bool "Allwinner alsa library test only for dsp"
+	depends on COMPONENTS_AW_ALSA_LIB_DSP
+	default n
+	help
+	  This is library package for aw-alsa test, only used for Allwinner DSP RTOS.
+
+endmenu

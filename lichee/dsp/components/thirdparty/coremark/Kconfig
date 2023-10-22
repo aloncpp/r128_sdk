@@ -1,0 +1,4 @@
+config COMPONENT_COREMARK
+    bool "coremark"
+    default n
+
