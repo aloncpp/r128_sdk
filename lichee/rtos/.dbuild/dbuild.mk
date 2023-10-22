@@ -228,8 +228,8 @@ CONF:=kconfig-conf
 MCONF:=kconfig-mconf
 MCONF_TERM:=
 ifeq ($(DBUILD_OS), LINUX_64)
-MCONF:=$(BASE)/scripts/kconfig-frontends/kconfig-frontends/frontends/mconf/kconfig-mconf
-CONF:=$(BASE)/scripts/kconfig-frontends/kconfig-frontends/frontends/conf/kconfig-conf
+MCONF:=$(BASE)/scripts/kconfig-frontends/frontends/mconf/kconfig-mconf
+CONF:=$(BASE)/scripts/kconfig-frontends/frontends/conf/kconfig-conf
 MCONF_TERM:=TERM=xterm-color
 endif
 ifeq ($(DBUILD_OS), WIN32)

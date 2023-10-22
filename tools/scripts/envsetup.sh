@@ -974,9 +974,9 @@ function uncompress_toolchain_linux() {
         fi
     fi
 
-    if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/kconfig-frontends/frontends/conf/kconfig-conf" -o \
-         ! -f "$T/lichee/rtos/scripts/kconfig-frontends/kconfig-frontends/frontends/mconf/kconfig-mconf" ]; then
-        cd "$T/lichee/rtos/scripts/kconfig-frontends/kconfig-frontends"
+    if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/conf/kconfig-conf" -o \
+         ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/mconf/kconfig-mconf" ]; then
+        cd "$T/lichee/rtos/scripts/kconfig-frontends"
         ./configure --enable-mconf --disable-nconf --disable-gconf --disable-qconf
         make
         cd -
