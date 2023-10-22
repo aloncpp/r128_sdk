@@ -1,4 +1,4 @@
-function hmm() {
+function hmm() { 
 cat <<EOF
 Invoke ". envsetup.sh" from your shell to add the following functions to your environment:
 
@@ -972,6 +972,14 @@ function uncompress_toolchain_linux() {
             fi
             export RTOS_BUILD_TOOLCHAIN=${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update/bin/arm-melis-eabi-
         fi
+    fi
+
+    if [ -f "$T/lichee/rtos/scripts/kconfig-frontends/kconfig-frontends/frontends/conf/kconfig-conf" -o \
+         -f "$T/lichee/rtos/scripts/kconfig-frontends/kconfig-frontends/frontends/mconf/kconfig-mconf" ]; then
+        cd "$T/lichee/rtos/scripts/kconfig-frontends/kconfig-frontends"
+        ./configure --enable-mconf --disable-nconf --disable-gconf --disable-qconf
+        make
+        cd -
     fi
 }
 

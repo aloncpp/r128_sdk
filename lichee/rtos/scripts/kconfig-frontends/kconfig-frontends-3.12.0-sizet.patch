@@ -1,0 +1,49 @@
+diff -ruN kconfig-frontends-3.12.0.0/configure.ac kconfig-frontends-3.12.0.0-fixed/configure.ac
+--- kconfig-frontends-3.12.0.0/configure.ac	2013-11-09 14:31:01.000000000 +0100
++++ kconfig-frontends-3.12.0.0-fixed/configure.ac	2017-04-05 22:44:36.140760000 +0200
+@@ -238,6 +238,22 @@
+ AC_SUBST([AM_YFLAGS], ["-t -l -p zconf"])
+ 
+ #----------------------------------------
++# gperf 3.1 generates functions with 'size_t' instead of 'unsigned int'
++AC_MSG_CHECKING([for the type used in gperf declarations])
++echo "#include <string.h>" > conftest.gperf.c
++echo "const char * in_word_set(const char *, GPERF_LEN_TYPE);" >> conftest.gperf.c
++echo foo,bar | ${GPERF} -L ANSI-C >> conftest.gperf.c
++AS_IF(
++    [${CC} -c -o /dev/null conftest.gperf.c -DGPERF_LEN_TYPE='size_t' >/dev/null 2>&1],
++    [AC_MSG_RESULT([size_t])
++        GPERF_LEN_TYPE='size_t'],
++    [${CC} -c -o /dev/null conftest.gperf.c -DGPERF_LEN_TYPE='unsigned int' >/dev/null 2>&1],
++    [AC_MSG_RESULT([unsigned int])
++        GPERF_LEN_TYPE='unsigned int'],
++    [AC_MSG_ERROR([unable to determine gperf len type])])
++rm -f conftest.gperf.c
++AC_SUBST([GPERF_LEN_TYPE])
++#----------------------------------------
+ # Check for gettext, for the kconfig frontends
+ [has_gettext="$enable_L10n"]
+ AS_IF(
+diff -ruN kconfig-frontends-3.12.0.0/libs/parser/hconf.gperf kconfig-frontends-3.12.0.0-fixed/libs/parser/hconf.gperf
+--- kconfig-frontends-3.12.0.0/libs/parser/hconf.gperf	2013-11-09 14:31:01.000000000 +0100
++++ kconfig-frontends-3.12.0.0-fixed/libs/parser/hconf.gperf	2017-04-05 22:44:58.023951000 +0200
+@@ -9,7 +9,7 @@
+ 
+ struct kconf_id;
+ 
+-static const struct kconf_id *kconf_id_lookup(register const char *str, register unsigned int len);
++static const struct kconf_id *kconf_id_lookup(register const char *str, register GPERF_LEN_TYPE len);
+ 
+ %%
+ mainmenu,	T_MAINMENU,	TF_COMMAND
+diff -ruN kconfig-frontends-3.12.0.0/libs/parser/Makefile.am kconfig-frontends-3.12.0.0-fixed/libs/parser/Makefile.am
+--- kconfig-frontends-3.12.0.0/libs/parser/Makefile.am	2013-11-09 14:31:01.000000000 +0100
++++ kconfig-frontends-3.12.0.0-fixed/libs/parser/Makefile.am	2017-04-05 22:43:23.304565000 +0200
+@@ -8,6 +8,7 @@
+     expr.c expr.h lkc.h lkc_proto.h
+ libkconfig_parser_la_CPPFLAGS = -DROOTMENU="\"$(root_menu)\""   \
+                                 -DCONFIG_=\"$(config_prefix)\"  \
++                                -DGPERF_LEN_TYPE="$(GPERF_LEN_TYPE)" \
+                                 $(intl_CPPFLAGS)
+ libkconfig_parser_la_CFLAGS = $(AM_CFLAGS) $(kf_CFLAGS)
+ libkconfig_parser_la_LDFLAGS = -release $(KCONFIGPARSER_LIB_VERSION) -no-undefined

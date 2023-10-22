@@ -1,0 +1,2 @@
+c7a982c0848a487e909fb0891437dc203edfbb9d */cygdrive/h/firmware.bin
+c81cf42e846b58eb68ac2d87be34b719fcf9f6af */cygdrive/h/blob.bin
