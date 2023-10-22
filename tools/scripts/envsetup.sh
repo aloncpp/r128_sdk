@@ -978,7 +978,7 @@ function uncompress_toolchain_linux() {
         ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/mconf/kconfig-mconf" ]; then
 
         if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/automake-1.15" -o \
-        ! if "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/aclocal-1.15"]
+        ! if "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/aclocal-1.15" ]; then
             cd "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15"
             ./configure --prefix="$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/"
             make
