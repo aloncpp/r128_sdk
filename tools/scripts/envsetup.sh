@@ -938,8 +938,8 @@ function uncompress_toolchain_linux() {
     RV64_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/riscv64-elf-x86_64-20201104.tar.gz"
     ARM_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2"
     MELISA_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2"
-    export http_proxy="http://192.168.242.1:7788"
-    export https_proxy="https://192.168.242.1:7788"
+    # export http_proxy="http://192.168.242.1:7788"
+    # export https_proxy="https://192.168.242.1:7788"
     
     if [ "x${RTOS_TARGET_ARCH}" == "xriscv"  ];then
         if [ ! -f "${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104/.time" ]; then
@@ -1037,7 +1037,7 @@ function uncompress_toolchain_linux() {
             [ ! if "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/aclocal-1.15" ]; then
             echo -e "\033[32mbuild automake-1.15\033[0m"
             cd "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15"
-            autoreconf -ivf
+            # autoreconf -ivf
             ./configure --prefix="$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/"
             make
             make install
