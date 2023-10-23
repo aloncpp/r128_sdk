@@ -937,16 +937,28 @@ function uncompress_toolchain_linux() {
 
     RV64_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/riscv64-elf-x86_64-20201104.tar.gz"
     ARM_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2"
-    XTENSA_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2"
-
+    MELISA_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2"
+    # export http_proxy="http://192.168.242.1:7788"
+    # export https_proxy="https://192.168.242.1:7788"
     if [ "x${RTOS_TARGET_ARCH}" == "xriscv"  ];then
         if [ ! -f "${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104/.time" ]; then
             if [ -d "${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104" ]; then
                 rm -rf ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104
             fi
 
-            if [ ! -f "${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104.tar.gz" ]; then
-                wget ${RV64_TOOLCHAIN_URL} -O ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104.tar.gz
+            if [ ! -f "${T}/lichee/rtos/tools/.riscv64-elf-x86_64-20201104.tar.gz.flag" ]; then
+                if [ -f "${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104.tar.gz" ]; then
+                    rm ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104.tar.gz
+                fi
+
+                wget $RV64_TOOLCHAIN_URL -O ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104.tar.gz
+
+                if [ $? == 0 ]; then
+                    touch ${T}/lichee/rtos/tools/.riscv64-elf-x86_64-20201104.tar.gz.flag
+                else
+                    echo -e "\033[31mdownload toolchain error\033[0m"
+                    return -1
+                fi
             fi
 
             mkdir -p ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104
@@ -965,8 +977,19 @@ function uncompress_toolchain_linux() {
                     rm -rf ${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update
                 fi
 
-                if [ ! -f "${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2" ]; then
-                    wget ${ARM_TOOLCHAIN_URL} -O ${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2
+                if [ ! -f "${T}/lichee/rtos/tools/.gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2.flag" ]; then
+                    if [ -f "${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2" ]; then
+                        rm ${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2
+                    fi
+
+                    wget $ARM_TOOLCHAIN_URL -O ${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2
+
+                    if [ $? == 0 ]; then
+                        touch ${T}/lichee/rtos/tools/.gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2.flag
+                    else
+                        echo -e "\033[31mdownload toolchain error\033[0m"
+                        return -1
+                    fi
                 fi
 
                 tar -jxvf ${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2 -C ${T}/lichee/rtos/tools/
@@ -981,8 +1004,19 @@ function uncompress_toolchain_linux() {
                     rm -rf ${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update
                 fi
 
-                if [ ! -f "${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2" ]; then
-                    wget ${XTENSA_TOOLCHAIN_URL} -O ${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2
+                if [ ! -f "${T}/lichee/rtos/tools/.gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2.flag" ]; then
+                    if [ -f "${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2" ]; then
+                        rm ${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2
+                    fi
+
+                    wget $MELISA_TOOLCHAIN_URL -O ${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2
+
+                    if [ $? == 0 ]; then
+                        touch ${T}/lichee/rtos/tools/.gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2.flag
+                    else
+                        echo -e "\033[31mdownload toolchain error\033[0m"
+                        return -1
+                    fi
                 fi
 
                 tar -jxvf ${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2 -C ${T}/lichee/rtos/tools/
@@ -994,22 +1028,28 @@ function uncompress_toolchain_linux() {
         fi
     fi
 
-    if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/conf/kconfig-conf" -o \
-        ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/mconf/kconfig-mconf" ]; then
+    # build kconfig
+    if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/conf/kconfig-conf" ] ||\
+        [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/mconf/kconfig-mconf" ]; then
 
-        if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/automake-1.15" -o \
-        ! if "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/aclocal-1.15" ]; then
+        if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/automake-1.15" ] || \
+            [ ! if "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/aclocal-1.15" ]; then
+            echo -e "\033[32mbuild automake-1.15\033[0m"
             cd "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15"
+            autoreconf -ivf
             ./configure --prefix="$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/"
             make
             make install
             cd "$T"
         fi
-        
+
         export PATH=$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin:$PATH
-        
+        echo -e "\033[32mbuild kconfig\033[0m"
         cd "$T/lichee/rtos/scripts/kconfig-frontends"
         ./configure --enable-mconf --disable-nconf --disable-gconf --disable-qconf
+        if [ $? -ne 0 ]; then
+            echo -e "\033[31mbuild kconfig error, try \"apt install gperf automake texinfo libtool\"\033[0m"
+        fi
         make
         cd "$T"
     fi
