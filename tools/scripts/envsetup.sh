@@ -934,11 +934,21 @@ function _lunch() {
 }
 
 function uncompress_toolchain_linux() {
+
+    RV64_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/riscv64-elf-x86_64-20201104.tar.gz"
+    ARM_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2"
+    XTENSA_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2"
+
     if [ "x${RTOS_TARGET_ARCH}" == "xriscv"  ];then
         if [ ! -f "${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104/.time" ]; then
             if [ -d "${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104" ]; then
                 rm -rf ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104
             fi
+
+            if [ ! -f "${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104.tar.gz" ]; then
+                wget ${RV64_TOOLCHAIN_URL} -O ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104.tar.gz
+            fi
+
             mkdir -p ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104
             tar zxvf ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104.tar.gz -C ${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104/
             if [ $? == 0 ]; then
@@ -954,6 +964,11 @@ function uncompress_toolchain_linux() {
                 if [ -d "${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update" ]; then
                     rm -rf ${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update
                 fi
+
+                if [ ! -f "${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2" ]; then
+                    wget ${ARM_TOOLCHAIN_URL} -O ${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2
+                fi
+
                 tar -jxvf ${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2 -C ${T}/lichee/rtos/tools/
                 if [ $? == 0 ]; then
                     touch ${T}/lichee/rtos/tools/gcc-arm-none-eabi-8-2019-q3-update/.time
@@ -965,6 +980,11 @@ function uncompress_toolchain_linux() {
                 if [ -d "${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update" ]; then
                     rm -rf ${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update
                 fi
+
+                if [ ! -f "${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2" ]; then
+                    wget ${XTENSA_TOOLCHAIN_URL} -O ${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2
+                fi
+
                 tar -jxvf ${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2 -C ${T}/lichee/rtos/tools/
                 if [ $? == 0 ]; then
                     touch ${T}/lichee/rtos/tools/gcc-arm-melis-eabi-8-2019-q3-update/.time

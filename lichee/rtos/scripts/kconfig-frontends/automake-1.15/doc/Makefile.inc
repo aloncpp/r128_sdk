@@ -49,7 +49,7 @@ update_mans = \
 %D%/aclocal-$(APIVERSION).1: $(aclocal_script) lib/Automake/Config.pm
 	$(update_mans) aclocal-$(APIVERSION)
 %D%/automake-$(APIVERSION).1: $(automake_script) lib/Automake/Config.pm
-	$(update_mans) automake-$(APIVERSION)
+	$(update_mans) automake-$(APIVERSION) --no-discard-stderr
 
 ## ---------------------------- ##
 ##  Example package "amhello".  ##
