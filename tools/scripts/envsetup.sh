@@ -1032,21 +1032,9 @@ function uncompress_toolchain_linux() {
     # build kconfig
     if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/conf/kconfig-conf" ] ||\
         [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/mconf/kconfig-mconf" ]; then
-
-        if [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/automake-1.15" ] || \
-            [ ! if "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin/aclocal-1.15" ]; then
-            echo -e "\033[32mbuild automake-1.15\033[0m"
-            cd "$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15"
-            # autoreconf -ivf
-            ./configure --prefix="$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/"
-            make
-            make install
-            cd "$T"
-        fi
-
-        export PATH=$T/lichee/rtos/scripts/kconfig-frontends/automake-1.15/1.15/bin:$PATH
         echo -e "\033[32mbuild kconfig\033[0m"
         cd "$T/lichee/rtos/scripts/kconfig-frontends"
+        autoconf -ivh
         ./configure --enable-mconf --disable-nconf --disable-gconf --disable-qconf
         if [ $? -ne 0 ]; then
             echo -e "\033[31mbuild kconfig error, try \"apt install gperf automake texinfo libtool pkg-config\"\033[0m"
