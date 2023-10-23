@@ -1034,7 +1034,7 @@ function uncompress_toolchain_linux() {
         [ ! -f "$T/lichee/rtos/scripts/kconfig-frontends/frontends/mconf/kconfig-mconf" ]; then
         echo -e "\033[32mbuild kconfig\033[0m"
         cd "$T/lichee/rtos/scripts/kconfig-frontends"
-        autoconf -ivh
+        autoconf -ivf
         ./configure --enable-mconf --disable-nconf --disable-gconf --disable-qconf
         if [ $? -ne 0 ]; then
             echo -e "\033[31mbuild kconfig error, try \"apt install gperf automake texinfo libtool pkg-config\"\033[0m"
