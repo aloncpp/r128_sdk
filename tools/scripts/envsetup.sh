@@ -938,8 +938,8 @@ function uncompress_toolchain_linux() {
     RV64_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/riscv64-elf-x86_64-20201104.tar.gz"
     ARM_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/gcc-arm-none-eabi-8-2019-q3-update-linux.tar.bz2"
     MELISA_TOOLCHAIN_URL="https://github.com/aloncpp/r128_sdk/releases/download/toolchains/gcc-arm-melis-eabi-8-2019-q3-update-linux.tar.bz2"
-    # export http_proxy="http://192.168.242.1:7788"
-    # export https_proxy="https://192.168.242.1:7788"
+    export http_proxy="http://172.20.144.1:7788"
+    export https_proxy="https://172.20.144.1:7788"
     
     if [ "x${RTOS_TARGET_ARCH}" == "xriscv"  ];then
         if [ ! -f "${T}/lichee/rtos/tools/riscv64-elf-x86_64-20201104/.time" ]; then
@@ -1038,8 +1038,13 @@ function uncompress_toolchain_linux() {
         ./configure --enable-mconf --disable-nconf --disable-gconf --disable-qconf
         if [ $? -ne 0 ]; then
             echo -e "\033[31mbuild kconfig error, try \"apt install gperf automake texinfo libtool pkg-config\"\033[0m"
+            echo -e "\033[31msudo cp /usr/share/aclocal/*.m4 /usr/local/share/aclocal/\033[0m"
         fi
         make
+        if [ $? -ne 0 ]; then
+            echo -e "\033[31mbuild kconfig error, try \"apt install gperf automake texinfo libtool pkg-config\"\033[0m"
+            echo -e "\033[31msudo cp /usr/share/aclocal/*.m4 /usr/local/share/aclocal/\033[0m"
+        fi
         cd "$T"
     fi
 }
