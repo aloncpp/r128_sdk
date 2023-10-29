@@ -23,16 +23,16 @@
 #define LEDC_DMA_BUF_SIZE 4096
 
 struct ledc_config ledc_config = {
-	.led_count = 1024,
-	.reset_ns = 84,
-	.t1h_ns = 800,
-	.t1l_ns = 450,
-	.t0h_ns = 400,
-	.t0l_ns = 850,
-	.wait_time0_ns = 84,
-	.wait_time1_ns = 84,
-	.wait_data_time_ns = 600000,
-	.output_mode = "GRB",
+    .led_count = 4,
+    .reset_ns = 84,
+    .t1h_ns = 1000,
+    .t1l_ns = 1000,
+    .t0h_ns = 580,
+    .t0l_ns = 1000,
+    .wait_time0_ns = 84,
+    .wait_time1_ns = 84,
+    .wait_data_time_ns = 600000,
+    .output_mode = "GRB",
 };
 
 static unsigned long base_addr = LEDC_BASE;

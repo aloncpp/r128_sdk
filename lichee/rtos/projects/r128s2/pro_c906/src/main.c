@@ -51,7 +51,12 @@
 #include <wlan_csfc.h>
 #endif
 
+#ifdef CONFIG_COMPONENTS_AW_AUDIO_SYSTEM
+#include <wifimg.h>
+#endif
 
+#include <wifi_test.h>
+#include <ledc_test.h>
 
 extern int hal_flashc_init(void);
 extern int pm_init(int argc, char **argv);
@@ -125,6 +130,32 @@ void *get_ahw_name_alias(int *num)
 	return g_r128_name_alias;
 }
 #endif
+
+void ledc_demo(void *arg)
+{
+
+    ledc_test_loop();
+
+    vTaskDelete(NULL);
+}
+
+void app_demo(void *arg)
+{
+    int ret = false;
+
+    ret = wifi_init();
+
+    while (ret != 0)
+    {
+        /* code */
+        ret = wifi_test();
+        vTaskDelay(pdMS_TO_TICKS(3000));
+    }
+
+    http_test();
+
+    vTaskDelete(NULL);
+}
 
 void cpu0_app_entry(void *param)
 {
@@ -278,6 +309,8 @@ extern void sunxi_usb_init(void);
         xTaskCreate(ota_task_thread, "ota_update_task", 8192, NULL, 0, NULL);
     }
 #endif
+    xTaskCreate(app_demo, "app_demo", 8192, NULL, 0, NULL);
+    xTaskCreate(ledc_demo, "ledc_demo", 2048, NULL, configMAX_PRIORITIES-1, NULL);
 
     vTaskDelete(NULL);
 }

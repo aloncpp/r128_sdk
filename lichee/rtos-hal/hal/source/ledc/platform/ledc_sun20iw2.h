@@ -43,7 +43,7 @@
 
 #define LEDC_BASE	0x40048000
 
-#define LEDC_PIN	GPIOA(26)
+#define LEDC_PIN	GPIOA(13)
 #define LEDC_PINMUXSEL	7
 
 #endif /* __LEDC_SUN20IW2_H__ */
