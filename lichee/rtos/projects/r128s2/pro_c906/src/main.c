@@ -57,6 +57,7 @@
 
 #include <wifi_test.h>
 #include <ledc_test.h>
+#include <max4466.h>
 
 extern int hal_flashc_init(void);
 extern int pm_init(int argc, char **argv);
@@ -309,6 +310,8 @@ extern void sunxi_usb_init(void);
         xTaskCreate(ota_task_thread, "ota_update_task", 8192, NULL, 0, NULL);
     }
 #endif
+    max4466_init();
+
     xTaskCreate(app_demo, "app_demo", 8192, NULL, 0, NULL);
     xTaskCreate(ledc_demo, "ledc_demo", 2048, NULL, configMAX_PRIORITIES-1, NULL);
 

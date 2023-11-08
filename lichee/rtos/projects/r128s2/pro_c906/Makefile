@@ -10,7 +10,8 @@ obj-y += src/shape.o
 obj-y += src/awtrix.o
 obj-y += src/awtrix_clock.o
 obj-y += src/awtrix_weather.o
-
+obj-y += src/max4466.o
+obj-y += src/microFFT.o
 
 
 ifeq ($(CONFIG_COMPONENTS_AW_AUDIO_SYSTEM),y)
