@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include <wifimg.h>
+#include <hal_time.h>
 
 #include <lwip/tcpip.h>
 #include <lwip/inet.h>
@@ -14,6 +15,86 @@
 
 #include <HTTPClient.h>
 #include <HTTPCUsr_api.h>
+#include <cJSON.h>
+
+#include <sntp.h>
+
+#include <awtrix.h>
+
+int sntp_test()
+{
+    int SNTP_FAIL_NUM = 5;
+    uint32_t fail_it = 0, success_it = 0;
+    uint32_t test_cnt = SNTP_FAIL_NUM;
+    printf("<sntp> <request>\n");
+
+    sntp_set_server(0, "203.107.6.88");
+    sntp_set_server(1, "ntp5.aliyun.com");
+    sntp_set_server(2, "tw.pool.ntp.org");
+
+    setenv("TZ", "CST-8", 1);
+    tzset();
+
+    while (1)
+    {
+        test_cnt--;
+        if (sntp_request(NULL) != 0) {
+            fail_it++;
+            if(fail_it >= SNTP_FAIL_NUM)
+            {
+                printf("<sntp> <response : fail>\n");
+                break;
+            }
+            printf("<sntp> <try : %d>\n", fail_it);
+        }
+        else
+        {
+            sntp_time *time = (sntp_time *)sntp_obtain_time();
+            success_it++;
+            printf("<sntp> <response : success>\n");
+            printf("===sntp->get time form network (year mon day week hour min sec===\n");
+            printf("(%04d-%02d-%02d  %u   %02d:%02d:%02d)\n", time->year, time->mon, time->day, time->week, time->hour, time->min, time->sec);
+            break;
+        }
+        if (test_cnt == 0) {
+            printf("<sntp> teste end!!! success cnt:<%d>, fail cnt:<%d>\n", success_it, fail_it);
+            break;
+        }
+        hal_msleep(500);
+    }
+
+    struct timeval tv;
+	gettimeofday(&tv, NULL);
+
+    printf("utc time: %ld.%ld\n", tv.tv_sec, tv.tv_usec);
+
+
+    time_t t = time(NULL);
+    struct tm tm_time;
+    char buf[128];
+
+    localtime_r(&t, &tm_time);
+    strftime(buf, sizeof buf, "%Y-%m-%d %H:%M:%S", &tm_time);
+    printf("localtime_r: %s\n", buf);
+    setenv("TZ", "CST-8", 1);
+    tzset();
+extern weather_t local_weather;
+    local_weather.type = 0;
+    while (1)
+    {
+        hal_msleep(1000);
+        pixel_t *awtrix = awtrix_get_pixel();
+        t = time(NULL);
+        localtime_r(&t, &tm_time);
+        strftime(buf, sizeof buf, "%Y-%m-%d %H:%M:%S", &tm_time);
+        // printf("localtime_r: %s\n", buf);
+        // awtrix_display_set_clock(awtrix, tm_time);
+        awtrix_display_set_clock_2(awtrix, tm_time);
+        // awtrix_display_set_weather(awtrix, 30);
+    }
+
+    return 0;
+}
 
 int http_test()
 {
@@ -23,7 +104,7 @@ int http_test()
 	unsigned int Received = 0;
 	HTTP_CLIENT  httpClient;
 	HTTPParameters *clientParams = NULL;
-    char *URL = "http://api.seniverse.com/v3/weather/now.json?key=S95aobioJH_vZfDlB&location=beijing&language=zh-Hans&unit=c";
+    char *URL = "http://api.seniverse.com/v3/weather/now.json?key=S95aobioJH_vZfDlB&location=tianjin&language=zh-Hans&unit=c";
 
     printf("@@@@@@@@@@@ HTTP TEST @@@@@@@@@@@\r\n");
 
@@ -95,11 +176,19 @@ int http_test()
 			}
 		} while (1);
         printf("recv :\r\n%s\r\n", buf);
+        awtrix_set_weather_info(buf);
 	}
 
     }while (0);
 
+    sntp_test();
+
 err_exit:
+
+    if( buf )
+    {
+        free(buf);
+    }
 
     return ret;
 
@@ -150,7 +239,20 @@ int wifi_test()
     uint32_t arr_size = 10;
     wifi_scan_result_t *result = malloc(sizeof(wifi_scan_result_t)*arr_size);
     wifi_scan_result_t *scanf_p;
-    
+
+    wifi_wmg_state_t wmg_state;
+    if( wifi_get_wmg_state(&wmg_state) !=  WMG_STATUS_SUCCESS)
+    {
+        printf("wifi_get_wmg_state error\r\n");
+        return status;
+    }
+
+    if( wmg_state.sta_state == WIFI_STA_CONNECTED || wmg_state.sta_state == WIFI_STA_NET_CONNECTED )
+    {
+        printf("@@@ wifi connected @@@@\r\n");
+        return WMG_STATUS_SUCCESS;
+    }
+
     if( wifi_get_scan_results(result, &bss_num, arr_size) !=  WMG_STATUS_SUCCESS)
         return status;
 
@@ -162,10 +264,11 @@ int wifi_test()
     {
         wifi_scan_result_t *p = (wifi_scan_result_t *)&result[i];
         printf("[%d]rssi: %d, freq: %d, ssid: %s\r\n", i, p->rssi, p->freq, p->ssid);
-        if ( strncmp("ChinaNet-BVBi", p->ssid, strlen(p->ssid)) == 0)
+        if ( strcmp("ChinaNet-BVBi", p->ssid) == 0)
         {
             scanf = true;
             scanf_p = (wifi_scan_result_t *)&result[i];
+            break;
         }
     }
 

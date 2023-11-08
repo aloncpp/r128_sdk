@@ -95,6 +95,8 @@ void hal_ledc_reset(void);
 int sunxi_led_init(void);
 int sunxi_set_led_brightness(int led_num, unsigned int brightness);
 int sunxi_set_all_led(int led_num, unsigned int brightness);
+
+int sunxi_set_led_awtrix(int led_num, unsigned int *buff);
 #ifdef __cplusplus
 }
 #endif

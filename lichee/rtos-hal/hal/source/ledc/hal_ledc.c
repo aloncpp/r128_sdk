@@ -20,10 +20,10 @@
 #define led_err(fmt, args...)  printf("%s()%d - "fmt, __func__, __LINE__, ##args)
 
 #define LEDC_PIN_SLEEP 0
-#define LEDC_DMA_BUF_SIZE 4096
+#define LEDC_DMA_BUF_SIZE (4096*10)
 
 struct ledc_config ledc_config = {
-    .led_count = 4,
+    .led_count = (32*8),
     .reset_ns = 84,
     .t1h_ns = 1000,
     .t1l_ns = 1000,
@@ -32,7 +32,7 @@ struct ledc_config ledc_config = {
     .wait_time0_ns = 84,
     .wait_time1_ns = 84,
     .wait_data_time_ns = 600000,
-    .output_mode = "GRB",
+    .output_mode = "RGB",
 };
 
 static unsigned long base_addr = LEDC_BASE;
@@ -526,6 +526,16 @@ int hal_ledc_trans_data(struct ledc_config *ledc)
 			led_err("dma start trans failed\n");
 			return -1;
 		}
+
+		uint32_t size = 0;
+		while (hal_dma_tx_status(dma_chan, &size) != 0);
+
+		ret = hal_dma_chan_desc_free(dma_chan);
+		if (ret != HAL_DMA_STATUS_OK)
+		{
+			printf("hal_dma_chan_desc_free, ret:%d", ret);
+			return -1;
+		}
 	}
 	return 0;
 }
@@ -640,6 +650,8 @@ int hal_ledc_init(void)
 	sunxi_led_get_config(&led->config);
 
 	led->config.data = malloc(sizeof(unsigned int) * led->config.led_count);
+	led_err("led count: %d\n", led->config.led_count);
+	
 	if (NULL == led->config.data) {
 		led_err("sunxi led config data malloc err\n");
 		goto err0;
@@ -781,6 +793,47 @@ int sunxi_set_led_brightness(int led_num, unsigned int brightness)
 		ledc_info("the %d led light is %u\n", i + 1, led->config.data[i]);
 
 	ret = hal_ledc_trans_data(&led->config);
+	if (ret) {
+		led_err("ledc trans data error\n");
+	}
+
+	reg_val = hal_ledc_get_irq_status();
+	ledc_info("ledc interrupt status reg is %x", reg_val);
+
+	return 0;
+}
+
+/*
+ * set the brightness of single led on the led strip
+ * @led_num: the specified led that you want to set
+ * @brightness: the led brightness data
+ */
+int sunxi_set_led_awtrix(int led_num, unsigned int *buff)
+{
+	u32 reg_val;
+	int i, ret;
+
+	if (NULL == led) {
+		led_err("err : ledc is not init\n");
+		return -1;
+	}
+
+	if (led_num > led->config.led_count) {
+		led_err("has not the %d led\n", led_num);
+		return -1;
+	}
+
+	// enum dma_status hal_dma_tx_status(struct sunxi_dma_chan *chan, uint32_t *left_size);
+
+
+	led->config.length = led_num;
+	for( i = 0; i < led_num; i++ )
+	{
+		led->config.data[i] = buff[i];
+	}
+
+	ret = hal_ledc_trans_data(&led->config);
+
 	if (ret) {
 		led_err("ledc trans data error\n");
 	}

@@ -5,6 +5,12 @@ obj-y += src/alsa_config.o
 obj-y += src/card_default.o
 obj-y += src/wifi_test.o
 obj-y += src/ledc_test.o
+obj-y += src/fonts.o
+obj-y += src/shape.o
+obj-y += src/awtrix.o
+obj-y += src/awtrix_clock.o
+obj-y += src/awtrix_weather.o
+
 
 
 ifeq ($(CONFIG_COMPONENTS_AW_AUDIO_SYSTEM),y)
@@ -32,6 +38,10 @@ endif
 ifeq ($(CONFIG_COMPONENTS_HTTPCLIENT),y)
 CFLAGS += -I $(BASE)/components/common/thirdparty/network/httpclient
 CFLAGS += -I $(BASE)/components/common/thirdparty/network/httpclient/API
+endif
+
+ifeq ($(CONFIG_COMPONENTS_SNTP),y)
+CFLAGS += -I $(BASE)/components/common/thirdparty/network/sntp
 endif
 
 
